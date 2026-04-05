@@ -1,4 +1,6 @@
 import { DotsMap, TopMap } from './schemas/canvas';
+import { main } from '../public/data/commands.json';
+import { bold, italic } from 'karboai';
 
 export const COLORS = {
   white: '#FFFFFF',
@@ -48,3 +50,7 @@ export const TOP_DOTS: Record<string, DotsMap[]> = {
     { x: 459, y: 251 },
   ],
 };
+
+export const ALL_COMMANDS = main
+  .map((command) => `${bold(command.name)} - ${italic(command.description)}\n`)
+  .join('\n');
