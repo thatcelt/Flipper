@@ -1,0 +1,24 @@
+{
+  "name": "flipper",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "author": "celt_is_god",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx tsx src/test.ts",
+    "start": "npx tsx src/index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "dotenv": "^17.4.0",
+    "prisma": "^7.6.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  },
+  "dependencies": {
+    "@prisma/adapter-mariadb": "^7.6.0",
+    "@prisma/client": "^7.6.0"
+  }
+}

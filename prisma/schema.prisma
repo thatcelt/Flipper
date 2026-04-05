@@ -1,0 +1,96 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Clan {
+  id                Int      @unique @default(autoincrement())
+  title             String
+  ownerId           String   @unique
+  experience        Int      @default(0)
+  chatLink          String?
+  createdAt         DateTime @default(now())
+  users             User[]
+  currentBackground String?
+  currentFrame      String   @default("orange")
+}
+
+model Schedule {
+  id         Int    @unique @default(autoincrement())
+  canWorkAt  BigInt @default(0)
+  canDailyAt BigInt @default(0)
+  canDuelAt  BigInt @default(0)
+  canRobAt   BigInt @default(0)
+  canRepAt   BigInt @default(0)
+  canCoinAt  BigInt @default(0)
+  user       User?  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String @unique
+}
+
+model ProductsOnUsers {
+  id        Int    @unique @default(autoincrement())
+  user      User   @relation(fields: [userId], references: [id])
+  userId    String
+  productId Int
+}
+
+model Stats {
+  id         Int    @id @default(autoincrement())
+  experience Int    @default(0)
+  reputation Int    @default(0)
+  messages   Int    @default(0)
+  robs       Int    @default(0)
+  duels      Int    @default(0)
+  user       User   @relation(fields: [userId], references: [id])
+  userId     String @unique
+}
+
+model Card {
+  id       Int    @id @default(autoincrement())
+  number   String
+  date     String
+  initials String
+  balance  Float  @default(0)
+  cash     Float  @default(0)
+  owner    User   @relation(fields: [ownerId], references: [id])
+  ownerId  String @unique
+}
+
+model User {
+  id                String            @id @unique
+  stats             Stats?
+  card              Card?
+  work              String?
+  schedule          Schedule?
+  products          ProductsOnUsers[]
+  clan              Clan?             @relation(fields: [clanId], references: [id])
+  clanId            Int?
+  currentBackground String?
+  currentFrame      String            @default("orange")
+  couple            Couple?           @relation(fields: [coupleId], references: [id])
+  coupleId          Int?
+}
+
+model Couple {
+  id                Int     @id @default(autoincrement())
+  users             User[]
+  createdAt         BigInt
+  answer            String
+  currentBackground String?
+  canActionAt       BigInt  @default(0)
+  lastActionAt      BigInt  @default(0)
+  actionStreak      Int     @default(0)
+  experience        Int     @default(0)
+  actionsDone       Int     @default(0)
+  lastStreakAt      Int     @default(0)
+  currentFrame      String  @default("orange")
+}
