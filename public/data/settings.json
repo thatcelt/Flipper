@@ -1,0 +1,194 @@
+{
+  "fonts": [
+    {
+      "path": "./public/fonts/UbuntuSansMono-Regular.ttf",
+      "family": "Ubuntu Sans Mono Regular"
+    },
+    {
+      "path": "./public/fonts/UbuntuSansMono-Medium.ttf",
+      "family": "Ubuntu Sans Mono Medium"
+    },
+    {
+      "path": "./public/fonts/UbuntuSansMono-Italic.ttf",
+      "family": "Ubuntu Sans Mono Italic"
+    },
+    {
+      "path": "./public/fonts/Poppins-Medium.ttf",
+      "family": "Poppins Medium"
+    }
+  ],
+  "assets": [
+    {
+      "path": "./public/assets/casino/casino-lose.png",
+      "key": "casino-lose"
+    },
+    {
+      "path": "./public/assets/casino/casino-win.png",
+      "key": "casino-win"
+    },
+    {
+      "path": "./public/assets/casino/green-dork.png",
+      "key": "casino-green-dork"
+    },
+    {
+      "path": "./public/assets/casino/green-love.png",
+      "key": "casino-green-love"
+    },
+    {
+      "path": "./public/assets/casino/purple-dork.png",
+      "key": "casino-purple-dork"
+    },
+    {
+      "path": "./public/assets/casino/purple-love.png",
+      "key": "casino-purple-love"
+    },
+    {
+      "path": "./public/assets/profile/credit-card.png",
+      "key": "profile-credit-card"
+    },
+    {
+      "path": "./public/assets/profile/default-background.png",
+      "key": "profile-default-background"
+    },
+    {
+      "path": "./public/assets/shop/blue.png",
+      "key": "shop-blue"
+    },
+    {
+      "path": "./public/assets/shop/green.png",
+      "key": "shop-green"
+    },
+    {
+      "path": "./public/assets/shop/orange.png",
+      "key": "shop-orange"
+    },
+    {
+      "path": "./public/assets/shop/pink.png",
+      "key": "shop-pink"
+    },
+    {
+      "path": "./public/assets/shop/purple.png",
+      "key": "shop-purple"
+    },
+    {
+      "path": "./public/assets/shop/red.png",
+      "key": "shop-red"
+    },
+    {
+      "path": "./public/assets/shop/shop-backgrounds.png",
+      "key": "shop-shop-backgrounds"
+    },
+    {
+      "path": "./public/assets/shop/shop-frames.png",
+      "key": "shop-shop-frames"
+    },
+    {
+      "path": "./public/assets/shop/shop-other.png",
+      "key": "shop-shop-other"
+    },
+    {
+      "path": "./public/assets/shop/yellow.png",
+      "key": "shop-yellow"
+    },
+    {
+      "path": "./public/assets/top/top-balance.png",
+      "key": "top-balance"
+    },
+    {
+      "path": "./public/assets/top/top-duels.png",
+      "key": "top-duels"
+    },
+    {
+      "path": "./public/assets/top/top-messages.png",
+      "key": "top-messages"
+    },
+    {
+      "path": "./public/assets/top/top-robs.png",
+      "key": "top-robs"
+    },
+    {
+      "path": "./public/assets/frames/clan/blue.png",
+      "key": "frames-clan-blue"
+    },
+    {
+      "path": "./public/assets/frames/clan/green.png",
+      "key": "frames-clan-green"
+    },
+    {
+      "path": "./public/assets/frames/clan/orange.png",
+      "key": "frames-clan-orange"
+    },
+    {
+      "path": "./public/assets/frames/clan/pink.png",
+      "key": "frames-clan-pink"
+    },
+    {
+      "path": "./public/assets/frames/clan/purple.png",
+      "key": "frames-clan-purple"
+    },
+    {
+      "path": "./public/assets/frames/clan/red.png",
+      "key": "frames-clan-red"
+    },
+    {
+      "path": "./public/assets/frames/clan/yellow.png",
+      "key": "frames-clan-yellow"
+    },
+    {
+      "path": "./public/assets/frames/couple/blue.png",
+      "key": "frames-couple-blue"
+    },
+    {
+      "path": "./public/assets/frames/couple/green.png",
+      "key": "frames-couple-green"
+    },
+    {
+      "path": "./public/assets/frames/couple/orange.png",
+      "key": "frames-couple-orange"
+    },
+    {
+      "path": "./public/assets/frames/couple/pink.png",
+      "key": "frames-couple-pink"
+    },
+    {
+      "path": "./public/assets/frames/couple/purple.png",
+      "key": "frames-couple-purple"
+    },
+    {
+      "path": "./public/assets/frames/couple/red.png",
+      "key": "frames-couple-red"
+    },
+    {
+      "path": "./public/assets/frames/couple/yellow.png",
+      "key": "frames-couple-yellow"
+    },
+    {
+      "path": "./public/assets/frames/profile/blue.png",
+      "key": "frames-profile-blue"
+    },
+    {
+      "path": "./public/assets/frames/profile/green.png",
+      "key": "frames-profile-green"
+    },
+    {
+      "path": "./public/assets/frames/profile/orange.png",
+      "key": "frames-profile-orange"
+    },
+    {
+      "path": "./public/assets/frames/profile/pink.png",
+      "key": "frames-profile-pink"
+    },
+    {
+      "path": "./public/assets/frames/profile/purple.png",
+      "key": "frames-profile-purple"
+    },
+    {
+      "path": "./public/assets/frames/profile/red.png",
+      "key": "frames-profile-red"
+    },
+    {
+      "path": "./public/assets/frames/profile/yellow.png",
+      "key": "frames-profile-yellow"
+    }
+  ]
+}
