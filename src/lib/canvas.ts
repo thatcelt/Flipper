@@ -1,12 +1,14 @@
-import { Image, loadImage, registerFont } from 'canvas';
+import { createCanvas, Image, loadImage, registerFont } from 'canvas';
 import { readFile } from 'node:fs/promises';
 
 import * as settings from '../../public/data/settings.json';
 import {
+  CanvasContext,
   DrawImageArrayConfig,
   DrawRoundedImageConfig,
   DrawTextConfig,
   ImagesMap,
+  ProfileImageBuilder,
 } from '../schemas/canvas';
 import { COLORS } from '../constants';
 
@@ -17,12 +19,36 @@ settings.fonts.forEach((font) =>
 );
 
 export const loadImages = async () => {
-  settings.assets.forEach(async (asset) =>
+  for (const asset of settings.assets)
     images.set(
       asset.key as ImagesMap,
       await loadImage(await readFile(asset.path)),
-    ),
+    );
+};
+
+export const loadCanvas = async (
+  image: ImagesMap,
+  background: string = 'profile-default-background',
+): Promise<CanvasContext> => {
+  const canvas = createCanvas(700, 700);
+  const ctx = canvas.getContext('2d');
+
+  const backgroundImage = images.get(background as ImagesMap)!;
+  console.log(background);
+  ctx.drawImage(
+    backgroundImage,
+    0,
+    0,
+    Math.max(backgroundImage.width, 700),
+    700,
   );
+
+  ctx.drawImage(images.get(image)!, 0, 0, 700, 700);
+
+  return {
+    canvas,
+    ctx,
+  };
 };
 
 const drawRoundedImage = async (
@@ -76,4 +102,156 @@ const drawImageArray = async (config: DrawImageArrayConfig): Promise<void> => {
       radius: config.radius,
     });
   }
+};
+
+export const drawProfile = async (
+  builder: ProfileImageBuilder,
+): Promise<Buffer> => {
+  const { canvas, ctx } = await loadCanvas(
+    `frames-profile-${builder.frame}` as ImagesMap,
+    builder.background,
+  );
+  const centeredWidth = 29 + 463 / 2;
+
+  drawText({ ctx, text: builder.nickname, size: 22, x: 193, y: 60 });
+  drawText({
+    ctx,
+    text: builder.work,
+    size: 17,
+    x: 268,
+    y: 95,
+    font: 'italic',
+  });
+  drawText({
+    ctx,
+    text: builder.level.toString(),
+    size: 17,
+    x: 261,
+    y: 124,
+    font: 'italic',
+  });
+  drawText({
+    ctx,
+    text: builder.reputation.toString(),
+    size: 17,
+    x: 299,
+    y: 152,
+    font: 'italic',
+  });
+
+  ctx.fillStyle = COLORS[builder.frame as keyof typeof COLORS];
+  ctx.beginPath();
+
+  ctx.roundRect(
+    29,
+    216,
+    (builder.experience.from / builder.experience.to) * 463,
+    54,
+    [7, 0, 0, 7],
+  );
+  ctx.fill();
+
+  drawText({
+    ctx,
+    text: `${builder.experience.from}/${builder.experience.to}`,
+    size: 17,
+    x: centeredWidth,
+    y: 249,
+    color: '#FFFFFF',
+    align: 'center',
+  });
+
+  drawText({
+    ctx,
+    text: builder.stats.messages.toString(),
+    size: 14,
+    x: 239,
+    y: 330,
+    font: 'italic',
+  });
+  drawText({
+    ctx,
+    text: builder.stats.robs.toString(),
+    size: 14,
+    x: 200,
+    y: 374,
+    font: 'italic',
+  });
+  drawText({
+    ctx,
+    text: builder.stats.duels.toString(),
+    size: 14,
+    x: 216,
+    y: 417,
+    font: 'italic',
+  });
+
+  if (builder.hasCouple) {
+    var coupleCaption = `В паре с ${builder.hasCouple.nickname}`;
+
+    await drawRoundedImage({
+      ctx,
+      image: builder.hasCouple.avatar,
+      dx: 397,
+      dy: 477,
+      width: 60,
+      height: 60,
+      radius: 100,
+    });
+  } else {
+    var coupleCaption = 'У вас нету пары';
+  }
+
+  drawText({
+    ctx,
+    text: coupleCaption,
+    size: 17,
+    x: centeredWidth,
+    y: 515,
+    font: 'regular',
+    color: '#FFFFFF',
+    align: 'center',
+  });
+
+  if (builder.hasClan) {
+    var clanCaption = `В клане ${builder.hasClan.name}`;
+
+    await drawRoundedImage({
+      ctx,
+      image: builder.hasClan.avatar,
+      dx: 396,
+      dy: 589,
+      width: 62,
+      height: 62,
+      radius: 100,
+    });
+  } else {
+    var clanCaption = 'У вас нету клана';
+  }
+
+  drawText({
+    ctx,
+    text: clanCaption,
+    size: 17,
+    x: centeredWidth,
+    y: 627,
+    font: 'regular',
+    color: '#FFFFFF',
+    align: 'center',
+  });
+
+  if (builder.avatar)
+    try {
+      await drawRoundedImage({
+        ctx,
+        image: builder.avatar,
+        dx: 28,
+        dy: 36,
+        width: 150,
+        height: 150,
+        radius: 12,
+      });
+    } catch {}
+
+  return canvas.toBuffer('image/png', { compressionLevel: 0 });
 };

@@ -1,4 +1,4 @@
-import { CanvasRenderingContext2D, Image } from 'canvas';
+import { Canvas, CanvasRenderingContext2D, Image } from 'canvas';
 import { z } from 'zod';
 import { COLORS } from '../constants';
 
@@ -69,7 +69,9 @@ export const DrawTextConfigSchema = z.object({
   x: z.number(),
   y: z.number(),
   font: FontsEnum.optional(),
-  color: z.enum(Object.keys(COLORS) as [keyof typeof COLORS, ...string[]]),
+  color: z
+    .enum(Object.keys(COLORS) as [keyof typeof COLORS, ...string[]])
+    .optional(),
   align: AlignEnum.optional(),
   maxWidth: z.number().optional(),
 });
@@ -88,6 +90,42 @@ export const DrawImageArrayConfigSchema = z.object({
   iter: z.number().optional(),
 });
 
+export const CanvasContextSchema = z.object({
+  canvas: z.instanceof(Canvas),
+  ctx: z.instanceof(CanvasRenderingContext2D),
+});
+
+export const ProfileImageBuilderSchema = z.object({
+  nickname: z.string(),
+  level: z.number(),
+  reputation: z.number(),
+  avatar: z.string(),
+  background: z.string().optional(),
+  work: z.string(),
+  frame: z.string(),
+  experience: z.object({
+    from: z.number(),
+    to: z.number(),
+  }),
+  stats: z.object({
+    messages: z.number(),
+    robs: z.number(),
+    duels: z.number(),
+  }),
+  hasCouple: z
+    .object({
+      nickname: z.string(),
+      avatar: z.string(),
+    })
+    .optional(),
+  hasClan: z
+    .object({
+      name: z.string(),
+      avatar: z.string(),
+    })
+    .optional(),
+});
+
 export type ImagesMap = z.infer<typeof ImagesEnum>;
 export type FontsMap = z.infer<typeof FontsEnum>;
 export type DrawRoundedImageConfig = z.infer<
@@ -96,3 +134,5 @@ export type DrawRoundedImageConfig = z.infer<
 export type DrawTextConfig = z.infer<typeof DrawTextConfigSchema>;
 export type DotsMap = z.infer<typeof DotsMapSchema>;
 export type DrawImageArrayConfig = z.infer<typeof DrawImageArrayConfigSchema>;
+export type CanvasContext = z.infer<typeof CanvasContextSchema>;
+export type ProfileImageBuilder = z.infer<typeof ProfileImageBuilderSchema>;
