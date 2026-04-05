@@ -11,8 +11,10 @@ import {
   DrawTextConfig,
   ImagesMap,
   ProfileImageBuilder,
+  ShopImageBuilder,
+  TopImageBuilder,
 } from '../schemas/canvas';
-import { CLAN_DOTS, COLORS } from '../constants';
+import { CLAN_DOTS, COLORS, TOP_DOTS, TOP_HORIZONAL_MAP } from '../constants';
 
 const images: Map<ImagesMap, Image> = new Map<ImagesMap, Image>();
 
@@ -377,6 +379,143 @@ export const drawClan = async (builder: ClanImageBuilder): Promise<Buffer> => {
     size: 88,
     radius: 100,
   });
+
+  return canvas.toBuffer('image/png', { compressionLevel: 0 });
+};
+
+export const drawTop = async (builder: TopImageBuilder): Promise<Buffer> => {
+  const { canvas, ctx } = await loadCanvas(builder.type);
+  const secondaryWidth = TOP_HORIZONAL_MAP[builder.type];
+
+  await drawImageArray({
+    ctx,
+    images: builder.winners.map((winner) => winner.avatar),
+    dots: TOP_DOTS.winners,
+    size: 88,
+    radius: 100,
+  });
+  await drawImageArray({
+    ctx,
+    images: builder.secondary.map((winner) => winner.avatar),
+    dots: TOP_DOTS.secondary,
+    size: 67,
+    radius: 100,
+  });
+
+  for (let i = 0; i < builder.winners.length; i++) {
+    const profile = builder.winners[i];
+    const { x, y } = TOP_DOTS.winnersMeta[i];
+
+    drawText({
+      ctx,
+      text: profile.nickname,
+      size: 17,
+      x: x + 89 / 2,
+      y,
+      align: 'center',
+    });
+    drawText({
+      ctx,
+      text: profile.value.toString(),
+      size: 17,
+      x: x + 89 / 2,
+      y: y + 48,
+      font: 'italic',
+      align: 'center',
+    });
+  }
+
+  for (let i = 0; i < builder.secondary.length; i++) {
+    const profile = builder.secondary[i];
+
+    drawText({
+      ctx,
+      text: profile.nickname,
+      size: 14,
+      x: 148,
+      y: 347 + 126 * i,
+      font: 'medium',
+    });
+    drawText({
+      ctx,
+      text: profile.value.toString(),
+      size: 14,
+      x: secondaryWidth,
+      y: 370 + 126 * i,
+      font: 'italic',
+    });
+  }
+
+  return canvas.toBuffer('image/png', { compressionLevel: 0 });
+};
+
+export const drawShop = async (builder: ShopImageBuilder): Promise<Buffer> => {
+  const { canvas, ctx } = await loadCanvas(`shop-shop-${builder.type}`);
+
+  let iter = 0;
+
+  drawText({
+    ctx,
+    text: builder.previousPage,
+    size: 13,
+    x: 43,
+    y: 682,
+    font: 'italic',
+  });
+  drawText({
+    ctx,
+    text: builder.nextPage,
+    size: 13,
+    x: 650,
+    y: 682,
+    font: 'italic',
+  });
+
+  for (let i = 0; i < 2; i++) {
+    for (let j = 0; j < 2; j++) {
+      const element = builder.elements[iter];
+      if (!element) continue;
+
+      iter++;
+      const fixedX = 56 + 308 * j;
+      const fixedY = 172 + 249 * i;
+
+      await drawRoundedImage({
+        ctx,
+        image: images.get(element.thumbnail)!,
+        dx: fixedX,
+        dy: fixedY,
+        width: 279,
+        height: 187,
+        radius: [10, 10, 13, 10],
+      });
+
+      drawText({
+        ctx,
+        text: element.title,
+        size: 12,
+        x: fixedX,
+        y: fixedY + 204,
+        font: 'medium',
+      });
+      drawText({
+        ctx,
+        text: element.id.toString(),
+        size: 12,
+        x: 330 + 308 * j,
+        y: fixedY + 204,
+        font: 'italic',
+      });
+      drawText({
+        ctx,
+        text: `${element.cost} гемов`,
+        size: 12,
+        x: fixedX,
+        y: fixedY + 220,
+        font: 'italic',
+      });
+    }
+  }
 
   return canvas.toBuffer('image/png', { compressionLevel: 0 });
 };

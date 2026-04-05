@@ -1,4 +1,4 @@
-import { DotsMap } from './schemas/canvas';
+import { DotsMap, TopMap } from './schemas/canvas';
 
 export const COLORS = {
   white: '#FFFFFF',
@@ -21,5 +21,30 @@ export const CLAN_DOTS: Record<string, DotsMap[]> = {
     { x: 146, y: 546 },
     { x: 305, y: 536 },
     { x: 465, y: 546 },
+  ],
+};
+
+export const TOP_HORIZONAL_MAP: Record<TopMap, number> = {
+  'top-messages': 321,
+  'top-balance': 287,
+  'top-duels': 380,
+  'top-robs': 350,
+};
+
+export const TOP_DOTS: Record<string, DotsMap[]> = {
+  winners: [
+    { x: 151, y: 141 },
+    { x: 305, y: 131 },
+    { x: 459, y: 141 },
+  ],
+  secondary: [
+    { x: 73, y: 333 },
+    { x: 73, y: 459 },
+    { x: 73, y: 585 },
+  ],
+  winnersMeta: [
+    { x: 151, y: 251 },
+    { x: 305, y: 242 },
+    { x: 459, y: 251 },
   ],
 };
