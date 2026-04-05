@@ -2,6 +2,7 @@ import { KarboAI } from 'karboai';
 import { config } from 'dotenv';
 
 import routes from './modules/index';
+import { loadImages } from './lib/canvas';
 
 config({ path: '.env', quiet: true });
 
@@ -9,6 +10,8 @@ config({ path: '.env', quiet: true });
   if (!process.env.BOT_TOKEN || !process.env.BOT_ID) {
     throw new Error('BOT_TOKEN and BOT_ID must be set in the environment');
   }
+
+  await loadImages();
 
   const karbo = new KarboAI({
     token: process.env.BOT_TOKEN,
