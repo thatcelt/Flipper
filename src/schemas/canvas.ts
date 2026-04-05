@@ -126,6 +126,31 @@ export const ProfileImageBuilderSchema = z.object({
     .optional(),
 });
 
+export const CreditCardImageBuilderSchema = z.object({
+  cardNumber: z.string(),
+  initials: z.string(),
+  date: z.string(),
+  balance: z.number(),
+  cash: z.number(),
+  background: z.string().optional(),
+});
+
+export const ClanImageBuilderSchema = z.object({
+  title: z.string(),
+  avatar: z.string(),
+  participants: z.number(),
+  level: z.number(),
+  chatTitle: z.string(),
+  experience: z.object({
+    from: z.number(),
+    to: z.number(),
+  }),
+  topMessages: z.array(z.string()),
+  topExperience: z.array(z.string()),
+  frame: z.string(),
+  background: z.string().optional(),
+});
+
 export type ImagesMap = z.infer<typeof ImagesEnum>;
 export type FontsMap = z.infer<typeof FontsEnum>;
 export type DrawRoundedImageConfig = z.infer<
@@ -136,3 +161,5 @@ export type DotsMap = z.infer<typeof DotsMapSchema>;
 export type DrawImageArrayConfig = z.infer<typeof DrawImageArrayConfigSchema>;
 export type CanvasContext = z.infer<typeof CanvasContextSchema>;
 export type ProfileImageBuilder = z.infer<typeof ProfileImageBuilderSchema>;
+export type CreditCardBuilder = z.infer<typeof CreditCardImageBuilderSchema>;
+export type ClanImageBuilder = z.infer<typeof ClanImageBuilderSchema>;

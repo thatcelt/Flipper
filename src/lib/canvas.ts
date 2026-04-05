@@ -4,13 +4,15 @@ import { readFile } from 'node:fs/promises';
 import * as settings from '../../public/data/settings.json';
 import {
   CanvasContext,
+  ClanImageBuilder,
+  CreditCardBuilder,
   DrawImageArrayConfig,
   DrawRoundedImageConfig,
   DrawTextConfig,
   ImagesMap,
   ProfileImageBuilder,
 } from '../schemas/canvas';
-import { COLORS } from '../constants';
+import { CLAN_DOTS, COLORS } from '../constants';
 
 const images: Map<ImagesMap, Image> = new Map<ImagesMap, Image>();
 
@@ -34,7 +36,6 @@ export const loadCanvas = async (
   const ctx = canvas.getContext('2d');
 
   const backgroundImage = images.get(background as ImagesMap)!;
-  console.log(background);
   ctx.drawImage(
     backgroundImage,
     0,
@@ -252,6 +253,130 @@ export const drawProfile = async (
         radius: 12,
       });
     } catch {}
+
+  return canvas.toBuffer('image/png', { compressionLevel: 0 });
+};
+
+export const drawCreditCard = async (
+  builder: CreditCardBuilder,
+): Promise<Buffer> => {
+  const { canvas, ctx } = await loadCanvas(
+    'profile-credit-card',
+    builder.background,
+  );
+
+  ctx.font = '25px Poppins Medium';
+  ctx.fillStyle = '#FFFFFF';
+  const splittedCardNumber = builder.cardNumber.split(' ');
+
+  for (let i = 0; i < 4; i++) {
+    ctx.fillText(splittedCardNumber[i], 139 + i * 98, 407);
+  }
+
+  ctx.font = '20px Poppins Medium';
+  ctx.fillText(builder.initials, 138, 460);
+  ctx.fillText(builder.date, 500, 460);
+
+  drawText({
+    ctx,
+    text: `${builder.balance} гемов`,
+    size: 20,
+    x: 224,
+    y: 536,
+    font: 'italic',
+  });
+  drawText({
+    ctx,
+    text: `${builder.cash} гемов`,
+    size: 20,
+    x: 245,
+    y: 568,
+    font: 'italic',
+  });
+
+  return canvas.toBuffer('image/png', { compressionLevel: 0 });
+};
+
+export const drawClan = async (builder: ClanImageBuilder): Promise<Buffer> => {
+  const { canvas, ctx } = await loadCanvas(
+    `frames-clan-${builder.frame}` as ImagesMap,
+    builder.background,
+  );
+  const centeredWidth = 29 + 465 / 2;
+
+  await drawRoundedImage({
+    ctx,
+    image: builder.avatar,
+    dx: 28,
+    dy: 21,
+    width: 150,
+    height: 150,
+    radius: 11,
+  });
+
+  drawText({ ctx, text: builder.title, size: 22, x: 193, y: 40 });
+  drawText({
+    ctx,
+    text: builder.participants.toString(),
+    size: 17,
+    x: 413,
+    y: 80,
+    font: 'italic',
+  });
+  drawText({
+    ctx,
+    text: builder.level.toString(),
+    size: 17,
+    x: 319,
+    y: 109,
+    font: 'italic',
+  });
+  drawText({
+    ctx,
+    text: builder.chatTitle,
+    size: 17,
+    x: 308,
+    y: 137,
+    font: 'italic',
+  });
+
+  ctx.fillStyle = COLORS[builder.frame as keyof typeof COLORS];
+  ctx.beginPath();
+
+  ctx.roundRect(
+    29,
+    197,
+    (builder.experience.from / builder.experience.to) * 465,
+    54,
+    [7, 0, 0, 7],
+  );
+  ctx.fill();
+
+  drawText({
+    ctx,
+    text: `${builder.experience.from}/${builder.experience.to}`,
+    size: 17,
+    x: centeredWidth,
+    y: 230,
+    font: 'regular',
+    color: '#FFFFFF',
+    align: 'center',
+  });
+
+  await drawImageArray({
+    ctx,
+    images: builder.topMessages,
+    dots: CLAN_DOTS.messages,
+    size: 88,
+    radius: 100,
+  });
+  await drawImageArray({
+    ctx,
+    images: builder.topExperience,
+    dots: CLAN_DOTS.experience,
+    size: 88,
+    radius: 100,
+  });
 
   return canvas.toBuffer('image/png', { compressionLevel: 0 });
 };
