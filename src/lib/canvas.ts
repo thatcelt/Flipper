@@ -4,7 +4,9 @@ import { readFile } from 'node:fs/promises';
 import * as settings from '../../public/data/settings.json';
 import {
   CanvasContext,
+  CasinoImageBuilder,
   ClanImageBuilder,
+  CoupleImageBuilder,
   CreditCardBuilder,
   DrawImageArrayConfig,
   DrawRoundedImageConfig,
@@ -516,6 +518,127 @@ export const drawShop = async (builder: ShopImageBuilder): Promise<Buffer> => {
       });
     }
   }
+
+  return canvas.toBuffer('image/png', { compressionLevel: 0 });
+};
+
+export const drawCasino = async (
+  builder: CasinoImageBuilder,
+): Promise<Buffer> => {
+  const { canvas, ctx } = await loadCanvas(builder.type);
+
+  for (let i = 0; i < builder.variants.length; i++) {
+    ctx.drawImage(images.get(builder.variants[i])!, 149 + 160 * i, 241);
+  }
+
+  drawText({
+    ctx,
+    text: `${builder.value} гемов`,
+    size: 22,
+    x: 245 + 208 / 2,
+    y: 510,
+    font: 'italic',
+    align: 'center',
+  });
+
+  return canvas.toBuffer('image/png', { compressionLevel: 0 });
+};
+
+export const drawCouple = async (
+  builder: CoupleImageBuilder,
+): Promise<Buffer> => {
+  const { canvas, ctx } = await loadCanvas(
+    `frames-couple-${builder.frame}` as ImagesMap,
+    builder.background,
+  );
+
+  for (let i = 0; i < 2; i++) {
+    const user = builder.users[i];
+    await drawRoundedImage({
+      ctx,
+      image: user.avatar,
+      dx: 124 + 301 * i,
+      dy: 127,
+      width: 149,
+      height: 149,
+      radius: 100,
+    });
+    drawText({
+      ctx,
+      text: user.nickname,
+      size: 17,
+      x: 140 + (124 + 602 * i) / 2,
+      y: 315,
+      font: 'medium',
+      align: 'center',
+    });
+  }
+
+  drawText({
+    ctx,
+    text: builder.createdAt,
+    size: 14,
+    x: 294,
+    y: 445,
+    font: 'regular',
+  });
+  drawText({
+    ctx,
+    text: builder.kissesMade.toString(),
+    size: 14,
+    x: 302,
+    y: 478,
+    font: 'regular',
+  });
+  drawText({
+    ctx,
+    text: builder.kissesStreak.toString(),
+    size: 14,
+    x: 349,
+    y: 512,
+    font: 'regular',
+  });
+  drawText({
+    ctx,
+    text: builder.level.toString(),
+    size: 17,
+    x: 374,
+    y: 315,
+    font: 'medium',
+  });
+
+  ctx.fillStyle = COLORS[builder.frame as keyof typeof COLORS];
+  ctx.beginPath();
+
+  ctx.roundRect(
+    118,
+    345,
+    (builder.experience.from / builder.experience.to) * 463,
+    54,
+    [7, 0, 0, 7],
+  );
+  ctx.fill();
+
+  drawText({
+    ctx,
+    text: `${builder.experience.from}/${builder.experience.to}`,
+    size: 17,
+    x: 118 + 466 / 2,
+    y: 378,
+    font: 'regular',
+    align: 'center',
+  });
+
+  drawText({
+    ctx,
+    text: `"${builder.answer}"`,
+    size: 14,
+    x: 160,
+    y: 559,
+    font: 'italic',
+    align: 'left',
+    maxWidth: 278,
+  });
 
   return canvas.toBuffer('image/png', { compressionLevel: 0 });
 };

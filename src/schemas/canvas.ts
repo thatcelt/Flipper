@@ -61,6 +61,15 @@ export const TopsEnum = z.enum([
 
 export const ShopsEnum = z.enum(['backgrounds', 'frames', 'other']);
 
+export const CasinoTypesEnum = z.enum(['casino-win', 'casino-lose']);
+
+export const CasinoVariantsEnum = z.enum([
+  'casino-green-dork',
+  'casino-purple-dork',
+  'casino-green-love',
+  'casino-purple-love',
+]);
+
 export const DrawRoundedImageConfigSchema = z.object({
   ctx: z.instanceof(CanvasRenderingContext2D),
   image: z.union([z.string(), z.instanceof(Image)]),
@@ -186,6 +195,32 @@ export const ShopImageBuilderSchema = z.object({
   ),
 });
 
+export const CasinoImageBuilderSchema = z.object({
+  type: CasinoTypesEnum,
+  variants: z.array(CasinoVariantsEnum),
+  value: z.number(),
+});
+
+export const CoupleImageBuilderSchema = z.object({
+  users: z.array(
+    z.object({
+      avatar: z.string(),
+      nickname: z.string(),
+    }),
+  ),
+  createdAt: z.string(),
+  kissesMade: z.number(),
+  kissesStreak: z.number(),
+  level: z.number(),
+  experience: z.object({
+    from: z.number(),
+    to: z.number(),
+  }),
+  answer: z.string(),
+  frame: z.string(),
+  background: z.string().optional(),
+});
+
 export type ImagesMap = z.infer<typeof ImagesEnum>;
 export type FontsMap = z.infer<typeof FontsEnum>;
 export type DrawRoundedImageConfig = z.infer<
@@ -202,3 +237,5 @@ export type TopImageBuilder = z.infer<typeof TopImageBuilderSchema>;
 export type TopMap = z.infer<typeof TopsEnum>;
 export type ShopMap = z.infer<typeof ShopsEnum>;
 export type ShopImageBuilder = z.infer<typeof ShopImageBuilderSchema>;
+export type CasinoImageBuilder = z.infer<typeof CasinoImageBuilderSchema>;
+export type CoupleImageBuilder = z.infer<typeof CoupleImageBuilderSchema>;
