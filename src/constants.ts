@@ -1,6 +1,13 @@
+import { bold, italic } from 'karboai';
+
 import { DotsMap, TopMap } from './schemas/canvas';
 import { main } from '../public/data/commands.json';
-import { bold, italic } from 'karboai';
+import { works } from '../public/data/works.json';
+import { WorksRecord } from './schemas/interactive';
+
+export const DEFAULT_VALUES = {
+  work: 'Безработный',
+};
 
 export const COLORS = {
   white: '#FFFFFF',
@@ -53,4 +60,16 @@ export const TOP_DOTS: Record<string, DotsMap[]> = {
 
 export const ALL_COMMANDS = main
   .map((command) => `${bold(command.name)} - ${italic(command.description)}\n`)
+  .join('\n');
+
+export const WORKS_RECORD = works.reduce((accumulator, currentItem) => {
+  accumulator[currentItem.workId] = currentItem.metadata;
+  return accumulator;
+}, {} as WorksRecord);
+
+export const WORKS_STRING = works
+  .map(
+    (work) =>
+      `${italic(work.metadata.name)} [ID: ${bold(work.workId.toString())}]\nМинимум репутации: ${italic(work.metadata.minReputation.toString())}\nЗарплата: ${italic(work.metadata.salary.toString())}\n`,
+  )
   .join('\n');

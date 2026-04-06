@@ -1,8 +1,10 @@
 import { Router } from 'karboai';
-import { meCallback } from './service';
+
+import { bankCallback, meCallback } from './service';
 
 const router = new Router('profile');
 
 router.command('/me', meCallback);
+router.command('/bank', bankCallback);
 
 export default router;

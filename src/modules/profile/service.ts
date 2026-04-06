@@ -2,7 +2,8 @@ import { KarboContext } from 'karboai';
 
 import { getCreateUser } from '../../lib/prisma';
 import { level } from '../../lib/util';
-import { drawProfile } from '../../lib/canvas';
+import { drawCreditCard, drawProfile } from '../../lib/canvas';
+import { DEFAULT_VALUES, WORKS_RECORD } from '../../constants';
 
 export const meCallback = async ({ karbo, message }: KarboContext) => {
   const user = await getCreateUser(
@@ -27,9 +28,31 @@ export const meCallback = async ({ karbo, message }: KarboContext) => {
       robs: user.stats!.robs,
       duels: user.stats!.duels,
     },
-    work: 'Безработный', // will change later
+    work: user.work ? WORKS_RECORD[user.work].name : DEFAULT_VALUES.work,
     reputation: user.stats!.reputation,
     background: user.currentBackground || undefined,
+  });
+
+  await karbo.image(
+    message.chatId,
+    [await karbo.upload(image)],
+    message.messageId,
+  );
+};
+
+export const bankCallback = async ({ karbo, message }: KarboContext) => {
+  const user = await getCreateUser(
+    message.author.userId,
+    message.author.nickname,
+    { card: true },
+  );
+
+  const image = await drawCreditCard({
+    cardNumber: user.card!.number,
+    initials: user.card!.initials,
+    date: user.card!.date,
+    balance: user.card!.balance,
+    cash: user.card!.cash,
   });
 
   await karbo.image(

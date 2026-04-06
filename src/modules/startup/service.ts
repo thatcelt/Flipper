@@ -1,14 +1,6 @@
 import { bold, code, KarboContext } from 'karboai';
 import { ALL_COMMANDS } from '../../constants';
-import { createUser, prisma } from '../../lib/prisma';
-import { delay } from '../../lib/util';
-
-const updateStats = async (userId: string) => {
-  await prisma.stats.update({
-    where: { userId },
-    data: { messages: { increment: 1 }, experience: { increment: 1 } },
-  });
-};
+import { prisma } from '../../lib/prisma';
 
 export const helpCallback = async ({ karbo, message }: KarboContext) => {
   await karbo.text(
@@ -30,10 +22,9 @@ export const joinCallback = async ({ karbo, message }: KarboContext) => {
 
 export const onMessageCallback = async ({ message }: KarboContext) => {
   try {
-    await updateStats(message.author.userId);
-  } catch {
-    await delay(3);
-    await createUser(message.author.userId, message.author.nickname);
-    await updateStats(message.author.userId);
-  }
+    await prisma.stats.update({
+      where: { userId: message.author.userId },
+      data: { messages: { increment: 1 }, experience: { increment: 1 } },
+    });
+  } catch {}
 };

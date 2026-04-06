@@ -1,0 +1,44 @@
+{
+  "works": [
+    {
+      "workId": -1,
+      "metadata": {
+        "name": "Нетраннер",
+        "salary": 100,
+        "minReputation": -10
+      }
+    },
+    {
+      "workId": 0,
+      "metadata": {
+        "name": "Лаборант",
+        "salary": 150,
+        "minReputation": 0
+      }
+    },
+    {
+      "workId": 1,
+      "metadata": {
+        "name": "Инженер протоколов",
+        "salary": 200,
+        "minReputation": 10
+      }
+    },
+    {
+      "workId": 2,
+      "metadata": {
+        "name": "Архо-прошивальщик",
+        "salary": 400,
+        "minReputation": 40
+      }
+    },
+    {
+      "workId": 3,
+      "metadata": {
+        "name": "Интернет призрак",
+        "salary": 650,
+        "minReputation": 75
+      }
+    }
+  ]
+}
