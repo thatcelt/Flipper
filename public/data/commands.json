@@ -2,7 +2,47 @@
   "main": [
     {
       "name": "/help",
-      "description": "вывод информации о боте и командах"
+      "description": "информация о боте и командах"
+    },
+    {
+      "name": "/help profile",
+      "description": "информация о профиле"
+    },
+    {
+      "name": "/help eco",
+      "description": "информация о экономике и деньгах"
+    }
+  ],
+  "sub": [
+    {
+      "subKey": "profile",
+      "commands": [
+        {
+          "name": "/me",
+          "description": "ваш профиль в боте"
+        },
+        {
+          "name": "/bank",
+          "description": "ваш банковский счет"
+        }
+      ]
+    },
+    {
+      "subKey": "eco",
+      "commands": [
+        {
+          "name": "/work",
+          "description": "поход на работу (раз в 12 часов)"
+        },
+        {
+          "name": "/wlist",
+          "description": "список работ"
+        },
+        {
+          "name": "/daily",
+          "description": "ежедневная награда"
+        }
+      ]
     }
   ]
 }

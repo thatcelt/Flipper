@@ -1,11 +1,28 @@
 import { bold, code, KarboContext } from 'karboai';
-import { ALL_COMMANDS } from '../../constants';
+import { ALL_COMMANDS, SUB_COMMANDS } from '../../constants';
 import { prisma } from '../../lib/prisma';
+import { SubCommandsEnum } from '../../schemas/interactive';
+import { outputException } from '../../lib/snippets';
 
 export const helpCallback = async ({ karbo, message }: KarboContext) => {
+  const splittedContent = message.content.split(' ');
+  const baseText = `${bold('Навигация')}\n\n`;
+
+  let commandsCategory: string | undefined;
+
+  try {
+    if (splittedContent[1]) {
+      commandsCategory =
+        SUB_COMMANDS[SubCommandsEnum.parse(splittedContent[1])];
+    }
+  } catch {
+    await outputException({ karbo, message }, 'UNKNOWN_CATEGORY');
+    return;
+  }
+
   await karbo.text(
     message.chatId,
-    `${bold('Навигация')}\n\n${ALL_COMMANDS}`,
+    `${baseText}${commandsCategory || ALL_COMMANDS}`,
     message.messageId,
   );
 };

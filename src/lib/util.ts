@@ -1,3 +1,8 @@
+import { CUTOFF_TIME, RELATIVE_UNITS } from '../constants';
+
+export const randomNumber = (min: number, max: number): number =>
+  Math.floor(Math.random() * (max - min + 1)) + min;
+
 export const generateCardDate = (): string => {
   const date = new Date();
 
@@ -21,3 +26,20 @@ export const level = (experience: number) => {
     maxExperience: 100 * Math.pow(level + 1, 2),
   };
 };
+
+export const getRelative = (timestamp: number): string => {
+  const deltaSeconds = Math.round(timestamp / 1000);
+
+  const unitIndex = CUTOFF_TIME.findIndex(
+    (cutoff) => cutoff > Math.abs(deltaSeconds),
+  );
+
+  const rtf = new Intl.RelativeTimeFormat('ru', { numeric: 'auto' });
+
+  return rtf.format(
+    Math.round(deltaSeconds / (CUTOFF_TIME[unitIndex - 1] || 1)),
+    RELATIVE_UNITS[unitIndex - 1],
+  );
+};
+
+export const generateDaily = (): number => randomNumber(250, 350);

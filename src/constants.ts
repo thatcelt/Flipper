@@ -1,9 +1,13 @@
-import { bold, italic } from 'karboai';
+import { bold, code, italic } from 'karboai';
 
 import { DotsMap, TopMap } from './schemas/canvas';
-import { main } from '../public/data/commands.json';
+import { main, sub } from '../public/data/commands.json';
 import { works } from '../public/data/works.json';
-import { WorksRecord } from './schemas/interactive';
+import {
+  SubCommand,
+  SubCommandsRecord,
+  WorksRecord,
+} from './schemas/interactive';
 
 export const DEFAULT_VALUES = {
   work: 'Безработный',
@@ -67,9 +71,51 @@ export const WORKS_RECORD = works.reduce((accumulator, currentItem) => {
   return accumulator;
 }, {} as WorksRecord);
 
-export const WORKS_STRING = works
+export const WORKS_STRING = `${bold('Доступные работы:')}\n\n${works
   .map(
     (work) =>
-      `${italic(work.metadata.name)} [ID: ${bold(work.workId.toString())}]\nМинимум репутации: ${italic(work.metadata.minReputation.toString())}\nЗарплата: ${italic(work.metadata.salary.toString())}\n`,
+      `${italic(bold(work.metadata.name))} [ID: ${code(work.workId.toString())}]\nМинимум репутации: ${italic(work.metadata.minReputation.toString())}\nЗарплата: ${italic(work.metadata.salary.toString())}\n`,
   )
-  .join('\n');
+  .join('\n')}`;
+
+export const SUB_COMMANDS = sub.reduce((accumulator, currentItem) => {
+  accumulator[currentItem.subKey as SubCommand] = currentItem.commands
+    .map(
+      (command) => `${bold(command.name)} - ${italic(command.description)}\n`,
+    )
+    .join('\n');
+  return accumulator;
+}, {} as SubCommandsRecord);
+
+export const CUTOFF_TIME = [
+  60,
+  3600,
+  86400,
+  86400 * 7,
+  86400 * 30,
+  86400 * 365,
+  Infinity,
+];
+
+export const RELATIVE_UNITS: Intl.RelativeTimeFormatUnit[] = [
+  'second',
+  'minute',
+  'hour',
+  'day',
+  'month',
+  'year',
+];
+
+export const ERRORS_MAP = {
+  UNKNOWN_CATEGORY: `${code('Такой категории не существует')}`,
+  NO_WORK: `${code('У вас нет активной работы')}`,
+  GET_FIRED: `${code('Вы были уволены из-за низкой репутации...')}`,
+  WORK_NOT_FOUND: `${code('Работа не найдена')}`,
+  ALREADY_WORKING: `${code('Вы уже работаете здесь')}`,
+  NOT_ENOUGH_REPUTATION: `${code('Недостаточно репутации для этой работы')}`,
+};
+
+export const DELAYS = {
+  daily: 86400000,
+  work: 28800000,
+};
