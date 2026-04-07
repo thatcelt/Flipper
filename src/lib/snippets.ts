@@ -5,6 +5,7 @@ import { findUuid, getRelative } from './util';
 import { prisma } from './prisma';
 import { CardColumn } from '../schemas/prisma';
 import { errorsMap } from '../../public/data/constants.json';
+import { UserInclude } from '../../generated/prisma/models';
 
 export const outputException = async (
   context: KarboContext,

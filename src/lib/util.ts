@@ -3,7 +3,7 @@ import {
   casinoVariantsList,
   relativeUnits,
 } from '../../public/data/constants.json';
-import { CasinoType, CasinoVariant } from '../schemas/canvas';
+import { CasinoType, CasinoVariant, GambleType } from '../schemas/canvas';
 
 export const randomNumber = (min: number, max: number): number =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -32,18 +32,21 @@ export const level = (experience: number) => {
   };
 };
 
-export const getRelative = (timestamp: number): string => {
-  const deltaSeconds = Math.round(timestamp / 1000);
+export const getRelative = (deltaMs: number): string => {
+  const deltaSeconds = Math.round(deltaMs / 1000);
 
   const unitIndex = CUTOFF_TIME.findIndex(
     (cutoff) => cutoff > Math.abs(deltaSeconds),
+  );
+  const value = Math.round(
+    deltaSeconds / (unitIndex === 0 ? 1 : CUTOFF_TIME[unitIndex - 1]),
   );
 
   const rtf = new Intl.RelativeTimeFormat('ru', { numeric: 'auto' });
 
   return rtf.format(
-    Math.round(deltaSeconds / (CUTOFF_TIME[unitIndex - 1] || 1)),
-    (relativeUnits as Intl.RelativeTimeFormatUnit[])[unitIndex - 1],
+    value,
+    (relativeUnits as Intl.RelativeTimeFormatUnit[])[unitIndex],
   );
 };
 
@@ -65,10 +68,10 @@ export const generateCasinoVariants = (isWon: boolean): CasinoVariant[] => {
     .slice(0, 3) as CasinoVariant[];
 };
 
-export const getChangingExpression = (type: CasinoType, value: number) => {
+export const getChangingExpression = (type: GambleType, value: number) => {
   const expressions = {
-    'casino-win': { increment: value },
-    'casino-lose': { decrement: value },
+    won: { increment: value },
+    lose: { decrement: value },
   };
 
   return expressions[type];
@@ -80,3 +83,5 @@ export const findUuid = (content: string): string[] | null =>
   );
 
 export const numberWithTax = (value: number): number => Math.floor(value * 0.8);
+
+export const isFlipWon = (): boolean => Math.random() > 0.5;
