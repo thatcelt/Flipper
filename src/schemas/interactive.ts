@@ -3,13 +3,15 @@ import z from 'zod';
 export const SubCommandsEnum = z.enum(['profile', 'eco']);
 
 export const ErrorsEnum = z.enum([
-  'UNKNOWN_CATEGORY',
-  'NOT_ENOUGH_MONEY',
-  'NOT_ENOUGH_REPUTATION',
-  'NO_WORK',
-  'GET_FIRED',
-  'WORK_NOT_FOUND',
-  'ALREADY_WORKING',
+  'unknownCategory',
+  'notEnoughMoney',
+  'notEnoughReputation',
+  'noWork',
+  'getFired',
+  'workNotFound',
+  'alreadyWorking',
+  'enterCorrectAmount',
+  'minDeposit',
 ]);
 
 export const WorksRecordSchema = z.record(

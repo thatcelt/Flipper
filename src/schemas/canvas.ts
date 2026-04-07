@@ -1,6 +1,6 @@
 import { Canvas, CanvasRenderingContext2D, Image } from 'canvas';
 import { z } from 'zod';
-import { COLORS } from '../constants';
+import { colors } from '../../public/data/constants.json';
 
 export const ImagesEnum = z.enum([
   'casino-lose',
@@ -88,7 +88,7 @@ export const DrawTextConfigSchema = z.object({
   y: z.number(),
   font: FontsEnum.optional(),
   color: z
-    .enum(Object.keys(COLORS) as [keyof typeof COLORS, ...string[]])
+    .enum(Object.keys(colors) as [keyof typeof colors, ...string[]])
     .optional(),
   align: AlignEnum.optional(),
   maxWidth: z.number().optional(),
@@ -227,15 +227,15 @@ export type DrawRoundedImageConfig = z.infer<
   typeof DrawRoundedImageConfigSchema
 >;
 export type DrawTextConfig = z.infer<typeof DrawTextConfigSchema>;
-export type DotsMap = z.infer<typeof DotsMapSchema>;
 export type DrawImageArrayConfig = z.infer<typeof DrawImageArrayConfigSchema>;
 export type CanvasContext = z.infer<typeof CanvasContextSchema>;
 export type ProfileImageBuilder = z.infer<typeof ProfileImageBuilderSchema>;
 export type CreditCardBuilder = z.infer<typeof CreditCardImageBuilderSchema>;
 export type ClanImageBuilder = z.infer<typeof ClanImageBuilderSchema>;
 export type TopImageBuilder = z.infer<typeof TopImageBuilderSchema>;
-export type TopMap = z.infer<typeof TopsEnum>;
 export type ShopMap = z.infer<typeof ShopsEnum>;
 export type ShopImageBuilder = z.infer<typeof ShopImageBuilderSchema>;
 export type CasinoImageBuilder = z.infer<typeof CasinoImageBuilderSchema>;
 export type CoupleImageBuilder = z.infer<typeof CoupleImageBuilderSchema>;
+export type CasinoVariant = z.infer<typeof CasinoVariantsEnum>;
+export type CasinoType = z.infer<typeof CasinoTypesEnum>;

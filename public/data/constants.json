@@ -1,0 +1,73 @@
+{
+  "casinoVariantsList": [
+    "casino-green-dork",
+    "casino-purple-dork",
+    "casino-green-love",
+    "casino-purple-love"
+  ],
+  "colors": {
+    "white": "#FFFFFF",
+    "orange": "#99580A",
+    "red": "#990a0a",
+    "blue": "#0a4399",
+    "green": "#43990a",
+    "yellow": "#99780a",
+    "pink": "#990a92",
+    "purple": "#600a99"
+  },
+  "staticValues": {
+    "work": "Безработный",
+    "minDeposit": 100
+  },
+  "clanDots": {
+    "messages": [
+      { "x": 146, "y": 333 },
+      { "x": 305, "y": 323 },
+      { "x": 465, "y": 333 }
+    ],
+    "experience": [
+      { "x": 146, "y": 546 },
+      { "x": 305, "y": 536 },
+      { "x": 465, "y": 546 }
+    ]
+  },
+  "topHorizontalMap": {
+    "top-messages": 321,
+    "top-balance": 287,
+    "top-duels": 380,
+    "top-robs": 350
+  },
+  "topDots": {
+    "winners": [
+      { "x": 151, "y": 141 },
+      { "x": 305, "y": 131 },
+      { "x": 459, "y": 141 }
+    ],
+    "secondary": [
+      { "x": 73, "y": 333 },
+      { "x": 73, "y": 459 },
+      { "x": 73, "y": 585 }
+    ],
+    "winnersMeta": [
+      { "x": 151, "y": 251 },
+      { "x": 305, "y": 242 },
+      { "x": 459, "y": 251 }
+    ]
+  },
+  "relativeUnits": ["second", "minute", "hour", "day", "month", "year"],
+  "errorsMap": {
+    "unknownCategory": "`Такой категории не существует`",
+    "noWork": "`У вас нет активной работы`",
+    "getFired": "`Вы были уволены из-за низкой репутации...`",
+    "workNotFound": "`Работа не найдена`",
+    "alreadyWorking": "`Вы уже работаете здесь`",
+    "notEnoughReputation": "`Недостаточно репутации для этой работы`",
+    "enterCorrectAmount": "`Введите корректную сумму`",
+    "minDeposit": "`Минимальная сумма депозита: 100`",
+    "notEnoughMoney": "`Недостаточно средств на счете`"
+  },
+  "delays": {
+    "daily": 86400000,
+    "work": 28800000
+  }
+}

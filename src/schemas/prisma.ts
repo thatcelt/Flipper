@@ -1,6 +1,8 @@
 import z from 'zod';
 import { Prisma } from '../../generated/prisma/client';
 
+export const CardColumnEnum = z.enum(['cash', 'balance']);
+
 export const IncludeUserSchema = z.object({
   stats: z.boolean().optional(),
   card: z.boolean().optional(),
@@ -11,3 +13,4 @@ export const IncludeUserSchema = z.object({
 export type UserWithStats = Prisma.UserGetPayload<{ include: { stats: true } }>;
 
 export type IncludeUser = z.infer<typeof IncludeUserSchema>;
+export type CardColumn = z.infer<typeof CardColumnEnum>;
