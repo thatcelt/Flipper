@@ -2,7 +2,6 @@ import { CUTOFF_TIME } from '../constants';
 import {
   casinoVariantsList,
   relativeUnits,
-  uuidRegex,
 } from '../../public/data/constants.json';
 import { CasinoType, CasinoVariant } from '../schemas/canvas';
 
