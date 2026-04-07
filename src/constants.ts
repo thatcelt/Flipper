@@ -42,3 +42,8 @@ export const CUTOFF_TIME = [
   86400 * 365,
   Infinity,
 ];
+
+export const FLIP_CASES: Record<string, string> = {
+  true: `${bold('Флиппер!')} Вы выиграли! Ваш баланс повышен на`,
+  false: `${bold('Зеро!')} Вы проиграли! Ваш баланс снижен на`,
+};

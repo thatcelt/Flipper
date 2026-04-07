@@ -54,7 +54,7 @@
       { "x": 459, "y": 251 }
     ]
   },
-  "relativeUnits": ["second", "minute", "hour", "day", "month", "year"],
+  "relativeUnits": ["second", "minute", "hour", "day", "week", "month", "year"],
   "errorsMap": {
     "unknownCategory": "`Такой категории не существует`",
     "noWork": "`У вас нет активной работы`",
@@ -68,6 +68,7 @@
   },
   "delays": {
     "daily": 86400000,
-    "work": 28800000
+    "work": 28800000,
+    "coin": 120000
   }
 }

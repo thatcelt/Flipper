@@ -70,6 +70,8 @@ export const CasinoVariantsEnum = z.enum([
   'casino-purple-love',
 ]);
 
+export const GambleTypesEnum = z.enum(['won', 'lose']);
+
 export const DrawRoundedImageConfigSchema = z.object({
   ctx: z.instanceof(CanvasRenderingContext2D),
   image: z.union([z.string(), z.instanceof(Image)]),
@@ -239,3 +241,4 @@ export type CasinoImageBuilder = z.infer<typeof CasinoImageBuilderSchema>;
 export type CoupleImageBuilder = z.infer<typeof CoupleImageBuilderSchema>;
 export type CasinoVariant = z.infer<typeof CasinoVariantsEnum>;
 export type CasinoType = z.infer<typeof CasinoTypesEnum>;
+export type GambleType = z.infer<typeof GambleTypesEnum>;

@@ -1,6 +1,6 @@
-import { bold, KarboContext } from 'karboai';
+import { bold, code, KarboContext } from 'karboai';
 
-import { WORKS_RECORD, WORKS_STRING } from '../../constants';
+import { FLIP_CASES, WORKS_RECORD, WORKS_STRING } from '../../constants';
 import { getCreateUser, prisma } from '../../lib/prisma';
 import {
   outputException,
@@ -14,6 +14,7 @@ import {
   getChangingExpression,
   getCasinoType,
   numberWithTax,
+  isFlipWon,
 } from '../../lib/util';
 import { UserWithStats } from '../../schemas/prisma';
 import { delays, staticValues } from '../../../public/data/constants.json';
@@ -104,7 +105,7 @@ export const workCallback = async ({ karbo, message }: KarboContext) => {
   if (timestamp < user.schedule!.canWorkAt) {
     await outputRelativeTime(
       { karbo, message },
-      timestamp - Number(user.schedule!.canWorkAt),
+      Number(user.schedule!.canWorkAt) - timestamp,
     );
     return;
   }
@@ -139,7 +140,7 @@ export const dailyCallback = async ({ karbo, message }: KarboContext) => {
   if (timestamp < user.schedule!.canDailyAt) {
     await outputRelativeTime(
       { karbo, message },
-      timestamp - Number(user.schedule!.canDailyAt),
+      Number(user.schedule!.canDailyAt) - timestamp,
     );
     return;
   }
@@ -189,7 +190,10 @@ export const betCallback = async ({ karbo, message }: KarboContext) => {
     data: {
       card: {
         update: {
-          balance: getChangingExpression(type, bet),
+          balance: getChangingExpression(
+            type == 'casino-win' ? 'won' : 'lose',
+            bet,
+          ),
         },
       },
     },
@@ -263,6 +267,51 @@ export const tradeCallback = async ({ karbo, message }: KarboContext) => {
   await karbo.text(
     message.chatId,
     `Вы перевели ${taxedSummary} гемов для ${bold(targetUser.nickname)} с учётом комиссии`,
+    message.messageId,
+  );
+};
+
+export const flipCallback = async ({ karbo, message }: KarboContext) => {
+  const splittedContent = message.content.split(' ');
+
+  const bet = await validateCardValue({ karbo, message }, splittedContent[1]);
+
+  if (!bet) return;
+
+  const timestamp = Date.now();
+
+  const user = await prisma.user.findUniqueOrThrow({
+    where: { id: message.author.userId },
+    include: { schedule: true },
+  });
+
+  if (user.schedule!.canCoinAt > timestamp) {
+    await outputRelativeTime(
+      { karbo, message },
+      Number(user.schedule!.canCoinAt) - timestamp,
+    );
+    return;
+  }
+
+  const type = isFlipWon();
+  const increatedBet = Math.floor(Number(bet * 1.5));
+  const text = FLIP_CASES[String(type)];
+
+  await prisma.user.update({
+    where: { id: message.author.userId },
+    data: {
+      schedule: { update: { canCoinAt: timestamp + delays.coin } },
+      card: {
+        update: {
+          balance: getChangingExpression(type ? 'won' : 'lose', increatedBet),
+        },
+      },
+    },
+  });
+
+  await karbo.text(
+    message.chatId,
+    `${text} ${code(increatedBet.toString())} гемов`,
     message.messageId,
   );
 };
