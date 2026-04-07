@@ -3,7 +3,8 @@ import { KarboContext } from 'karboai';
 import { getCreateUser } from '../../lib/prisma';
 import { level } from '../../lib/util';
 import { drawCreditCard, drawProfile } from '../../lib/canvas';
-import { DEFAULT_VALUES, WORKS_RECORD } from '../../constants';
+import { WORKS_RECORD } from '../../constants';
+import { staticValues } from '../../../public/data/constants.json';
 
 export const meCallback = async ({ karbo, message }: KarboContext) => {
   const user = await getCreateUser(
@@ -28,7 +29,7 @@ export const meCallback = async ({ karbo, message }: KarboContext) => {
       robs: user.stats!.robs,
       duels: user.stats!.duels,
     },
-    work: user.work ? WORKS_RECORD[user.work].name : DEFAULT_VALUES.work,
+    work: user.work ? WORKS_RECORD[user.work].name : staticValues.work,
     reputation: user.stats!.reputation,
     background: user.currentBackground || undefined,
   });

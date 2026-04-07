@@ -1,10 +1,23 @@
 import { bold, KarboContext } from 'karboai';
 
-import { DELAYS, WORKS_RECORD, WORKS_STRING } from '../../constants';
+import { WORKS_RECORD, WORKS_STRING } from '../../constants';
 import { getCreateUser, prisma } from '../../lib/prisma';
-import { outputException, outputRelativeTime } from '../../lib/snippets';
-import { generateDaily } from '../../lib/util';
+import {
+  outputException,
+  outputRelativeTime,
+  validateCardValue,
+  validateUser,
+} from '../../lib/snippets';
+import {
+  generateCasinoVariants,
+  generateDaily,
+  getChangingExpression,
+  getCasinoType,
+  numberWithTax,
+} from '../../lib/util';
 import { UserWithStats } from '../../schemas/prisma';
+import { delays, staticValues } from '../../../public/data/constants.json';
+import { drawCasino } from '../../lib/canvas';
 
 const setWork = async (
   context: KarboContext,
@@ -16,7 +29,7 @@ const setWork = async (
   if (!work) {
     await outputException(
       { karbo: context.karbo, message: context.message },
-      'WORK_NOT_FOUND',
+      'workNotFound',
     );
     return;
   }
@@ -24,7 +37,7 @@ const setWork = async (
   if (user.work == workId) {
     await outputException(
       { karbo: context.karbo, message: context.message },
-      'ALREADY_WORKING',
+      'alreadyWorking',
     );
     return;
   }
@@ -32,7 +45,7 @@ const setWork = async (
   if (user.stats!.reputation < work.minReputation) {
     await outputException(
       { karbo: context.karbo, message: context.message },
-      'NOT_ENOUGH_REPUTATION',
+      'notEnoughReputation',
     );
     return;
   }
@@ -69,12 +82,12 @@ export const workCallback = async ({ karbo, message }: KarboContext) => {
   const work = WORKS_RECORD[user.work!];
 
   if (!work) {
-    await outputException({ karbo, message }, 'NO_WORK');
+    await outputException({ karbo, message }, 'noWork');
     return;
   }
 
   if (work.minReputation > user.stats!.reputation) {
-    await outputException({ karbo, message }, 'GET_FIRED');
+    await outputException({ karbo, message }, 'getFired');
     await prisma.user.update({
       where: {
         id: message.author.userId,
@@ -103,7 +116,7 @@ export const workCallback = async ({ karbo, message }: KarboContext) => {
     data: {
       card: { update: { cash: { increment: work.salary } } },
       schedule: {
-        update: { canWorkAt: timestamp + DELAYS.work },
+        update: { canWorkAt: timestamp + delays.work },
       },
     },
   });
@@ -141,13 +154,115 @@ export const dailyCallback = async ({ karbo, message }: KarboContext) => {
       card: {
         update: { cash: { increment: reward } },
       },
-      schedule: { update: { canDailyAt: timestamp + DELAYS.daily } },
+      schedule: { update: { canDailyAt: timestamp + delays.daily } },
     },
   });
 
   await karbo.text(
     message.chatId,
     `За ежедневную награду вы заработали ${reward} гемов`,
+    message.messageId,
+  );
+};
+
+export const betCallback = async ({ karbo, message }: KarboContext) => {
+  const splitted = message.content.split(' ');
+  const bet = await validateCardValue({ karbo, message }, splitted[1]);
+  if (!bet) return;
+
+  if (bet < staticValues.minDeposit) {
+    await outputException({ karbo, message }, 'minDeposit');
+    return;
+  }
+
+  const type = getCasinoType();
+  const variants = generateCasinoVariants(type == 'casino-win');
+
+  const image = await drawCasino({
+    type,
+    variants,
+    value: type == 'casino-win' ? bet * 2 : bet,
+  });
+
+  await prisma.user.update({
+    where: { id: message.author.userId },
+    data: {
+      card: {
+        update: {
+          balance: getChangingExpression(type, bet),
+        },
+      },
+    },
+  });
+
+  await karbo.image(
+    message.chatId,
+    [await karbo.upload(image)],
+    message.messageId,
+  );
+};
+
+export const transferCallback = async ({ karbo, message }: KarboContext) => {
+  const splittedContent = message.content.split(' ');
+  const transferSummary = await validateCardValue(
+    { karbo, message },
+    splittedContent[1],
+    'cash',
+  );
+
+  if (!transferSummary) return;
+
+  await prisma.user.update({
+    where: { id: message.author.userId },
+    data: {
+      card: {
+        update: {
+          cash: { decrement: transferSummary },
+          balance: { increment: transferSummary },
+        },
+      },
+    },
+  });
+
+  await karbo.text(
+    message.chatId,
+    `Вы перевели ${transferSummary} гемов`,
+    message.messageId,
+  );
+};
+
+export const tradeCallback = async ({ karbo, message }: KarboContext) => {
+  const splittedContent = message.content.split(' ');
+
+  const tradeSummary = await validateCardValue(
+    { karbo, message },
+    splittedContent[1],
+  );
+
+  if (!tradeSummary) return;
+
+  const id = await validateUser({ karbo, message });
+
+  if (!id) return;
+
+  const taxedSummary = numberWithTax(tradeSummary);
+
+  await prisma.$transaction([
+    prisma.user.update({
+      where: { id: message.author.userId },
+      data: { card: { update: { balance: { decrement: tradeSummary } } } },
+    }),
+    prisma.user.update({
+      where: { id },
+      data: { card: { update: { balance: { increment: taxedSummary } } } },
+    }),
+  ]);
+
+  const targetUser = await karbo.user(id);
+
+  await karbo.text(
+    message.chatId,
+    `Вы перевели ${taxedSummary} гемов для ${bold(targetUser.nickname)} с учётом комиссии`,
     message.messageId,
   );
 };

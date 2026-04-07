@@ -16,7 +16,7 @@ export const helpCallback = async ({ karbo, message }: KarboContext) => {
         SUB_COMMANDS[SubCommandsEnum.parse(splittedContent[1])];
     }
   } catch {
-    await outputException({ karbo, message }, 'UNKNOWN_CATEGORY');
+    await outputException({ karbo, message }, 'unknownCategory');
     return;
   }
 

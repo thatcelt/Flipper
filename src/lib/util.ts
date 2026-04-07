@@ -1,4 +1,10 @@
-import { CUTOFF_TIME, RELATIVE_UNITS } from '../constants';
+import { CUTOFF_TIME } from '../constants';
+import {
+  casinoVariantsList,
+  relativeUnits,
+  uuidRegex,
+} from '../../public/data/constants.json';
+import { CasinoType, CasinoVariant } from '../schemas/canvas';
 
 export const randomNumber = (min: number, max: number): number =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -38,8 +44,40 @@ export const getRelative = (timestamp: number): string => {
 
   return rtf.format(
     Math.round(deltaSeconds / (CUTOFF_TIME[unitIndex - 1] || 1)),
-    RELATIVE_UNITS[unitIndex - 1],
+    (relativeUnits as Intl.RelativeTimeFormatUnit[])[unitIndex - 1],
   );
 };
 
 export const generateDaily = (): number => randomNumber(250, 350);
+
+export const getCasinoType = (): CasinoType =>
+  Math.random() < 0.25 ? 'casino-win' : 'casino-lose';
+
+export const generateCasinoVariants = (isWon: boolean): CasinoVariant[] => {
+  if (isWon) {
+    const winVariant =
+      casinoVariantsList[Math.floor(Math.random() * casinoVariantsList.length)];
+
+    return Array.from({ length: 3 }, () => winVariant) as CasinoVariant[];
+  }
+
+  return casinoVariantsList
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 3) as CasinoVariant[];
+};
+
+export const getChangingExpression = (type: CasinoType, value: number) => {
+  const expressions = {
+    'casino-win': { increment: value },
+    'casino-lose': { decrement: value },
+  };
+
+  return expressions[type];
+};
+
+export const findUuid = (content: string): string[] | null =>
+  content.match(
+    /[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}/gi,
+  );
+
+export const numberWithTax = (value: number): number => Math.floor(value * 0.8);

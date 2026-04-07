@@ -16,7 +16,12 @@ import {
   ShopImageBuilder,
   TopImageBuilder,
 } from '../schemas/canvas';
-import { CLAN_DOTS, COLORS, TOP_DOTS, TOP_HORIZONAL_MAP } from '../constants';
+import {
+  clanDots,
+  colors,
+  topDots,
+  topHorizontalMap,
+} from '../../public/data/constants.json';
 
 const images: Map<ImagesMap, Image> = new Map<ImagesMap, Image>();
 
@@ -86,7 +91,7 @@ const drawText = (config: DrawTextConfig): void => {
 
   config.ctx.font = `${config.size}px Ubuntu Sans Mono ${font.charAt(0).toUpperCase() + font.slice(1)}`;
   config.ctx.textAlign = config.align || 'left';
-  config.ctx.fillStyle = config.color || COLORS.white;
+  config.ctx.fillStyle = config.color || colors.white;
   config.ctx.fillText(config.text, config.x, config.y, config.maxWidth);
 };
 
@@ -144,7 +149,7 @@ export const drawProfile = async (
     font: 'italic',
   });
 
-  ctx.fillStyle = COLORS[builder.frame as keyof typeof COLORS];
+  ctx.fillStyle = colors[builder.frame as keyof typeof colors];
   ctx.beginPath();
 
   ctx.roundRect(
@@ -344,7 +349,7 @@ export const drawClan = async (builder: ClanImageBuilder): Promise<Buffer> => {
     font: 'italic',
   });
 
-  ctx.fillStyle = COLORS[builder.frame as keyof typeof COLORS];
+  ctx.fillStyle = colors[builder.frame as keyof typeof colors];
   ctx.beginPath();
 
   ctx.roundRect(
@@ -370,14 +375,14 @@ export const drawClan = async (builder: ClanImageBuilder): Promise<Buffer> => {
   await drawImageArray({
     ctx,
     images: builder.topMessages,
-    dots: CLAN_DOTS.messages,
+    dots: clanDots.messages,
     size: 88,
     radius: 100,
   });
   await drawImageArray({
     ctx,
     images: builder.topExperience,
-    dots: CLAN_DOTS.experience,
+    dots: clanDots.experience,
     size: 88,
     radius: 100,
   });
@@ -387,26 +392,26 @@ export const drawClan = async (builder: ClanImageBuilder): Promise<Buffer> => {
 
 export const drawTop = async (builder: TopImageBuilder): Promise<Buffer> => {
   const { canvas, ctx } = await loadCanvas(builder.type);
-  const secondaryWidth = TOP_HORIZONAL_MAP[builder.type];
+  const secondaryWidth = topHorizontalMap[builder.type];
 
   await drawImageArray({
     ctx,
     images: builder.winners.map((winner) => winner.avatar),
-    dots: TOP_DOTS.winners,
+    dots: topDots.winners,
     size: 88,
     radius: 100,
   });
   await drawImageArray({
     ctx,
     images: builder.secondary.map((winner) => winner.avatar),
-    dots: TOP_DOTS.secondary,
+    dots: topDots.secondary,
     size: 67,
     radius: 100,
   });
 
   for (let i = 0; i < builder.winners.length; i++) {
     const profile = builder.winners[i];
-    const { x, y } = TOP_DOTS.winnersMeta[i];
+    const { x, y } = topDots.winnersMeta[i];
 
     drawText({
       ctx,
@@ -607,7 +612,7 @@ export const drawCouple = async (
     font: 'medium',
   });
 
-  ctx.fillStyle = COLORS[builder.frame as keyof typeof COLORS];
+  ctx.fillStyle = colors[builder.frame as keyof typeof colors];
   ctx.beginPath();
 
   ctx.roundRect(
