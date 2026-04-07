@@ -1,8 +1,11 @@
 import { bold, code, KarboContext } from 'karboai';
+
 import { ALL_COMMANDS, SUB_COMMANDS } from '../../constants';
-import { prisma } from '../../lib/prisma';
+import { getCreateUser, prisma } from '../../lib/prisma';
 import { SubCommandsEnum } from '../../schemas/interactive';
 import { outputException } from '../../lib/snippets';
+import { leaveEventCallbacks } from '../../../public/data/constants.json';
+import { delay } from '../../lib/util';
 
 export const helpCallback = async ({ karbo, message }: KarboContext) => {
   const splittedContent = message.content.split(' ');
@@ -38,10 +41,27 @@ export const joinCallback = async ({ karbo, message }: KarboContext) => {
 };
 
 export const onMessageCallback = async ({ message }: KarboContext) => {
+  if (message.content.startsWith('/')) return;
+
   try {
     await prisma.stats.update({
       where: { userId: message.author.userId },
       data: { messages: { increment: 1 }, experience: { increment: 1 } },
     });
+  } catch {
+    await delay(3.5);
+    await getCreateUser(message.author.userId, message.author.nickname);
+  }
+};
+
+export const leaveCallback = async ({ karbo, message }: KarboContext) => {
+  try {
+    await karbo.text(
+      message.chatId,
+      leaveEventCallbacks[
+        Math.floor(Math.random() * leaveEventCallbacks.length)
+      ].replace('%s', message.author.nickname),
+      message.messageId,
+    );
   } catch {}
 };
