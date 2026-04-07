@@ -53,7 +53,7 @@ export const getRelative = (deltaMs: number): string => {
 export const generateDaily = (): number => randomNumber(250, 350);
 
 export const getCasinoType = (): CasinoType =>
-  Math.random() < 0.25 ? 'casino-win' : 'casino-lose';
+  Math.random() < 0.33 ? 'casino-win' : 'casino-lose';
 
 export const generateCasinoVariants = (isWon: boolean): CasinoVariant[] => {
   if (isWon) {

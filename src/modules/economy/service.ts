@@ -245,11 +245,12 @@ export const tradeCallback = async ({ karbo, message }: KarboContext) => {
 
   if (!tradeSummary) return;
 
-  const id = await validateUser({ karbo, message });
+  const user = await validateUser({ karbo, message });
 
-  if (!id) return;
+  if (!user) return;
 
   const taxedSummary = numberWithTax(tradeSummary);
+  await getCreateUser(user.userId, user.nickname);
 
   await prisma.$transaction([
     prisma.user.update({
@@ -257,16 +258,14 @@ export const tradeCallback = async ({ karbo, message }: KarboContext) => {
       data: { card: { update: { balance: { decrement: tradeSummary } } } },
     }),
     prisma.user.update({
-      where: { id },
+      where: { id: user.userId },
       data: { card: { update: { balance: { increment: taxedSummary } } } },
     }),
   ]);
 
-  const targetUser = await karbo.user(id);
-
   await karbo.text(
     message.chatId,
-    `Вы перевели ${taxedSummary} гемов для ${bold(targetUser.nickname)} с учётом комиссии`,
+    `Вы перевели ${taxedSummary} гемов для ${bold(user.nickname)} с учётом комиссии`,
     message.messageId,
   );
 };

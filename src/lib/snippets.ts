@@ -1,4 +1,4 @@
-import { bold, KarboContext } from 'karboai';
+import { bold, KarboContext, User } from 'karboai';
 
 import { ErrorsMap } from '../schemas/interactive';
 import { findUuid, getRelative } from './util';
@@ -54,9 +54,10 @@ export const validateCardValue = async (
   return amount;
 };
 
-export const validateUser = async (context: KarboContext) => {
+export const validateUser = async (
+  context: KarboContext,
+): Promise<User | undefined> => {
   const uuid = findUuid(context.message.content);
-  console.log(uuid);
 
   if (
     !uuid ||
@@ -71,5 +72,14 @@ export const validateUser = async (context: KarboContext) => {
     return;
   }
 
-  return uuid[0];
+  try {
+    return await context.karbo.user(uuid[0]);
+  } catch {
+    await context.karbo.text(
+      context.message.chatId,
+      'Пользователь не найден',
+      context.message.messageId,
+    );
+    return;
+  }
 };
