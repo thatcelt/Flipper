@@ -2,6 +2,8 @@ import z from 'zod';
 
 export const SubCommandsEnum = z.enum(['profile', 'eco']);
 
+export const ReputationActionEnum = z.enum(['increase', 'decrease']);
+
 export const ErrorsEnum = z.enum([
   'unknownCategory',
   'notEnoughMoney',
@@ -12,6 +14,8 @@ export const ErrorsEnum = z.enum([
   'alreadyWorking',
   'enterCorrectAmount',
   'minDeposit',
+  'needToReply',
+  'accessDenied',
 ]);
 
 export const WorksRecordSchema = z.record(
@@ -23,11 +27,10 @@ export const WorksRecordSchema = z.record(
   }),
 );
 
-export type WorksRecord = z.infer<typeof WorksRecordSchema>;
-
 export const SubCommandsRecordSchema = z.record(SubCommandsEnum, z.string());
 
+export type WorksRecord = z.infer<typeof WorksRecordSchema>;
 export type SubCommandsRecord = z.infer<typeof SubCommandsRecordSchema>;
 export type SubCommand = z.infer<typeof SubCommandsEnum>;
-
+export type ReputationAction = z.infer<typeof ReputationActionEnum>;
 export type ErrorsMap = z.infer<typeof ErrorsEnum>;

@@ -85,3 +85,5 @@ export const findUuid = (content: string): string[] | null =>
 export const numberWithTax = (value: number): number => Math.floor(value * 0.8);
 
 export const isFlipWon = (): boolean => Math.random() > 0.5;
+
+export const generateRepReward = (): number => randomNumber(5, 10);
