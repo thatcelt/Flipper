@@ -1,6 +1,6 @@
 import z from 'zod';
 
-export const SubCommandsEnum = z.enum(['profile', 'eco']);
+export const SubCommandsEnum = z.enum(['profile', 'eco', 'inter']);
 
 export const ReputationActionEnum = z.enum(['increase', 'decrease']);
 
@@ -16,7 +16,11 @@ export const ErrorsEnum = z.enum([
   'minDeposit',
   'needToReply',
   'accessDenied',
+  'userNotFound',
+  'enterCorrectUser',
 ]);
+
+export const BooleanEnum = z.enum(['true', 'false']);
 
 export const WorksRecordSchema = z.record(
   z.string(),
@@ -34,3 +38,4 @@ export type SubCommandsRecord = z.infer<typeof SubCommandsRecordSchema>;
 export type SubCommand = z.infer<typeof SubCommandsEnum>;
 export type ReputationAction = z.infer<typeof ReputationActionEnum>;
 export type ErrorsMap = z.infer<typeof ErrorsEnum>;
+export type BooleanValue = z.infer<typeof BooleanEnum>;

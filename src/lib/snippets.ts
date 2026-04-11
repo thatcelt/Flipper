@@ -5,7 +5,6 @@ import { findUuid, getRelative } from './util';
 import { prisma } from './prisma';
 import { CardColumn } from '../schemas/prisma';
 import { errorsMap } from '../../public/data/constants.json';
-import { UserInclude } from '../../generated/prisma/models';
 
 export const outputException = async (
   context: KarboContext,
@@ -64,22 +63,14 @@ export const validateUser = async (
     uuid[0] == context.message.author.userId ||
     uuid[0] == process.env.BOT_ID
   ) {
-    await context.karbo.text(
-      context.message.chatId,
-      'Введите корректного пользователя',
-      context.message.messageId,
-    );
+    await outputException(context, 'enterCorrectUser');
     return;
   }
 
   try {
     return await context.karbo.user(uuid[0]);
   } catch {
-    await context.karbo.text(
-      context.message.chatId,
-      'Пользователь не найден',
-      context.message.messageId,
-    );
+    await outputException(context, 'userNotFound');
     return;
   }
 };

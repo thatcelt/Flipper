@@ -87,3 +87,9 @@ export const numberWithTax = (value: number): number => Math.floor(value * 0.8);
 export const isFlipWon = (): boolean => Math.random() > 0.5;
 
 export const generateRepReward = (): number => randomNumber(5, 10);
+
+export const isRobbed = (): boolean => Math.random() > 0.35;
+
+export const generateRobReward = (): number => randomNumber(100, 200);
+
+export const generateReputationDecrease = (): number => randomNumber(5, 10);
