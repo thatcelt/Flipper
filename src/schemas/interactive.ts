@@ -18,6 +18,7 @@ export const ErrorsEnum = z.enum([
   'accessDenied',
   'userNotFound',
   'enterCorrectUser',
+  'cantFight',
 ]);
 
 export const BooleanEnum = z.enum(['true', 'false']);

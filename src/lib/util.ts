@@ -93,3 +93,10 @@ export const isRobbed = (): boolean => Math.random() > 0.35;
 export const generateRobReward = (): number => randomNumber(100, 200);
 
 export const generateReputationDecrease = (): number => randomNumber(5, 10);
+
+export const isDuelWon = (): boolean => Math.random() > 0.4;
+
+export const randomElement = <T>(array: T[]): T =>
+  array[Math.floor(Math.random() * array.length)];
+
+export const generateDuelReward = (): number => randomNumber(5, 15);

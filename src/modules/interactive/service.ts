@@ -6,6 +6,7 @@ import {
   delays,
   robActionsMap,
   queries,
+  duelEventCallbacks,
 } from '../../../public/data/constants.json';
 import {
   outputException,
@@ -14,10 +15,13 @@ import {
 } from '../../lib/snippets';
 import { getCreateUser, prisma } from '../../lib/prisma';
 import {
+  generateDuelReward,
   generateRepReward,
   generateReputationDecrease,
   generateRobReward,
+  isDuelWon,
   isRobbed,
+  randomElement,
 } from '../../lib/util';
 
 const manageReputation = async (
@@ -164,4 +168,86 @@ export const robCallback = async ({ karbo, message }: KarboContext) => {
   );
 };
 
-export const duelCallback = async ({ karbo, message }: KarboContext) => {};
+export const duelCallback = async ({ karbo, message }: KarboContext) => {
+  const target = await validateUser({ karbo, message });
+
+  if (!target) return;
+
+  const targetUser = await getCreateUser(target.userId, target.nickname, {
+    stats: true,
+    schedule: true,
+  });
+
+  if (!targetUser.stats!.reputation) {
+    await outputException({ karbo, message }, 'cantFight');
+    return;
+  }
+
+  const user = await getCreateUser(
+    message.author.userId,
+    message.author.nickname,
+    { schedule: true },
+  );
+
+  const timestamp = Date.now();
+
+  for (const canDuelAt of [
+    user.schedule!.canDuelAt,
+    targetUser.schedule!.canDuelAt,
+  ]) {
+    if (canDuelAt > timestamp) {
+      await outputRelativeTime(
+        { karbo, message },
+        Number(canDuelAt) - timestamp,
+      );
+
+      return;
+    }
+  }
+
+  const duelResult = isDuelWon();
+  const canDuelAt = timestamp + delays.duel;
+  const reward = generateDuelReward();
+  const reputationLoss = Math.floor(reward / 2);
+
+  const positioning = duelResult
+    ? [message.author.userId, target.userId]
+    : [target.userId, message.author.userId];
+
+  await prisma.$transaction([
+    prisma.user.update({
+      where: { id: positioning[0] },
+      data: {
+        schedule: { update: { canDuelAt } },
+        stats: {
+          update: {
+            reputation: { increment: reward },
+            ...queries.incrementDuels,
+          },
+        },
+      },
+    }),
+    prisma.user.update({
+      where: { id: positioning[1] },
+      data: {
+        schedule: { update: { canDuelAt } },
+        stats: {
+          update: {
+            reputation: { decrement: reputationLoss },
+            ...queries.incrementDuels,
+          },
+        },
+      },
+    }),
+  ]);
+
+  await karbo.text(
+    message.chatId,
+    randomElement(duelEventCallbacks[duelResult.toString() as BooleanValue])
+      .replaceAll('%s', message.author.nickname)
+      .replaceAll('%f', target.nickname)
+      .replace('%i', reward.toString())
+      .replace('%d', reputationLoss.toString()),
+    message.messageId,
+  );
+};
