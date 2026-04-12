@@ -1,10 +1,11 @@
-import { KarboContext } from 'karboai';
+import { bold, KarboContext } from 'karboai';
 
-import { getCreateUser } from '../../lib/prisma';
+import { getCreateUser, prisma } from '../../lib/prisma';
 import { level } from '../../lib/util';
 import { drawCreditCard, drawProfile } from '../../lib/canvas';
-import { WORKS_RECORD } from '../../constants';
+import { FLATTED_PRODUCTS, WORKS_RECORD } from '../../constants';
 import { staticValues } from '../../../public/data/constants.json';
+import { validateProduct } from '../../lib/snippets';
 
 export const meCallback = async ({ karbo, message }: KarboContext) => {
   const user = await getCreateUser(
@@ -31,7 +32,9 @@ export const meCallback = async ({ karbo, message }: KarboContext) => {
     },
     work: user.work ? WORKS_RECORD[user.work].name : staticValues.work,
     reputation: user.stats!.reputation,
-    background: user.currentBackground || undefined,
+    background: user.currentBackground
+      ? `background-${user.currentBackground}`
+      : undefined,
   });
 
   await karbo.image(
@@ -59,6 +62,59 @@ export const bankCallback = async ({ karbo, message }: KarboContext) => {
   await karbo.image(
     message.chatId,
     [await karbo.upload(image)],
+    message.messageId,
+  );
+};
+
+export const frameCallback = async ({ karbo, message }: KarboContext) => {
+  const frame = await validateProduct({ karbo, message }, 'frames');
+
+  if (!frame) return;
+
+  await prisma.user.update({
+    where: { id: message.author.userId },
+    data: { currentFrame: frame.thumbnail.split('-')[1] },
+  });
+
+  await karbo.text(
+    message.chatId,
+    `Вы успешно поставили рамку - ${bold(frame.title)}`,
+    message.messageId,
+  );
+};
+
+export const backgroundCallback = async ({ karbo, message }: KarboContext) => {
+  const background = await validateProduct({ karbo, message }, 'backgrounds');
+
+  if (!background) return;
+
+  await prisma.user.update({
+    where: { id: message.author.userId },
+    data: { currentBackground: background.thumbnail.split('-')[1] },
+  });
+
+  await karbo.text(
+    message.chatId,
+    `Вы успешно поставили фон - ${bold(background.title)}`,
+    message.messageId,
+  );
+};
+
+export const ownedCallback = async ({ karbo, message }: KarboContext) => {
+  const ownedProductIds = (
+    await prisma.productsOnUsers.findMany({
+      where: { userId: message.author.userId },
+      select: { productId: true },
+    })
+  ).map(({ productId }) => productId);
+
+  const products = FLATTED_PRODUCTS.filter((product) =>
+    ownedProductIds.includes(product.id),
+  );
+
+  await karbo.text(
+    message.chatId,
+    `Ваши купленные товары: ${products.map((product) => bold(product.title)).join(', ') || bold('отсутствуют')}`,
     message.messageId,
   );
 };

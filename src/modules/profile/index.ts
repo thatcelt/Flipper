@@ -1,10 +1,19 @@
 import { Router } from 'karboai';
 
-import { bankCallback, meCallback } from './service';
+import {
+  backgroundCallback,
+  bankCallback,
+  frameCallback,
+  meCallback,
+  ownedCallback,
+} from './service';
 
 const router = new Router('profile');
 
 router.command('/me', meCallback);
 router.command('/bank', bankCallback);
+router.command('/fr', frameCallback);
+router.command('/bg', backgroundCallback);
+router.command('/owned', ownedCallback);
 
 export default router;

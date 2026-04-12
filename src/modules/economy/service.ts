@@ -1,6 +1,7 @@
 import { bold, code, KarboContext } from 'karboai';
 
 import {
+  FLATTED_PRODUCTS,
   FLATTED_SHOPS,
   FLIP_CASES,
   WORKS_RECORD,
@@ -364,7 +365,7 @@ export const buyCallback = async ({ karbo, message }: KarboContext) => {
   const splittedMessage = message.content.split(' ');
   const productId = Number(splittedMessage[1]);
 
-  const product = FLATTED_SHOPS.find((product) => product.id === productId);
+  const product = FLATTED_PRODUCTS.find((product) => product.id === productId);
 
   if (!product) {
     await outputException({ karbo, message }, 'productNotFound');

@@ -22,6 +22,8 @@ export const ErrorsEnum = z.enum([
   'unknownPage',
   'productNotFound',
   'productAlreadyOwned',
+  'enterCorrectProductId',
+  'productNotOwned',
 ]);
 
 export const BooleanEnum = z.enum(['true', 'false']);
@@ -37,9 +39,20 @@ export const WorksRecordSchema = z.record(
 
 export const SubCommandsRecordSchema = z.record(SubCommandsEnum, z.string());
 
+export const ProductCategoryEnum = z.enum(['other', 'backgrounds', 'frames']);
+
+export const ProductSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  thumbnail: z.string(),
+  cost: z.number(),
+});
+
 export type WorksRecord = z.infer<typeof WorksRecordSchema>;
 export type SubCommandsRecord = z.infer<typeof SubCommandsRecordSchema>;
 export type SubCommand = z.infer<typeof SubCommandsEnum>;
 export type ReputationAction = z.infer<typeof ReputationActionEnum>;
 export type ErrorsMap = z.infer<typeof ErrorsEnum>;
 export type BooleanValue = z.infer<typeof BooleanEnum>;
+export type ProductCategory = z.infer<typeof ProductCategoryEnum>;
+export type Product = z.infer<typeof ProductSchema>;

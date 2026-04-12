@@ -1,10 +1,11 @@
 import { bold, KarboContext, User } from 'karboai';
 
-import { ErrorsMap } from '../schemas/interactive';
+import { ErrorsMap, Product, ProductCategory } from '../schemas/interactive';
 import { findUuid, getRelative } from './util';
 import { prisma } from './prisma';
 import { CardColumn } from '../schemas/prisma';
 import { errorsMap } from '../../public/data/constants.json';
+import { FLATTED_SHOPS } from '../constants';
 
 export const outputException = async (
   context: KarboContext,
@@ -73,4 +74,36 @@ export const validateUser = async (
     await outputException(context, 'userNotFound');
     return;
   }
+};
+
+export const validateProduct = async (
+  context: KarboContext,
+  category: ProductCategory,
+): Promise<Product | undefined> => {
+  const productId = Number(context.message.content.split(' ')[1]);
+
+  if (isNaN(productId)) {
+    await outputException(context, 'enterCorrectProductId');
+    return;
+  }
+
+  const product = FLATTED_SHOPS[category].find(
+    (product) => product.id == productId,
+  );
+
+  if (!product) {
+    await outputException(context, 'productNotFound');
+    return;
+  }
+
+  if (
+    !(await prisma.productsOnUsers.findFirst({
+      where: { userId: context.message.author.userId, productId },
+    }))
+  ) {
+    await outputException(context, 'productNotOwned');
+    return;
+  }
+
+  return product;
 };

@@ -3,25 +3,25 @@
     [
       {
         "thumbnail": "shop-aminodork",
-        "title": "Злой Аминодорк",
+        "title": "Злой Аминодорк [Фон]",
         "cost": 2500,
         "id": 9
       },
       {
         "thumbnail": "shop-cat",
-        "title": "Дино-кот",
+        "title": "Дино-кот [Фон]",
         "cost": 2500,
         "id": 10
       },
       {
         "thumbnail": "shop-dodge",
-        "title": "Dodge Challenger",
+        "title": "Dodge Challenger [Фон]",
         "cost": 2500,
         "id": 11
       },
       {
         "thumbnail": "shop-forest",
-        "title": "Тёмный лес",
+        "title": "Тёмный лес [Фон]",
         "cost": 2500,
         "id": 12
       }
@@ -29,25 +29,25 @@
     [
       {
         "thumbnail": "shop-guts",
-        "title": "Тёмный Мечник",
+        "title": "Тёмный Мечник [Фон]",
         "cost": 2500,
         "id": 13
       },
       {
         "thumbnail": "shop-kirbies",
-        "title": "Кирбики",
+        "title": "Кирбики [Фон]",
         "cost": 2500,
         "id": 14
       },
       {
         "thumbnail": "shop-minecraft",
-        "title": "Вишнёвая роща",
+        "title": "Вишнёвая роща [Фон]",
         "cost": 2500,
         "id": 15
       },
       {
         "thumbnail": "shop-porche",
-        "title": "Porche Macan",
+        "title": "Porche Macan [Фон]",
         "cost": 2500,
         "id": 16
       }
@@ -55,25 +55,25 @@
     [
       {
         "thumbnail": "shop-shrine",
-        "title": "Гробница зла",
+        "title": "Гробница зла [Фон]",
         "cost": 2500,
         "id": 17
       },
       {
         "thumbnail": "shop-sniper",
-        "title": "Снайпер",
+        "title": "Снайпер [Фон]",
         "cost": 2500,
         "id": 18
       },
       {
         "thumbnail": "shop-ultrakill",
-        "title": "MANKIND IS DEAD",
+        "title": "MANKIND IS DEAD [Фон]",
         "cost": 2500,
         "id": 19
       },
       {
         "thumbnail": "shop-watchman",
-        "title": "Серия Хранитель",
+        "title": "Серия Хранитель [Фон]",
         "cost": 2500,
         "id": 20
       }

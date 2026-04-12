@@ -72,7 +72,9 @@
     "cantFight": "`У пользователя недостаточно репутации для боя`",
     "unknownPage": "`Такой страницы не существует`",
     "productNotFound": "`Товар не найден`",
-    "productAlreadyOwned": "`Вы уже купили этот товар`"
+    "productAlreadyOwned": "`Вы уже купили этот товар`",
+    "enterCorrectProductId": "`Введите корректный идентификатор товара`",
+    "productNotOwned": "`Вы не купили этот товар`"
   },
   "delays": {
     "daily": 86400000,

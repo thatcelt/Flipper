@@ -49,7 +49,13 @@ export const FLIP_CASES: Record<string, string> = {
   false: `${bold('Зеро!')} Вы проиграли! Ваш баланс снижен на`,
 };
 
-export const FLATTED_SHOPS = [
+export const FLATTED_SHOPS = {
+  frames: shops.frames.flat(),
+  backgrounds: shops.backgrounds.flat(),
+  other: shops.other.flat(),
+};
+
+export const FLATTED_PRODUCTS = [
   ...shops.frames.flat(),
   ...shops.backgrounds.flat(),
   ...shops.other.flat(),
