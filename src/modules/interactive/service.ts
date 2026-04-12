@@ -7,6 +7,7 @@ import {
   robActionsMap,
   queries,
   duelEventCallbacks,
+  topCategories,
 } from '../../../public/data/constants.json';
 import {
   outputException,
@@ -19,10 +20,17 @@ import {
   generateRepReward,
   generateReputationDecrease,
   generateRobReward,
+  getAvatarUrl,
+  getOrderBy,
   isDuelWon,
   isRobbed,
   randomElement,
+  truncate,
 } from '../../lib/util';
+import { User } from '../../../generated/prisma/client';
+import { UserWithStatsCard } from '../../schemas/prisma';
+import { drawTop } from '../../lib/canvas';
+import { TopMap } from '../../schemas/canvas';
 
 const manageReputation = async (
   { karbo, message }: KarboContext,
@@ -248,6 +256,64 @@ export const duelCallback = async ({ karbo, message }: KarboContext) => {
       .replaceAll('%f', target.nickname)
       .replace('%i', reward.toString())
       .replace('%d', reputationLoss.toString()),
+    message.messageId,
+  );
+};
+
+export const topCallback = async ({ karbo, message }: KarboContext) => {
+  const category = message.content.split(' ')[1];
+
+  if (!topCategories.includes(category)) {
+    await outputException({ karbo, message }, 'unknownCategory');
+    return;
+  }
+
+  const users = await Promise.all(
+    (
+      await prisma.user.findMany({
+        orderBy: getOrderBy(category),
+        select:
+          category == 'balance'
+            ? queries.descBalance
+            : { id: true, stats: { select: { [category]: true } } },
+        take: 6,
+      })
+    ).map(async (user) => {
+      const userWithFields: UserWithStatsCard = JSON.parse(
+        JSON.stringify(user),
+      );
+      const { avatar, nickname } = await karbo.user(user.id);
+
+      return {
+        avatar: getAvatarUrl(avatar),
+        nickname,
+        value:
+          category == 'balance'
+            ? userWithFields.card!.balance
+            : userWithFields.stats![
+                category as keyof typeof userWithFields.stats
+              ],
+      };
+    }),
+  );
+
+  const winners = [users[1], users[0], users[2]].map(
+    ({ avatar, nickname, value }) => ({
+      avatar,
+      nickname: truncate(nickname),
+      value,
+    }),
+  );
+
+  const image = await drawTop({
+    winners,
+    type: `top-${category}` as TopMap,
+    secondary: users.slice(3),
+  });
+
+  await karbo.image(
+    message.chatId,
+    [await karbo.upload(image)],
     message.messageId,
   );
 };

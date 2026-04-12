@@ -1,6 +1,7 @@
 import { Router } from 'karboai';
 
 import {
+  bigBroCallback,
   helpCallback,
   joinCallback,
   leaveCallback,
@@ -13,6 +14,7 @@ router.on('join', joinCallback);
 router.on('leave', leaveCallback);
 router.on('message', onMessageCallback);
 
+router.command('/big', bigBroCallback);
 router.command('/help', helpCallback);
 
 export default router;

@@ -69,7 +69,8 @@
     "accessDenied": "`Доступ запрещен`",
     "enterCorrectUser": "`Введите корректного пользователя`",
     "userNotFound": "`Пользователь не найден`",
-    "cantFight": "`У пользователя недостаточно репутации для боя`"
+    "cantFight": "`У пользователя недостаточно репутации для боя`",
+    "unknownPage": "`Такой страницы не существует`"
   },
   "delays": {
     "daily": 86400000,
@@ -100,7 +101,8 @@
   },
   "queries": {
     "incrementRobs": { "robs": { "increment": 1 } },
-    "incrementDuels": { "duels": { "increment": 1 } }
+    "incrementDuels": { "duels": { "increment": 1 } },
+    "descBalance": { "id": true, "card": { "select": { "balance": true } } }
   },
   "duelEventCallbacks": {
     "true": [
@@ -115,5 +117,8 @@
       "**%s** захотел постреляться с **%f**, но пуля отрекошетила обратно в него!\n\n**%f** получил `%i репутации`\n**%s** потерял `%d репутации`",
       "в результате поединка **%s** подскользнулся и пал прямо перед **%f** и проиграл\n\n**%f** получил `%i репутации`\n**%s** потерял `%d репутации`"
     ]
-  }
+  },
+  "topCategories": ["messages", "robs", "duels", "balance"],
+  "shopCategories": ["backgrounds", "frames", "other"],
+  "mediaBaseUrl": "https://api.karboai.com/static/images/"
 }

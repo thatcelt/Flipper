@@ -82,6 +82,10 @@
         {
           "name": "/duel @<имя>",
           "description": "сразиться с другим пользователем"
+        },
+        {
+          "name": "/top <категория>",
+          "description": "показать топ пользователей по категории (**messages/robs/duels/balance**)"
         }
       ]
     }

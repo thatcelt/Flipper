@@ -2,8 +2,10 @@ import { CUTOFF_TIME } from '../constants';
 import {
   casinoVariantsList,
   relativeUnits,
+  mediaBaseUrl,
 } from '../../public/data/constants.json';
 import { CasinoType, CasinoVariant, GambleType } from '../schemas/canvas';
+import { UserOrderByWithRelationInput } from '../../generated/prisma/models';
 
 export const randomNumber = (min: number, max: number): number =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -100,3 +102,15 @@ export const randomElement = <T>(array: T[]): T =>
   array[Math.floor(Math.random() * array.length)];
 
 export const generateDuelReward = (): number => randomNumber(5, 15);
+
+export const getOrderBy = (category: string): UserOrderByWithRelationInput => {
+  if (category == 'balance') return { card: { balance: 'desc' } };
+
+  return { stats: { [category]: 'desc' } };
+};
+
+export const truncate = (name: string) =>
+  name.length > 10 ? `${name.slice(0, 10)}...` : name;
+
+export const getAvatarUrl = (path: string): string =>
+  !path.includes('karbo') ? `${mediaBaseUrl}${path}` : path;

@@ -1,0 +1,52 @@
+{
+  "backgrounds": [],
+  "frames": [
+    [
+      {
+        "thumbnail": "shop-yellow",
+        "title": "Жёлтая рамка профиля",
+        "cost": 2500,
+        "id": 0
+      },
+      {
+        "thumbnail": "shop-red",
+        "title": "Красная рамка профиля",
+        "cost": 2500,
+        "id": 1
+      },
+      {
+        "thumbnail": "shop-orange",
+        "title": "Оранжевая рамка профиля",
+        "cost": 2500,
+        "id": 2
+      },
+      {
+        "thumbnail": "shop-green",
+        "title": "Зелёная рамка профиля",
+        "cost": 2500,
+        "id": 3
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-blue",
+        "title": "Синяя рамка профиля",
+        "cost": 2500,
+        "id": 4
+      },
+      {
+        "thumbnail": "shop-pink",
+        "title": "Розовая рамка профиля",
+        "cost": 2500,
+        "id": 5
+      },
+      {
+        "thumbnail": "shop-purple",
+        "title": "Фиолетовая рамка профиля",
+        "cost": 3000,
+        "id": 6
+      }
+    ]
+  ],
+  "other": []
+}

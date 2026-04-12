@@ -17,8 +17,14 @@ import {
   isFlipWon,
 } from '../../lib/util';
 import { UserWithStats } from '../../schemas/prisma';
-import { delays, staticValues } from '../../../public/data/constants.json';
-import { drawCasino } from '../../lib/canvas';
+import {
+  delays,
+  staticValues,
+  shopCategories,
+} from '../../../public/data/constants.json';
+import * as shopsData from '../../../public/data/shops.json';
+import { drawCasino, drawShop } from '../../lib/canvas';
+import { ShopElement, ShopMap } from '../../schemas/canvas';
 
 const setWork = async (
   context: KarboContext,
@@ -311,6 +317,40 @@ export const flipCallback = async ({ karbo, message }: KarboContext) => {
   await karbo.text(
     message.chatId,
     `${text} ${code(increatedBet.toString())} гемов`,
+    message.messageId,
+  );
+};
+
+export const shopCallback = async ({ karbo, message }: KarboContext) => {
+  const splittedContent = message.content.split(' ');
+  const category = splittedContent[1];
+  const page = isNaN(Number(splittedContent[2]))
+    ? 1
+    : Number(splittedContent[2]);
+
+  if (!shopCategories.includes(category)) {
+    await outputException({ karbo, message }, 'unknownCategory');
+    return;
+  }
+
+  const shop = shopsData[category as keyof typeof shopsData];
+  const elements = shop[page - 1] as ShopElement[];
+
+  if (!elements) {
+    await outputException({ karbo, message }, 'unknownPage');
+    return;
+  }
+
+  const image = await drawShop({
+    type: category as ShopMap,
+    elements,
+    previousPage: page - 1 == 0 ? '' : (page - 1).toString(),
+    nextPage: page == shop.length ? '' : (page + 1).toString(),
+  });
+
+  await karbo.image(
+    message.chatId,
+    [await karbo.upload(image)],
     message.messageId,
   );
 };

@@ -65,3 +65,11 @@ export const leaveCallback = async ({ karbo, message }: KarboContext) => {
     );
   } catch {}
 };
+
+export const bigBroCallback = async ({ karbo, message }: KarboContext) => {
+  await karbo.image(
+    message.chatId,
+    [process.env.BIG_BRO_URL],
+    message.messageId,
+  );
+};

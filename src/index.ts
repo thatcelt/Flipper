@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 
 import routes from './modules/index';
 import { loadImages } from './lib/canvas';
+import { readFile } from 'fs/promises';
 
 config({ path: '.env', quiet: true });
 
@@ -16,6 +17,10 @@ config({ path: '.env', quiet: true });
     id: process.env.BOT_ID,
     enableLogging: true,
   });
+  process.env.BIG_BRO_URL = await karbo.upload(
+    await readFile('./public/assets/generator.png'),
+  );
+
   karbo.bind(...routes);
   karbo.attach();
 })();

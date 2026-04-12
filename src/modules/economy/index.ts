@@ -3,6 +3,7 @@ import {
   betCallback,
   dailyCallback,
   flipCallback,
+  shopCallback,
   tradeCallback,
   transferCallback,
   workCallback,
@@ -18,5 +19,6 @@ router.command('/bet', betCallback);
 router.command('/trf', transferCallback);
 router.command('/trade', tradeCallback);
 router.command('/flip', flipCallback);
+router.command('/shop', shopCallback);
 
 export default router;

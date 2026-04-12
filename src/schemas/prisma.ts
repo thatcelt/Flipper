@@ -11,6 +11,9 @@ export const IncludeUserSchema = z.object({
 });
 
 export type UserWithStats = Prisma.UserGetPayload<{ include: { stats: true } }>;
+export type UserWithStatsCard = Prisma.UserGetPayload<{
+  include: { stats: true; card: true };
+}>;
 
 export type IncludeUser = z.infer<typeof IncludeUserSchema>;
 export type CardColumn = z.infer<typeof CardColumnEnum>;

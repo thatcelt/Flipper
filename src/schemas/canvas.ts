@@ -183,18 +183,18 @@ export const TopImageBuilderSchema = z.object({
   secondary: z.array(TopEntitySchema),
 });
 
+export const ShopElementSchema = z.object({
+  thumbnail: ImagesEnum,
+  title: z.string(),
+  cost: z.number(),
+  id: z.number(),
+});
+
 export const ShopImageBuilderSchema = z.object({
   previousPage: z.string(),
   nextPage: z.string(),
   type: ShopsEnum,
-  elements: z.array(
-    z.object({
-      thumbnail: ImagesEnum,
-      title: z.string(),
-      cost: z.number(),
-      id: z.number(),
-    }),
-  ),
+  elements: z.array(ShopElementSchema),
 });
 
 export const CasinoImageBuilderSchema = z.object({
@@ -242,3 +242,6 @@ export type CoupleImageBuilder = z.infer<typeof CoupleImageBuilderSchema>;
 export type CasinoVariant = z.infer<typeof CasinoVariantsEnum>;
 export type CasinoType = z.infer<typeof CasinoTypesEnum>;
 export type GambleType = z.infer<typeof GambleTypesEnum>;
+export type TopEntity = z.infer<typeof TopEntitySchema>;
+export type TopMap = z.infer<typeof TopsEnum>;
+export type ShopElement = z.infer<typeof ShopElementSchema>;
