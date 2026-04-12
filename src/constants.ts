@@ -2,6 +2,7 @@ import { bold, code, italic } from 'karboai';
 
 import { main, sub } from '../public/data/commands.json';
 import { works } from '../public/data/works.json';
+import * as shops from '../public/data/shops.json';
 import {
   SubCommand,
   SubCommandsRecord,
@@ -47,3 +48,9 @@ export const FLIP_CASES: Record<string, string> = {
   true: `${bold('Флиппер!')} Вы выиграли! Ваш баланс повышен на`,
   false: `${bold('Зеро!')} Вы проиграли! Ваш баланс снижен на`,
 };
+
+export const FLATTED_SHOPS = [
+  ...shops.frames.flat(),
+  ...shops.backgrounds.flat(),
+  ...shops.other.flat(),
+];

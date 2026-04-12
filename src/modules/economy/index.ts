@@ -1,6 +1,7 @@
 import { Router } from 'karboai';
 import {
   betCallback,
+  buyCallback,
   dailyCallback,
   flipCallback,
   shopCallback,
@@ -20,5 +21,6 @@ router.command('/trf', transferCallback);
 router.command('/trade', tradeCallback);
 router.command('/flip', flipCallback);
 router.command('/shop', shopCallback);
+router.command('/buy', buyCallback);
 
 export default router;

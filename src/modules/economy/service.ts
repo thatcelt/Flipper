@@ -1,6 +1,11 @@
 import { bold, code, KarboContext } from 'karboai';
 
-import { FLIP_CASES, WORKS_RECORD, WORKS_STRING } from '../../constants';
+import {
+  FLATTED_SHOPS,
+  FLIP_CASES,
+  WORKS_RECORD,
+  WORKS_STRING,
+} from '../../constants';
 import { getCreateUser, prisma } from '../../lib/prisma';
 import {
   outputException,
@@ -352,5 +357,52 @@ export const shopCallback = async ({ karbo, message }: KarboContext) => {
     message.chatId,
     [await karbo.upload(image)],
     message.messageId,
+  );
+};
+
+export const buyCallback = async ({ karbo, message }: KarboContext) => {
+  const splittedMessage = message.content.split(' ');
+  const productId = Number(splittedMessage[1]);
+
+  const product = FLATTED_SHOPS.find((product) => product.id === productId);
+
+  if (!product) {
+    await outputException({ karbo, message }, 'productNotFound');
+    return;
+  }
+
+  if (
+    await prisma.productsOnUsers.findFirst({
+      where: { userId: message.author.userId, productId },
+    })
+  ) {
+    await outputException({ karbo, message }, 'productAlreadyOwned');
+    return;
+  }
+
+  const user = await getCreateUser(
+    message.author.userId,
+    message.author.nickname,
+    { card: true },
+  );
+
+  if (user.card!.balance < product.cost) {
+    await outputException({ karbo, message }, 'notEnoughMoney');
+    return;
+  }
+
+  await prisma.$transaction([
+    prisma.user.update({
+      where: { id: message.author.userId },
+      data: { card: { update: { balance: { decrement: product.cost } } } },
+    }),
+    prisma.productsOnUsers.create({
+      data: { userId: message.author.userId, productId },
+    }),
+  ]);
+
+  await karbo.text(
+    message.chatId,
+    `Вы успешно приобрели товар - ${bold(product.title)}`,
   );
 };

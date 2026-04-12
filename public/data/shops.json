@@ -1,5 +1,84 @@
 {
-  "backgrounds": [],
+  "backgrounds": [
+    [
+      {
+        "thumbnail": "shop-aminodork",
+        "title": "Злой Аминодорк",
+        "cost": 2500,
+        "id": 9
+      },
+      {
+        "thumbnail": "shop-cat",
+        "title": "Дино-кот",
+        "cost": 2500,
+        "id": 10
+      },
+      {
+        "thumbnail": "shop-dodge",
+        "title": "Dodge Challenger",
+        "cost": 2500,
+        "id": 11
+      },
+      {
+        "thumbnail": "shop-forest",
+        "title": "Тёмный лес",
+        "cost": 2500,
+        "id": 12
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-guts",
+        "title": "Тёмный Мечник",
+        "cost": 2500,
+        "id": 13
+      },
+      {
+        "thumbnail": "shop-kirbies",
+        "title": "Кирбики",
+        "cost": 2500,
+        "id": 14
+      },
+      {
+        "thumbnail": "shop-minecraft",
+        "title": "Вишнёвая роща",
+        "cost": 2500,
+        "id": 15
+      },
+      {
+        "thumbnail": "shop-porche",
+        "title": "Porche Macan",
+        "cost": 2500,
+        "id": 16
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-shrine",
+        "title": "Гробница зла",
+        "cost": 2500,
+        "id": 17
+      },
+      {
+        "thumbnail": "shop-sniper",
+        "title": "Снайпер",
+        "cost": 2500,
+        "id": 18
+      },
+      {
+        "thumbnail": "shop-ultrakill",
+        "title": "MANKIND IS DEAD",
+        "cost": 2500,
+        "id": 19
+      },
+      {
+        "thumbnail": "shop-watchman",
+        "title": "Серия Хранитель",
+        "cost": 2500,
+        "id": 20
+      }
+    ]
+  ],
   "frames": [
     [
       {
@@ -48,5 +127,20 @@
       }
     ]
   ],
-  "other": []
+  "other": [
+    [
+      {
+        "thumbnail": "shop-clan",
+        "title": "Создание клана",
+        "cost": 10000,
+        "id": 7
+      },
+      {
+        "thumbnail": "shop-marry",
+        "title": "Создание пары",
+        "cost": 4000,
+        "id": 8
+      }
+    ]
+  ]
 }

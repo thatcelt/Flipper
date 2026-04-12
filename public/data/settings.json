@@ -189,6 +189,110 @@
     {
       "path": "./public/assets/frames/profile/yellow.png",
       "key": "frames-profile-yellow"
+    },
+    {
+      "path": "./public/assets/shop/clan.png",
+      "key": "shop-clan"
+    },
+    {
+      "path": "./public/assets/shop/marry.png",
+      "key": "shop-marry"
+    },
+    {
+      "path": "./public/assets/shop/aminodork.png",
+      "key": "shop-aminodork"
+    },
+    {
+      "path": "./public/assets/shop/cat.png",
+      "key": "shop-cat"
+    },
+    {
+      "path": "./public/assets/shop/dodge.png",
+      "key": "shop-dodge"
+    },
+    {
+      "path": "./public/assets/shop/forest.png",
+      "key": "shop-forest"
+    },
+    {
+      "path": "./public/assets/shop/guts.png",
+      "key": "shop-guts"
+    },
+    {
+      "path": "./public/assets/shop/kirbies.png",
+      "key": "shop-kirbies"
+    },
+    {
+      "path": "./public/assets/shop/minecraft.png",
+      "key": "shop-minecraft"
+    },
+    {
+      "path": "./public/assets/shop/porche.png",
+      "key": "shop-porche"
+    },
+    {
+      "path": "./public/assets/shop/shrine.png",
+      "key": "shop-shrine"
+    },
+    {
+      "path": "./public/assets/shop/sniper.png",
+      "key": "shop-sniper"
+    },
+    {
+      "path": "./public/assets/shop/ultrakill.png",
+      "key": "shop-ultrakill"
+    },
+    {
+      "path": "./public/assets/shop/watchman.png",
+      "key": "shop-watchman"
+    },
+    {
+      "path": "./public/assets/backgrounds/aminodork.png",
+      "key": "background-aminodork"
+    },
+    {
+      "path": "./public/assets/backgrounds/cat.png",
+      "key": "background-cat"
+    },
+    {
+      "path": "./public/assets/backgrounds/dodge.png",
+      "key": "background-dodge"
+    },
+    {
+      "path": "./public/assets/backgrounds/forest.png",
+      "key": "background-forest"
+    },
+    {
+      "path": "./public/assets/backgrounds/guts.png",
+      "key": "background-guts"
+    },
+    {
+      "path": "./public/assets/backgrounds/kirbies.png",
+      "key": "background-kirbies"
+    },
+    {
+      "path": "./public/assets/backgrounds/minecraft.png",
+      "key": "background-minecraft"
+    },
+    {
+      "path": "./public/assets/backgrounds/porche.png",
+      "key": "background-porche"
+    },
+    {
+      "path": "./public/assets/backgrounds/shrine.png",
+      "key": "background-shrine"
+    },
+    {
+      "path": "./public/assets/backgrounds/sniper.png",
+      "key": "background-sniper"
+    },
+    {
+      "path": "./public/assets/backgrounds/ultrakill.png",
+      "key": "background-ultrakill"
+    },
+    {
+      "path": "./public/assets/backgrounds/watchman.png",
+      "key": "background-watchman"
     }
   ]
 }
