@@ -106,6 +106,10 @@
         {
           "name": "/top <категория>",
           "description": "показать топ пользователей по категории (**messages/robs/duels/balance**)"
+        },
+        {
+          "name": "/marry @<имя>",
+          "description": "создание свадьбы"
         }
       ]
     }
