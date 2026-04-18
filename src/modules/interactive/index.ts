@@ -3,6 +3,7 @@ import {
   decreaseReputationCallback,
   duelCallback,
   increaseReputationCallback,
+  marryCallback,
   robCallback,
   topCallback,
 } from './service';
@@ -14,5 +15,6 @@ router.command('-rep', decreaseReputationCallback);
 router.command('/rob', robCallback);
 router.command('/duel', duelCallback);
 router.command('/top', topCallback);
+router.command('/marry', marryCallback);
 
 export default router;

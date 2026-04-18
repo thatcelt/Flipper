@@ -27,7 +27,6 @@ import {
   randomElement,
   truncate,
 } from '../../lib/util';
-import { User } from '../../../generated/prisma/client';
 import { UserWithStatsCard } from '../../schemas/prisma';
 import { drawTop } from '../../lib/canvas';
 import { TopMap } from '../../schemas/canvas';
@@ -317,3 +316,5 @@ export const topCallback = async ({ karbo, message }: KarboContext) => {
     message.messageId,
   );
 };
+
+export const marryCallback = async ({ karbo, message }: KarboContext) => {};

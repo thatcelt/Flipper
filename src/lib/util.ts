@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import { CUTOFF_TIME } from '../constants';
 import {
   casinoVariantsList,
@@ -6,6 +8,17 @@ import {
 } from '../../public/data/constants.json';
 import { CasinoType, CasinoVariant, GambleType } from '../schemas/canvas';
 import { UserOrderByWithRelationInput } from '../../generated/prisma/models';
+
+const getDeepKeys = (obj: Partial<Record<string, unknown>>): string => {
+  const key = Object.keys(obj)[0];
+  const value = obj[key];
+
+  if (value && !Array.isArray(value)) {
+    return `${key}.${getDeepKeys(value)}`;
+  }
+
+  return key;
+};
 
 export const randomNumber = (min: number, max: number): number =>
   Math.floor(Math.random() * (max - min + 1)) + min;
@@ -114,3 +127,14 @@ export const truncate = (name: string) =>
 
 export const getAvatarUrl = (path: string): string =>
   !path.includes('karbo') ? `${mediaBaseUrl}${path}` : path;
+
+export const getAddQuery = (
+  query: Partial<Record<string, unknown>>,
+  value: number,
+) => {
+  _.set(query, getDeepKeys(query), value);
+
+  return JSON.parse(
+    JSON.stringify(query).replace(`{"undefined":${value}}`, value.toString()),
+  );
+};

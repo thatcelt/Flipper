@@ -74,7 +74,8 @@
     "productNotFound": "`Товар не найден`",
     "productAlreadyOwned": "`Вы уже купили этот товар`",
     "enterCorrectProductId": "`Введите корректный идентификатор товара`",
-    "productNotOwned": "`Вы не купили этот товар`"
+    "productNotOwned": "`Вы не купили этот товар`",
+    "enterCorrectQuery": "`Введите корректный запрос`"
   },
   "delays": {
     "daily": 86400000,
@@ -124,5 +125,9 @@
   },
   "topCategories": ["messages", "robs", "duels", "balance"],
   "shopCategories": ["backgrounds", "frames", "other"],
-  "mediaBaseUrl": "https://api.karboai.com/static/images/"
+  "mediaBaseUrl": "https://api.karboai.com/static/images/",
+  "addQueries": {
+    "bal-inc": { "card": { "update": { "balance": { "increment": 1 } } } },
+    "bal-dec": { "card": { "update": { "balance": { "decrement": 1 } } } }
+  }
 }
