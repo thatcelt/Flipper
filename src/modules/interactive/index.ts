@@ -19,6 +19,6 @@ router.command('/duel', duelCallback);
 router.command('/top', topCallback);
 router.command('/marry', marryCallback);
 router.command('да', yesCallback);
-router.command('/no', noCallback);
+router.command('нет', noCallback);
 
 export default router;
