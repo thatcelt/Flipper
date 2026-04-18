@@ -25,6 +25,9 @@ export const ErrorsEnum = z.enum([
   'enterCorrectProductId',
   'productNotOwned',
   'enterCorrectQuery',
+  'youAlreadyMarried',
+  'userAlreadyMarried',
+  'userAlreadyRequested',
 ]);
 
 export const BooleanEnum = z.enum(['true', 'false']);

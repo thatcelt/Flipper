@@ -4,8 +4,10 @@ import {
   duelCallback,
   increaseReputationCallback,
   marryCallback,
+  noCallback,
   robCallback,
   topCallback,
+  yesCallback,
 } from './service';
 
 const router = new Router('interactive');
@@ -16,5 +18,7 @@ router.command('/rob', robCallback);
 router.command('/duel', duelCallback);
 router.command('/top', topCallback);
 router.command('/marry', marryCallback);
+router.command('да', yesCallback);
+router.command('/no', noCallback);
 
 export default router;

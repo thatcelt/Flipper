@@ -75,7 +75,10 @@
     "productAlreadyOwned": "`Вы уже купили этот товар`",
     "enterCorrectProductId": "`Введите корректный идентификатор товара`",
     "productNotOwned": "`Вы не купили этот товар`",
-    "enterCorrectQuery": "`Введите корректный запрос`"
+    "enterCorrectQuery": "`Введите корректный запрос`",
+    "youAlreadyMarried": "`Вы уже женаты`",
+    "userAlreadyMarried": "`Пользователь уже женат`",
+    "userAlreadyRequested": "`У пользователя уже запросили брак`"
   },
   "delays": {
     "daily": 86400000,
@@ -128,6 +131,9 @@
   "mediaBaseUrl": "https://api.karboai.com/static/images/",
   "addQueries": {
     "bal-inc": { "card": { "update": { "balance": { "increment": 1 } } } },
-    "bal-dec": { "card": { "update": { "balance": { "decrement": 1 } } } }
-  }
+    "bal-dec": { "card": { "update": { "balance": { "decrement": 1 } } } },
+    "rep-inc": { "stats": { "update": { "reputation": { "increment": 1 } } } },
+    "rep-dec": { "stats": { "update": { "reputation": { "decrement": 1 } } } }
+  },
+  "marryProductId": 8
 }

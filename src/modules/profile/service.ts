@@ -1,7 +1,7 @@
 import { bold, KarboContext } from 'karboai';
 
 import { getCreateUser, prisma } from '../../lib/prisma';
-import { level } from '../../lib/util';
+import { getAvatarUrl, level } from '../../lib/util';
 import { drawCreditCard, drawProfile } from '../../lib/canvas';
 import { FLATTED_PRODUCTS, WORKS_RECORD } from '../../constants';
 import { staticValues } from '../../../public/data/constants.json';
@@ -15,6 +15,23 @@ export const meCallback = async ({ karbo, message }: KarboContext) => {
   );
 
   const levelInfo = level(user.stats!.experience);
+
+  let hasCouple;
+
+  if (user.coupleId) {
+    const couple = await prisma.couple.findFirst({
+      where: { id: user.coupleId },
+      include: { users: true },
+    });
+    const coupleUser = await karbo.user(
+      couple!.users.filter((user) => user.id != message.author.userId)[0].id,
+    );
+
+    hasCouple = {
+      nickname: coupleUser.nickname,
+      avatar: getAvatarUrl(coupleUser.avatar),
+    };
+  }
 
   const image = await drawProfile({
     nickname: message.author.nickname,
@@ -35,6 +52,7 @@ export const meCallback = async ({ karbo, message }: KarboContext) => {
     background: user.currentBackground
       ? `background-${user.currentBackground}`
       : undefined,
+    hasCouple,
   });
 
   await karbo.image(

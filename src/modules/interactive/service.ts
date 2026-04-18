@@ -8,6 +8,7 @@ import {
   queries,
   duelEventCallbacks,
   topCategories,
+  marryProductId,
 } from '../../../public/data/constants.json';
 import {
   outputException,
@@ -30,6 +31,8 @@ import {
 import { UserWithStatsCard } from '../../schemas/prisma';
 import { drawTop } from '../../lib/canvas';
 import { TopMap } from '../../schemas/canvas';
+
+const marriageCache: Map<string, string> = new Map<string, string>();
 
 const manageReputation = async (
   { karbo, message }: KarboContext,
@@ -317,4 +320,99 @@ export const topCallback = async ({ karbo, message }: KarboContext) => {
   );
 };
 
-export const marryCallback = async ({ karbo, message }: KarboContext) => {};
+export const marryCallback = async ({ karbo, message }: KarboContext) => {
+  const user = await getCreateUser(
+    message.author.userId,
+    message.author.nickname,
+  );
+
+  if (
+    !(await prisma.productsOnUsers.findFirst({
+      where: { userId: user.id, productId: marryProductId },
+    }))
+  ) {
+    await outputException({ karbo, message }, 'accessDenied');
+    return;
+  }
+
+  if (user.coupleId) {
+    await outputException({ karbo, message }, 'youAlreadyMarried');
+    return;
+  }
+
+  const targetUserObject = await validateUser({ karbo, message });
+
+  if (!targetUserObject) {
+    await outputException({ karbo, message }, 'userNotFound');
+    return;
+  }
+
+  if (marriageCache.get(targetUserObject!.userId)) {
+    await outputException({ karbo, message }, 'userAlreadyRequested');
+    return;
+  }
+
+  const targetUser = await getCreateUser(
+    targetUserObject!.userId,
+    targetUserObject!.nickname,
+  );
+
+  if (targetUser.coupleId) {
+    await outputException({ karbo, message }, 'userAlreadyMarried');
+    return;
+  }
+
+  marriageCache.set(targetUser.id, user.id);
+
+  await karbo.text(
+    message.chatId,
+    `${bold(message.author.nickname)} делает предложение руки и сердца для ${bold(targetUserObject.nickname)}\n${bold(targetUserObject.nickname)}, согласен(на) ли ты? ответь на это сообщение либо да, либо нет`,
+    message.messageId,
+  );
+};
+
+export const yesCallback = async ({ karbo, message }: KarboContext) => {
+  const targetId = marriageCache.get(message.author.userId);
+  if (!targetId) return;
+
+  const couple = await prisma.couple.create({
+    data: {
+      createdAt: Date.now(),
+      answer: message.content,
+    },
+  });
+
+  await prisma.$transaction([
+    prisma.user.update({
+      data: { coupleId: couple.id },
+      where: { id: message.author.userId },
+    }),
+    prisma.user.update({
+      data: { coupleId: couple.id },
+      where: { id: targetId },
+    }),
+  ]);
+
+  const user = await karbo.user(targetId);
+
+  await karbo.text(
+    message.chatId,
+    `${bold(message.author.nickname)} и ${bold(user.nickname)} теперь официально находятся в браке! Счастливой совместной жизни!`,
+    message.messageId,
+  );
+  await karbo.text(message.chatId, '🎉');
+};
+
+export const noCallback = async ({ karbo, message }: KarboContext) => {
+  const targetId = marriageCache.get(message.author.userId);
+  if (!targetId) return;
+
+  marriageCache.delete(message.author.userId);
+  const user = await karbo.user(targetId);
+
+  await karbo.text(
+    message.chatId,
+    `Печальные новости...поступил отказ на свадьбу ${bold(message.author.nickname)} от ${bold(user.nickname)}`,
+    message.messageId,
+  );
+};
