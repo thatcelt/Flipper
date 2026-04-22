@@ -77,6 +77,14 @@
         "cost": 2500,
         "id": 20
       }
+    ],
+    [
+      {
+        "thumbnail": "shop-sinie",
+        "title": "Синий фон [Фон]",
+        "cost": 2500,
+        "id": 21
+      }
     ]
   ],
   "frames": [

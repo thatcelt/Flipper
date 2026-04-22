@@ -293,6 +293,14 @@
     {
       "path": "./public/assets/backgrounds/watchman.png",
       "key": "background-watchman"
+    },
+    {
+      "path": "./public/assets/backgrounds/sinie.png",
+      "key": "background-sinie"
+    },
+    {
+      "path": "./public/assets/shop/sinie.png",
+      "key": "shop-sinie"
     }
   ]
 }
