@@ -74,15 +74,24 @@ const drawRoundedImage = async (
     config.radius,
   );
   config.ctx.clip();
-  config.ctx.drawImage(
-    config.image instanceof Image
-      ? config.image
-      : await loadImage(config.image),
-    config.dx,
-    config.dy,
-    config.width,
-    config.height,
-  );
+
+  try {
+    const image =
+      config.image instanceof Image
+        ? config.image
+        : await loadImage(config.image);
+
+    config.ctx.drawImage(
+      image,
+      config.dx,
+      config.dy,
+      config.width,
+      config.height,
+    );
+  } catch (error) {
+    console.error('Failed to load image:', config.image, error);
+  }
+
   config.ctx.restore();
 };
 
