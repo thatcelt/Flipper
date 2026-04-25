@@ -84,6 +84,32 @@
         "title": "Синий фон [Фон]",
         "cost": 2500,
         "id": 21
+      },
+      {
+        "thumbnail": "shop-beskonechnost",
+        "title": "Бесконечность [Фон]",
+        "cost": 3000,
+        "id": 22
+      },
+      {
+        "thumbnail": "shop-tokyogul",
+        "title": "Токийский гуль [Фон]",
+        "cost": 2500,
+        "id": 23
+      },
+      {
+        "thumbnail": "shop-shinobi",
+        "title": "Шиноби [Фон]",
+        "cost": 2500,
+        "id": 24
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-demons",
+        "title": "Демоны",
+        "cost": 2500,
+        "id": 25
       }
     ]
   ],

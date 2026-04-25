@@ -35,6 +35,10 @@ export const ImagesEnum = z.enum([
   'shop-sniper',
   'shop-ultrakill',
   'shop-watchman',
+  'shop-demons',
+  'shop-shinobi',
+  'shop-tokyogul',
+  'shop-beskonechnost',
   'shop-sinie',
   'top-balance',
   'top-duels',
@@ -73,6 +77,10 @@ export const ImagesEnum = z.enum([
   'background-sniper',
   'background-ultrakill',
   'background-watchman',
+  'background-demons',
+  'background-shinobi',
+  'background-tokyogul',
+  'background-beskonechnost',
   'background-sinie',
 ]);
 

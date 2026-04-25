@@ -45,13 +45,13 @@ export const loadCanvas = async (
   const ctx = canvas.getContext('2d');
 
   const backgroundImage = images.get(background as ImagesMap)!;
-  ctx.drawImage(
-    backgroundImage,
-    0,
-    0,
-    Math.max(backgroundImage.width, 700),
-    700,
-  );
+  const bgScale = Math.min(700 / backgroundImage.width, 700 / backgroundImage.height);
+  const bgWidth = backgroundImage.width * bgScale;
+  const bgHeight = backgroundImage.height * bgScale;
+  const bgX = (700 - bgWidth) / 2;
+  const bgY = (700 - bgHeight) / 2;
+
+  ctx.drawImage(backgroundImage, bgX, bgY, bgWidth, bgHeight);
 
   ctx.drawImage(images.get(image)!, 0, 0, 700, 700);
 

@@ -301,6 +301,38 @@
     {
       "path": "./public/assets/shop/sinie.png",
       "key": "shop-sinie"
+    },
+    {
+      "path": "./public/assets/backgrounds/beskonechnost.png",
+      "key": "background-beskonechnost"
+    },
+    {
+      "path": "./public/assets/shop/beskonechnost.png",
+      "key": "shop-beskonechnost"
+    },
+    {
+      "path": "./public/assets/backgrounds/tokyogul.png",
+      "key": "background-tokyogul"
+    },
+    {
+      "path": "./public/assets/shop/tokyogul.png",
+      "key": "shop-tokyogul"
+    },
+    {
+      "path": "./public/assets/backgrounds/shinobi.png",
+      "key": "background-shinobi"
+    },
+    {
+      "path": "./public/assets/shop/shinobi.png",
+      "key": "shop-shinobi"
+    },
+    {
+      "path": "./public/assets/backgrounds/demons.png",
+      "key": "background-demons"
+    },
+    {
+      "path": "./public/assets/shop/demons.png",
+      "key": "shop-demons"
     }
   ]
 }
