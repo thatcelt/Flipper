@@ -3,41 +3,73 @@
     {
       "workId": -1,
       "metadata": {
-        "name": "Нетраннер",
-        "salary": 100,
+        "name": "Цифровой новичок",
+        "salary": 50,
         "minReputation": -10
       }
     },
     {
       "workId": 0,
       "metadata": {
-        "name": "Лаборант",
-        "salary": 150,
+        "name": "Сетевой",
+        "salary": 100,
         "minReputation": 0
       }
     },
     {
       "workId": 1,
       "metadata": {
-        "name": "Инженер протоколов",
-        "salary": 200,
+        "name": "Младший оператор",
+        "salary": 150,
         "minReputation": 10
       }
     },
     {
       "workId": 2,
       "metadata": {
-        "name": "Архо-прошивальщик",
-        "salary": 400,
-        "minReputation": 40
+        "name": "Менеджер протоколов",
+        "salary": 200,
+        "minReputation": 20
       }
     },
     {
       "workId": 3,
       "metadata": {
-        "name": "Интернет призрак",
-        "salary": 650,
-        "minReputation": 75
+        "name": "Администратор",
+        "salary": 300,
+        "minReputation": 30
+      }
+    },
+    {
+      "workId": 4,
+      "metadata": {
+        "name": "Прошивальщик",
+        "salary": 350,
+        "minReputation": 40
+      }
+    },
+    {
+      "workId": 5,
+      "metadata": {
+        "name": "Кибербезопасник",
+        "salary": 400,
+        "minReputation": 50
+      }
+    },
+    {
+      "workId": 6,
+      "metadata": {
+        "name": "Главный технолог",
+        "salary": 450,
+        "minReputation": 60
+      }
+    },
+    {
+      "workId": 7,
+      "metadata": {
+        "name": "Флиппер",
+        "salary": 550,
+        "minReputation": 100
       }
     }
   ]

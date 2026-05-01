@@ -220,7 +220,7 @@ export const duelCallback = async ({ karbo, message }: KarboContext) => {
   const duelResult = isDuelWon();
   const canDuelAt = timestamp + delays.duel;
   const reward = generateDuelReward();
-  const reputationLoss = Math.floor(reward / 2);
+  const reputationLoss = Math.floor(reward / 1.2);
 
   const positioning = duelResult
     ? [message.author.userId, target.userId]

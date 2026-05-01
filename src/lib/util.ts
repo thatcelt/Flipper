@@ -69,7 +69,7 @@ export const getRelative = (deltaMs: number): string => {
 export const generateDaily = (): number => randomNumber(250, 350);
 
 export const getCasinoType = (): CasinoType =>
-  Math.random() < 0.33 ? 'casino-win' : 'casino-lose';
+  Math.random() < 0.35 ? 'casino-win' : 'casino-lose';
 
 export const generateCasinoVariants = (isWon: boolean): CasinoVariant[] => {
   if (isWon) {
@@ -115,7 +115,7 @@ export const isDuelWon = (): boolean => Math.random() > 0.4;
 export const randomElement = <T>(array: T[]): T =>
   array[Math.floor(Math.random() * array.length)];
 
-export const generateDuelReward = (): number => randomNumber(5, 15);
+export const generateDuelReward = (): number => randomNumber(3, 10);
 
 export const getOrderBy = (category: string): UserOrderByWithRelationInput => {
   if (category == 'balance') return { card: { balance: 'desc' } };
