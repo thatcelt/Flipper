@@ -454,20 +454,26 @@ export const kissCallback = async ({ karbo, message }: KarboContext) => {
     user.couple!.lastStreakAt = timestamp;
   }
 
-  await prisma.couple.update({
-    data: {
-      actionsDone: { increment: 1 },
-      canActionAt: timestamp + delays.kiss,
-      experience: { increment: 55 },
-      lastActionAt: timestamp,
-      actionStreak: user.couple!.lastStreakAt
-        ? Math.floor(
-            (timestamp - user.couple!.lastStreakAt) / (1000 * 60 * 60 * 24),
-          ) + 1
-        : 1,
-    },
-    where: { id: user.couple!.id },
-  });
+  await prisma.$transaction([
+    prisma.user.update({
+      where: { id: message.author.userId },
+      data: { card: { update: { balance: 150 } } },
+    }),
+    prisma.couple.update({
+      data: {
+        actionsDone: { increment: 1 },
+        canActionAt: timestamp + delays.kiss,
+        experience: { increment: 55 },
+        lastActionAt: timestamp,
+        actionStreak: user.couple!.lastStreakAt
+          ? Math.floor(
+              (timestamp - user.couple!.lastStreakAt) / (1000 * 60 * 60 * 24),
+            ) + 1
+          : 1,
+      },
+      where: { id: user.couple!.id },
+    }),
+  ]);
 
   const coupleUser = (
     await prisma.user.findMany({
