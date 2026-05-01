@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
-import { PrismaClient, User } from '../../generated/prisma/client';
+import { PrismaClient } from '../../generated/prisma/client';
+
 import { IncludeUser } from '../schemas/prisma';
 import { generateCardDate, generateCardNumber } from './util';
 

@@ -4,7 +4,9 @@ import {
   backgroundCallback,
   bankCallback,
   frameCallback,
+  loveBackgroundCallback,
   loveCallback,
+  loveFrameCallback,
   meCallback,
   ownedCallback,
 } from './service';
@@ -17,5 +19,7 @@ router.command('/fr', frameCallback);
 router.command('/bg', backgroundCallback);
 router.command('/owned', ownedCallback);
 router.command('/love', loveCallback);
+router.command('/lv-fr', loveFrameCallback);
+router.command('/lv-bg', loveBackgroundCallback);
 
 export default router;

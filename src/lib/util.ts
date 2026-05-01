@@ -5,6 +5,7 @@ import {
   casinoVariantsList,
   relativeUnits,
   mediaBaseUrl,
+  uniqueProducts,
 } from '../../public/data/constants.json';
 import { CasinoType, CasinoVariant, GambleType } from '../schemas/canvas';
 import { UserOrderByWithRelationInput } from '../../generated/prisma/models';
@@ -141,3 +142,9 @@ export const getAddQuery = (
 
 export const isCoupleStreakEnded = (lastKissAt: number): boolean =>
   Date.now() - lastKissAt >= 43200000;
+
+export const isFrameForCouple = (frameId: number): boolean =>
+  uniqueProducts.coupleFrameIds.includes(frameId);
+
+export const isBackgroundForCouple = (backgroundId: number): boolean =>
+  uniqueProducts.coupleBackgroundIds.includes(backgroundId);

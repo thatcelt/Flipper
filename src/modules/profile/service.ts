@@ -4,7 +4,9 @@ import { getCreateUser, prisma } from '../../lib/prisma';
 import {
   getAvatarUrl,
   getRelative,
+  isBackgroundForCouple,
   isCoupleStreakEnded,
+  isFrameForCouple,
   level,
 } from '../../lib/util';
 import { drawCouple, drawCreditCard, drawProfile } from '../../lib/canvas';
@@ -204,6 +206,75 @@ export const loveCallback = async ({ karbo, message }: KarboContext) => {
   await karbo.image(
     message.chatId,
     [await karbo.upload(image)],
+    message.messageId,
+  );
+};
+
+export const loveFrameCallback = async ({ karbo, message }: KarboContext) => {
+  const user = await getCreateUser(
+    message.author.userId,
+    message.author.nickname,
+    { couple: true },
+  );
+
+  if (!user.coupleId) {
+    await outputException({ karbo, message }, 'youHaveNotMarried');
+    return;
+  }
+
+  const frame = await validateProduct({ karbo, message }, 'frames');
+
+  if (!frame) return;
+
+  if (!isFrameForCouple(frame.id)) {
+    await outputException({ karbo, message }, 'accessDenied');
+    return;
+  }
+
+  await prisma.couple.update({
+    data: { currentFrame: frame.thumbnail.split('-')[1] },
+    where: { id: user.coupleId! },
+  });
+  await karbo.text(
+    message.chatId,
+    `Вы успешно поставили рамку - ${bold(frame.title)}`,
+    message.messageId,
+  );
+};
+
+export const loveBackgroundCallback = async ({
+  karbo,
+  message,
+}: KarboContext) => {
+  const user = await getCreateUser(
+    message.author.userId,
+    message.author.nickname,
+    { couple: true },
+  );
+
+  if (!user.coupleId) {
+    await outputException({ karbo, message }, 'youHaveNotMarried');
+    return;
+  }
+
+  const background = await validateProduct({ karbo, message }, 'backgrounds');
+
+  if (!background) return;
+
+  if (!isBackgroundForCouple(background.id)) {
+    await outputException({ karbo, message }, 'accessDenied');
+    return;
+  }
+
+  await prisma.couple.update({
+    data: {
+      currentBackground: `background-${background.thumbnail.split('-')[1]}`,
+    },
+    where: { id: user.coupleId! },
+  });
+  await karbo.text(
+    message.chatId,
+    `Вы успешно поставили фон - ${bold(background.title)}`,
     message.messageId,
   );
 };
