@@ -1,11 +1,16 @@
 import { bold, KarboContext } from 'karboai';
 
 import { getCreateUser, prisma } from '../../lib/prisma';
-import { getAvatarUrl, level } from '../../lib/util';
-import { drawCreditCard, drawProfile } from '../../lib/canvas';
+import {
+  getAvatarUrl,
+  getRelative,
+  isCoupleStreakEnded,
+  level,
+} from '../../lib/util';
+import { drawCouple, drawCreditCard, drawProfile } from '../../lib/canvas';
 import { FLATTED_PRODUCTS, WORKS_RECORD } from '../../constants';
 import { staticValues } from '../../../public/data/constants.json';
-import { validateProduct } from '../../lib/snippets';
+import { outputException, validateProduct } from '../../lib/snippets';
 
 export const meCallback = async ({ karbo, message }: KarboContext) => {
   const user = await getCreateUser(
@@ -133,6 +138,72 @@ export const ownedCallback = async ({ karbo, message }: KarboContext) => {
   await karbo.text(
     message.chatId,
     `Ваши купленные товары: ${products.map((product) => bold(product.title)).join(', ') || bold('отсутствуют')}`,
+    message.messageId,
+  );
+};
+
+export const loveCallback = async ({ karbo, message }: KarboContext) => {
+  const user = await getCreateUser(
+    message.author.userId,
+    message.author.nickname,
+    { couple: true },
+  );
+
+  if (!user.coupleId) {
+    await outputException({ karbo, message }, 'youHaveNotMarried');
+    return;
+  }
+
+  const users = await Promise.all(
+    (
+      await prisma.user.findMany({
+        where: { coupleId: user.coupleId },
+      })
+    ).map(async (user) => {
+      const { nickname, avatar } = await karbo.user(user.id);
+
+      return { nickname, avatar: getAvatarUrl(avatar) };
+    }),
+  );
+
+  if (
+    isCoupleStreakEnded(Number(user.couple!.lastActionAt)) &&
+    user.couple!.actionStreak
+  ) {
+    await karbo.text(
+      message.chatId,
+      `Вы пропустили серию дней из поцелуев, остановившись на ${bold(user.couple!.actionStreak.toString())}!\n${bold('Теперь ваш прогресс сброшен до 0 дней...')}`,
+      message.messageId,
+    );
+
+    const timestamp = Date.now();
+
+    await prisma.couple.update({
+      data: { lastStreakAt: timestamp },
+      where: { id: user.couple!.id },
+    });
+    user.couple!.lastStreakAt = timestamp;
+  }
+  const levelInfo = level(user.couple!.experience);
+
+  const image = await drawCouple({
+    users,
+    createdAt: getRelative(Date.now() - Number(user.couple!.createdAt)),
+    answer: user.couple!.answer,
+    background: user.couple!.currentBackground || undefined,
+    level: levelInfo.level,
+    experience: {
+      from: user.couple!.experience,
+      to: levelInfo.maxExperience,
+    },
+    kissesMade: user.couple!.actionsDone,
+    kissesStreak: user.couple!.actionStreak,
+    frame: user.couple!.currentFrame,
+  });
+
+  await karbo.image(
+    message.chatId,
+    [await karbo.upload(image)],
     message.messageId,
   );
 };
