@@ -457,7 +457,7 @@ export const kissCallback = async ({ karbo, message }: KarboContext) => {
   await prisma.$transaction([
     prisma.user.update({
       where: { id: message.author.userId },
-      data: { card: { update: { balance: 150 } } },
+      data: { card: { update: { balance: { increment: 300 } } } },
     }),
     prisma.couple.update({
       data: {
@@ -486,6 +486,45 @@ export const kissCallback = async ({ karbo, message }: KarboContext) => {
   await karbo.text(
     message.chatId,
     `${bold(message.author.nickname)} поцеловал(а) ${bold(coupleUserObject.nickname)} 💋`,
+    message.messageId,
+  );
+};
+
+export const divorceCallback = async ({ karbo, message }: KarboContext) => {
+  const user = await getCreateUser(
+    message.author.userId,
+    message.author.nickname,
+    { couple: true },
+  );
+
+  if (!user.coupleId) {
+    await outputException({ karbo, message }, 'youHaveNotMarried');
+    return;
+  }
+
+  const coupleUser = (
+    await prisma.user.findMany({
+      where: { coupleId: user.coupleId },
+    })
+  ).filter((user) => user.id != message.author.userId)[0];
+
+  await prisma.$transaction([
+    prisma.user.update({
+      data: { card: { update: { balance: { increment: 1000 } } } },
+      where: { id: coupleUser.id },
+    }),
+    prisma.user.update({
+      data: { card: { update: { balance: { decrement: 1000 } } } },
+      where: { id: message.author.userId },
+    }),
+    prisma.couple.delete({ where: { id: user.coupleId } }),
+  ]);
+
+  const coupleUserObject = await karbo.user(coupleUser.id);
+
+  await karbo.text(
+    message.chatId,
+    `${bold(message.author.nickname)} развелся(лась) с ${bold(coupleUserObject.nickname)} и заплатил(а) 1000 гемов компенсации...${bold('Объявляем траур')}`,
     message.messageId,
   );
 };

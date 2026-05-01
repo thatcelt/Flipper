@@ -1,6 +1,7 @@
 import { Router } from 'karboai';
 import {
   decreaseReputationCallback,
+  divorceCallback,
   duelCallback,
   increaseReputationCallback,
   kissCallback,
@@ -22,5 +23,6 @@ router.command('/marry', marryCallback);
 router.command('да', yesCallback);
 router.command('нет', noCallback);
 router.command('/kiss', kissCallback);
+router.command('/divorce', divorceCallback);
 
 export default router;
