@@ -107,9 +107,113 @@
     [
       {
         "thumbnail": "shop-demons",
-        "title": "Демоны",
+        "title": "Демоны [Фон]",
         "cost": 2500,
         "id": 25
+      },
+      {
+        "thumbnail": "shop-cat",
+        "title": "Дино-кот [Фон Пары]",
+        "cost": 3000,
+        "id": 33
+      },
+      {
+        "thumbnail": "shop-dodge",
+        "title": "Dodge Challenger [Фон Пары]",
+        "cost": 3000,
+        "id": 34
+      },
+      {
+        "thumbnail": "shop-forest",
+        "title": "Тёмный лес [Фон Пары]",
+        "cost": 3000,
+        "id": 35
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-guts",
+        "title": "Тёмный Мечник [Фон Пары]",
+        "cost": 3000,
+        "id": 36
+      },
+      {
+        "thumbnail": "shop-kirbies",
+        "title": "Кирбики [Фон Пары]",
+        "cost": 3000,
+        "id": 37
+      },
+      {
+        "thumbnail": "shop-minecraft",
+        "title": "Вишнёвая роща [Фон Пары]",
+        "cost": 3000,
+        "id": 38
+      },
+      {
+        "thumbnail": "shop-porche",
+        "title": "Porche Macan [Фон Пары]",
+        "cost": 3000,
+        "id": 39
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-shrine",
+        "title": "Гробница зла [Фон Пары]",
+        "cost": 3000,
+        "id": 40
+      },
+      {
+        "thumbnail": "shop-sniper",
+        "title": "Снайпер [Фон Пары]",
+        "cost": 3000,
+        "id": 41
+      },
+      {
+        "thumbnail": "shop-ultrakill",
+        "title": "MANKIND IS DEAD [Фон Пары]",
+        "cost": 3000,
+        "id": 42
+      },
+      {
+        "thumbnail": "shop-watchman",
+        "title": "Серия Хранитель [Фон Пары]",
+        "cost": 3000,
+        "id": 43
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-sinie",
+        "title": "Синий фон [Фон Пары]",
+        "cost": 3000,
+        "id": 44
+      },
+      {
+        "thumbnail": "shop-beskonechnost",
+        "title": "Бесконечность [Фон Пары]",
+        "cost": 3500,
+        "id": 45
+      },
+      {
+        "thumbnail": "shop-tokyogul",
+        "title": "Токийский гуль [Фон Пары]",
+        "cost": 3000,
+        "id": 46
+      },
+      {
+        "thumbnail": "shop-shinobi",
+        "title": "Шиноби [Фон Пары]",
+        "cost": 3000,
+        "id": 47
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-demons",
+        "title": "Демоны [Фон Пары]",
+        "cost": 3000,
+        "id": 48
       }
     ]
   ],
@@ -158,6 +262,52 @@
         "title": "Фиолетовая рамка профиля",
         "cost": 3000,
         "id": 6
+      },
+      {
+        "thumbnail": "shop-yellow",
+        "title": "Жёлтая рамка пары",
+        "cost": 3000,
+        "id": 26
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-red",
+        "title": "Красная рамка пары",
+        "cost": 3000,
+        "id": 27
+      },
+      {
+        "thumbnail": "shop-orange",
+        "title": "Оранжевая рамка пары",
+        "cost": 3000,
+        "id": 28
+      },
+      {
+        "thumbnail": "shop-green",
+        "title": "Зелёная рамка пары",
+        "cost": 3000,
+        "id": 29
+      },
+      {
+        "thumbnail": "shop-blue",
+        "title": "Синяя рамка пары",
+        "cost": 3000,
+        "id": 30
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-pink",
+        "title": "Розовая рамка пары",
+        "cost": 3000,
+        "id": 31
+      },
+      {
+        "thumbnail": "shop-purple",
+        "title": "Фиолетовая рамка пары",
+        "cost": 3500,
+        "id": 32
       }
     ]
   ],

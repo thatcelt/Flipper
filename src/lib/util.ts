@@ -138,3 +138,6 @@ export const getAddQuery = (
     JSON.stringify(query).replace(`{"undefined":${value}}`, value.toString()),
   );
 };
+
+export const isCoupleStreakEnded = (lastKissAt: number): boolean =>
+  Date.now() - lastKissAt >= 43200000;

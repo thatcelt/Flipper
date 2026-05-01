@@ -78,7 +78,8 @@
     "enterCorrectQuery": "`Введите корректный запрос`",
     "youAlreadyMarried": "`Вы уже женаты`",
     "userAlreadyMarried": "`Пользователь уже женат`",
-    "userAlreadyRequested": "`У пользователя уже запросили брак`"
+    "userAlreadyRequested": "`У пользователя уже запросили брак`",
+    "youHaveNotMarried": "`Вы не женаты`"
   },
   "delays": {
     "daily": 86400000,
@@ -135,5 +136,11 @@
     "rep-inc": { "stats": { "update": { "reputation": { "increment": 1 } } } },
     "rep-dec": { "stats": { "update": { "reputation": { "decrement": 1 } } } }
   },
-  "marryProductId": 8
+  "marryProductId": 8,
+  "uniqueProducts": {
+    "coupleFrameIds": [26, 27, 28, 29, 30, 31, 32],
+    "coupleBackgroundIds": [
+      33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48
+    ]
+  }
 }

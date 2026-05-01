@@ -28,6 +28,7 @@ export const ErrorsEnum = z.enum([
   'youAlreadyMarried',
   'userAlreadyMarried',
   'userAlreadyRequested',
+  'youHaveNotMarried',
 ]);
 
 export const BooleanEnum = z.enum(['true', 'false']);

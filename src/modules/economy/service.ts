@@ -2,7 +2,6 @@ import { bold, code, KarboContext } from 'karboai';
 
 import {
   FLATTED_PRODUCTS,
-  FLATTED_SHOPS,
   FLIP_CASES,
   WORKS_RECORD,
   WORKS_STRING,
