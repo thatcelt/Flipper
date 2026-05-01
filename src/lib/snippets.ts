@@ -107,3 +107,24 @@ export const validateProduct = async (
 
   return product;
 };
+
+export const manageStreakEnd = async (
+  context: KarboContext,
+  actionStreak: number,
+  coupleId: number,
+) => {
+  await context.karbo.text(
+    context.message.chatId,
+    `Вы пропустили серию дней из поцелуев, остановившись на ${bold(actionStreak.toString())}!\n${bold('Теперь ваш прогресс сброшен до 0 дней...')}`,
+    context.message.messageId,
+  );
+
+  const timestamp = Date.now();
+
+  await prisma.couple.update({
+    data: { lastStreakAt: timestamp },
+    where: { id: coupleId },
+  });
+
+  return timestamp;
+};

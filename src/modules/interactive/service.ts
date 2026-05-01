@@ -13,6 +13,7 @@ import {
 import {
   outputException,
   outputRelativeTime,
+  manageStreakEnd,
   validateUser,
 } from '../../lib/snippets';
 import { getCreateUser, prisma } from '../../lib/prisma';
@@ -23,6 +24,7 @@ import {
   generateRobReward,
   getAvatarUrl,
   getOrderBy,
+  isCoupleStreakEnded,
   isDuelWon,
   isRobbed,
   randomElement,
@@ -413,6 +415,71 @@ export const noCallback = async ({ karbo, message }: KarboContext) => {
   await karbo.text(
     message.chatId,
     `Печальные новости...поступил отказ на свадьбу ${bold(message.author.nickname)} от ${bold(user.nickname)}`,
+    message.messageId,
+  );
+};
+
+export const kissCallback = async ({ karbo, message }: KarboContext) => {
+  const user = await getCreateUser(
+    message.author.userId,
+    message.author.nickname,
+    { couple: true },
+  );
+
+  if (!user.coupleId) {
+    await outputException({ karbo, message }, 'youHaveNotMarried');
+    return;
+  }
+
+  const timestamp = Date.now();
+
+  if (user.couple!.canActionAt > timestamp) {
+    await outputRelativeTime(
+      { karbo, message },
+      timestamp - Number(user.couple!.canActionAt),
+    );
+
+    return;
+  }
+
+  if (
+    isCoupleStreakEnded(Number(user.couple!.lastActionAt)) &&
+    user.couple!.actionStreak
+  ) {
+    await manageStreakEnd(
+      { karbo, message },
+      user.couple!.actionStreak,
+      user.couple!.id,
+    );
+    user.couple!.lastStreakAt = timestamp;
+  }
+
+  await prisma.couple.update({
+    data: {
+      actionsDone: { increment: 1 },
+      canActionAt: timestamp + delays.kiss,
+      experience: { increment: 55 },
+      lastActionAt: timestamp,
+      actionStreak: user.couple!.lastStreakAt
+        ? Math.floor(
+            (timestamp - user.couple!.lastStreakAt) / (1000 * 60 * 60 * 24),
+          ) + 1
+        : 1,
+    },
+    where: { id: user.couple!.id },
+  });
+
+  const coupleUser = (
+    await prisma.user.findMany({
+      where: { coupleId: user.coupleId },
+    })
+  ).filter((user) => user.id != message.author.userId)[0];
+
+  const coupleUserObject = await karbo.user(coupleUser.id);
+
+  await karbo.text(
+    message.chatId,
+    `${bold(message.author.nickname)} поцеловал(а) ${bold(coupleUserObject.nickname)} 💋`,
     message.messageId,
   );
 };

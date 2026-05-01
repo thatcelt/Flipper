@@ -3,6 +3,7 @@ import {
   decreaseReputationCallback,
   duelCallback,
   increaseReputationCallback,
+  kissCallback,
   marryCallback,
   noCallback,
   robCallback,
@@ -20,5 +21,6 @@ router.command('/top', topCallback);
 router.command('/marry', marryCallback);
 router.command('да', yesCallback);
 router.command('нет', noCallback);
+router.command('/kiss', kissCallback);
 
 export default router;

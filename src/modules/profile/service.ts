@@ -12,7 +12,11 @@ import {
 import { drawCouple, drawCreditCard, drawProfile } from '../../lib/canvas';
 import { FLATTED_PRODUCTS, WORKS_RECORD } from '../../constants';
 import { staticValues } from '../../../public/data/constants.json';
-import { outputException, validateProduct } from '../../lib/snippets';
+import {
+  outputException,
+  manageStreakEnd,
+  validateProduct,
+} from '../../lib/snippets';
 
 export const meCallback = async ({ karbo, message }: KarboContext) => {
   const user = await getCreateUser(
@@ -172,25 +176,20 @@ export const loveCallback = async ({ karbo, message }: KarboContext) => {
     isCoupleStreakEnded(Number(user.couple!.lastActionAt)) &&
     user.couple!.actionStreak
   ) {
-    await karbo.text(
-      message.chatId,
-      `Вы пропустили серию дней из поцелуев, остановившись на ${bold(user.couple!.actionStreak.toString())}!\n${bold('Теперь ваш прогресс сброшен до 0 дней...')}`,
-      message.messageId,
+    const lastStreakAt = await manageStreakEnd(
+      { karbo, message },
+      user.couple!.actionStreak,
+      user.couple!.id,
     );
-
-    const timestamp = Date.now();
-
-    await prisma.couple.update({
-      data: { lastStreakAt: timestamp },
-      where: { id: user.couple!.id },
-    });
-    user.couple!.lastStreakAt = timestamp;
+    user.couple!.lastStreakAt = lastStreakAt;
   }
   const levelInfo = level(user.couple!.experience);
 
   const image = await drawCouple({
     users,
-    createdAt: getRelative(Date.now() - Number(user.couple!.createdAt)),
+    createdAt: getRelative(Date.now() - Number(user.couple!.createdAt)).slice(
+      6,
+    ),
     answer: user.couple!.answer,
     background: user.couple!.currentBackground || undefined,
     level: levelInfo.level,
