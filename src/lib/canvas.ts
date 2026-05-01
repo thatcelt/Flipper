@@ -45,13 +45,20 @@ export const loadCanvas = async (
   const ctx = canvas.getContext('2d');
 
   const backgroundImage = images.get(background as ImagesMap)!;
-  const bgScale = Math.min(700 / backgroundImage.width, 700 / backgroundImage.height);
-  const bgWidth = backgroundImage.width * bgScale;
-  const bgHeight = backgroundImage.height * bgScale;
-  const bgX = (700 - bgWidth) / 2;
-  const bgY = (700 - bgHeight) / 2;
+  const backgroundScale = Math.min(
+    700 / backgroundImage.width,
+    700 / backgroundImage.height,
+  );
+  const scaledWidth = backgroundImage.width * backgroundScale;
+  const scaledHeight = backgroundImage.height * backgroundScale;
 
-  ctx.drawImage(backgroundImage, bgX, bgY, bgWidth, bgHeight);
+  ctx.drawImage(
+    backgroundImage,
+    (700 - scaledWidth) / 2,
+    (700 - scaledHeight) / 2,
+    scaledWidth,
+    scaledHeight,
+  );
 
   ctx.drawImage(images.get(image)!, 0, 0, 700, 700);
 
@@ -88,9 +95,7 @@ const drawRoundedImage = async (
       config.width,
       config.height,
     );
-  } catch (error) {
-    console.error('Failed to load image:', config.image, error);
-  }
+  } catch {}
 
   config.ctx.restore();
 };
