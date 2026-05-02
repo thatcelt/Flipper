@@ -126,6 +126,7 @@ export const workCallback = async ({ karbo, message }: KarboContext) => {
       id: message.author.userId,
     },
     data: {
+      stats: { update: { experience: { increment: 50 } } },
       card: { update: { cash: { increment: work.salary } } },
       schedule: {
         update: { canWorkAt: timestamp + delays.work },
@@ -164,6 +165,7 @@ export const dailyCallback = async ({ karbo, message }: KarboContext) => {
     },
     data: {
       card: {
+        stats: { update: { experience: { increment: 50 } } },
         update: { cash: { increment: reward } },
       },
       schedule: { update: { canDailyAt: timestamp + delays.daily } },
@@ -199,6 +201,7 @@ export const betCallback = async ({ karbo, message }: KarboContext) => {
   await prisma.user.update({
     where: { id: message.author.userId },
     data: {
+      stats: { update: { experience: { increment: 50 } } },
       card: {
         update: {
           balance: getChangingExpression(
@@ -313,6 +316,7 @@ export const flipCallback = async ({ karbo, message }: KarboContext) => {
       schedule: { update: { canCoinAt: timestamp + delays.coin } },
       card: {
         update: {
+          stats: { update: { experience: { increment: 50 } } },
           balance: getChangingExpression(type ? 'won' : 'lose', increatedBet),
         },
       },

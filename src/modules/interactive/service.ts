@@ -148,7 +148,10 @@ export const robCallback = async ({ karbo, message }: KarboContext) => {
 
   await prisma.$transaction([
     prisma.user.update({
-      data: { card: { update: { cash: { decrement: robReward } } } },
+      data: {
+        card: { update: { cash: { decrement: robReward } } },
+        stats: { update: { experience: { increment: 100 } } },
+      },
       where: { id: target.userId },
     }),
     prisma.user.update({
@@ -233,6 +236,7 @@ export const duelCallback = async ({ karbo, message }: KarboContext) => {
         schedule: { update: { canDuelAt } },
         stats: {
           update: {
+            experience: { increment: 100 },
             reputation: { increment: reward },
             ...queries.incrementDuels,
           },
@@ -459,7 +463,10 @@ export const kissCallback = async ({ karbo, message }: KarboContext) => {
   await prisma.$transaction([
     prisma.user.update({
       where: { id: message.author.userId },
-      data: { card: { update: { balance: { increment: 300 } } } },
+      data: {
+        card: { update: { balance: { increment: 50 } } },
+        stats: { update: { experience: { increment: 50 } } },
+      },
     }),
     prisma.couple.update({
       data: {
