@@ -377,6 +377,8 @@ export const yesCallback = async ({ karbo, message }: KarboContext) => {
   const targetId = marriageCache.get(message.author.userId);
   if (!targetId) return;
 
+  marriageCache.delete(message.author.userId);
+
   const couple = await prisma.couple.create({
     data: {
       createdAt: Date.now(),
