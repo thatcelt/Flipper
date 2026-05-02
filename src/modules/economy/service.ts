@@ -164,8 +164,8 @@ export const dailyCallback = async ({ karbo, message }: KarboContext) => {
       id: message.author.userId,
     },
     data: {
+      stats: { update: { experience: { increment: 50 } } },
       card: {
-        stats: { update: { experience: { increment: 50 } } },
         update: { cash: { increment: reward } },
       },
       schedule: { update: { canDailyAt: timestamp + delays.daily } },
@@ -313,10 +313,10 @@ export const flipCallback = async ({ karbo, message }: KarboContext) => {
   await prisma.user.update({
     where: { id: message.author.userId },
     data: {
+      stats: { update: { experience: { increment: 50 } } },
       schedule: { update: { canCoinAt: timestamp + delays.coin } },
       card: {
         update: {
-          stats: { update: { experience: { increment: 50 } } },
           balance: getChangingExpression(type ? 'won' : 'lose', increatedBet),
         },
       },

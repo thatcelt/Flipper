@@ -249,6 +249,7 @@ export const duelCallback = async ({ karbo, message }: KarboContext) => {
         schedule: { update: { canDuelAt } },
         stats: {
           update: {
+            experience: { increment: 50 },
             reputation: { decrement: reputationLoss },
             ...queries.incrementDuels,
           },
