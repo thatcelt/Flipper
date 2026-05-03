@@ -181,7 +181,7 @@ export const loveCallback = async ({ karbo, message }: KarboContext) => {
       user.couple!.actionStreak,
       user.couple!.id,
     );
-    user.couple!.lastStreakAt = lastStreakAt;
+    user.couple!.lastStreakAt = BigInt(lastStreakAt);
   }
   const levelInfo = level(user.couple!.experience);
 

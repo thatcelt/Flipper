@@ -458,7 +458,7 @@ export const kissCallback = async ({ karbo, message }: KarboContext) => {
       user.couple!.actionStreak,
       user.couple!.id,
     );
-    user.couple!.lastStreakAt = timestamp;
+    user.couple!.lastStreakAt = BigInt(timestamp);
   }
 
   await prisma.$transaction([
@@ -477,7 +477,8 @@ export const kissCallback = async ({ karbo, message }: KarboContext) => {
         lastActionAt: timestamp,
         actionStreak: user.couple!.lastStreakAt
           ? Math.floor(
-              (timestamp - user.couple!.lastStreakAt) / (1000 * 60 * 60 * 24),
+              (timestamp - Number(user.couple!.lastStreakAt)) /
+                (1000 * 60 * 60 * 24),
             ) + 1
           : 1,
       },

@@ -91,6 +91,6 @@ model Couple {
   actionStreak      Int     @default(0)
   experience        Int     @default(0)
   actionsDone       Int     @default(0)
-  lastStreakAt      Int     @default(0)
+  lastStreakAt      BigInt  @default(0)
   currentFrame      String  @default("orange")
 }
