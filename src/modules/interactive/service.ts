@@ -443,7 +443,7 @@ export const kissCallback = async ({ karbo, message }: KarboContext) => {
   if (user.couple!.canActionAt > timestamp) {
     await outputRelativeTime(
       { karbo, message },
-      timestamp - Number(user.couple!.canActionAt),
+      Number(user.couple!.canActionAt) - timestamp,
     );
 
     return;
