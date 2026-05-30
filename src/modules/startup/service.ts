@@ -9,7 +9,6 @@ import { delay } from '../../lib/util';
 
 export const helpCallback = async ({ karbo, message }: KarboContext) => {
   const splittedContent = message.content.split(' ');
-  const baseText = `${bold('Навигация')}\n\n`;
 
   let commandsCategory: string | undefined;
 
@@ -25,7 +24,7 @@ export const helpCallback = async ({ karbo, message }: KarboContext) => {
 
   await karbo.text(
     message.chatId,
-    `${baseText}${commandsCategory || ALL_COMMANDS}`,
+    `${bold('Навигация')}\n\n${commandsCategory || ALL_COMMANDS}\n${bold('Чат поддержки бота -')} ${process.env.CHAT_URL}`,
     message.messageId,
   );
 };
