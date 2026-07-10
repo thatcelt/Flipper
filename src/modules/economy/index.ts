@@ -1,26 +1,16 @@
 import { Router } from 'karboai';
-import {
-  betCallback,
-  buyCallback,
-  dailyCallback,
-  flipCallback,
-  shopCallback,
-  tradeCallback,
-  transferCallback,
-  workCallback,
-  worksListCallback,
-} from './service';
+
+import { bank, bet, daily, jobs, shop, trade, transfer, work } from './service';
 
 const router = new Router('economy');
 
-router.command('/wlist', worksListCallback);
-router.command('/daily', dailyCallback);
-router.command('/work', workCallback);
-router.command('/bet', betCallback);
-router.command('/trf', transferCallback);
-router.command('/trade', tradeCallback);
-router.command('/flip', flipCallback);
-router.command('/shop', shopCallback);
-router.command('/buy', buyCallback);
+router.command('/bank', bank);
+router.command('/daily', daily);
+router.command('/trf', transfer);
+router.command('/trade', trade);
+router.command('/bet', bet);
+router.command('/jobs', jobs);
+router.command('/work', work);
+router.command('/shop', shop);
 
 export default router;

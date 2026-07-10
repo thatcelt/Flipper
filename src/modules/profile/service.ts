@@ -1,279 +1,31 @@
-import { bold, KarboContext } from 'karboai';
+import type { MessageCallback } from 'karboai';
 
-import { getCreateUser, prisma } from '../../lib/prisma';
-import {
-  getAvatarUrl,
-  getRelative,
-  isBackgroundForCouple,
-  isCoupleStreakEnded,
-  isFrameForCouple,
-  level,
-} from '../../lib/util';
-import { drawCouple, drawCreditCard, drawProfile } from '../../lib/canvas';
-import { FLATTED_PRODUCTS, WORKS_RECORD } from '../../constants';
-import { staticValues } from '../../../public/data/constants.json';
-import {
-  outputException,
-  manageStreakEnd,
-  validateProduct,
-} from '../../lib/snippets';
+import { getUser } from '../../util/prisma';
+import { profile } from '../../util/canvas';
+import { DEFAULT_WORK, WORKS_RECORD } from '../../constants';
+import { calculateLevel } from '../../util/helpers';
+import type { BackgroundKey, FrameKey } from '../../types/canvas';
 
-export const meCallback = async ({ karbo, message }: KarboContext) => {
-  const user = await getCreateUser(
-    message.author.userId,
-    message.author.nickname,
-    { stats: true, couple: true },
-  );
+export const me: MessageCallback = async ({ karbo, message }) => {
+  const user = await getUser({ user: message.author, include: { stats: true } });
+  const { level, maxExperience } = calculateLevel(user.stats!.experience);
 
-  const levelInfo = level(user.stats!.experience);
-
-  let hasCouple;
-
-  if (user.coupleId) {
-    const couple = await prisma.couple.findFirst({
-      where: { id: user.coupleId },
-      include: { users: true },
-    });
-    const coupleUser = await karbo.user(
-      couple!.users.filter((user) => user.id != message.author.userId)[0].id,
-    );
-
-    hasCouple = {
-      nickname: coupleUser.nickname,
-      avatar: getAvatarUrl(coupleUser.avatar),
-    };
-  }
-
-  const image = await drawProfile({
-    nickname: message.author.nickname,
-    level: levelInfo.level,
-    frame: user.currentFrame,
-    experience: {
-      from: user.stats!.experience,
-      to: levelInfo.maxExperience,
-    },
-    avatar: message.author.avatarUrl,
-    stats: {
-      messages: user.stats!.messages,
-      robs: user.stats!.robs,
-      duels: user.stats!.duels,
-    },
-    work: user.work ? WORKS_RECORD[user.work].name : staticValues.work,
-    reputation: user.stats!.reputation,
-    background: user.currentBackground
-      ? `background-${user.currentBackground}`
-      : undefined,
-    hasCouple,
-  });
-
-  await karbo.image(
-    message.chatId,
-    [await karbo.upload(image)],
-    message.messageId,
-  );
-};
-
-export const bankCallback = async ({ karbo, message }: KarboContext) => {
-  const user = await getCreateUser(
-    message.author.userId,
-    message.author.nickname,
-    { card: true },
-  );
-
-  const image = await drawCreditCard({
-    cardNumber: user.card!.number,
-    initials: user.card!.initials,
-    date: user.card!.date,
-    balance: user.card!.balance,
-    cash: user.card!.cash,
-  });
-
-  await karbo.image(
-    message.chatId,
-    [await karbo.upload(image)],
-    message.messageId,
-  );
-};
-
-export const frameCallback = async ({ karbo, message }: KarboContext) => {
-  const frame = await validateProduct({ karbo, message }, 'frames');
-
-  if (!frame) return;
-
-  await prisma.user.update({
-    where: { id: message.author.userId },
-    data: { currentFrame: frame.thumbnail.split('-')[1] },
-  });
-
-  await karbo.text(
-    message.chatId,
-    `Вы успешно поставили рамку - ${bold(frame.title)}`,
-    message.messageId,
-  );
-};
-
-export const backgroundCallback = async ({ karbo, message }: KarboContext) => {
-  const background = await validateProduct({ karbo, message }, 'backgrounds');
-
-  if (!background) return;
-
-  await prisma.user.update({
-    where: { id: message.author.userId },
-    data: { currentBackground: background.thumbnail.split('-')[1] },
-  });
-
-  await karbo.text(
-    message.chatId,
-    `Вы успешно поставили фон - ${bold(background.title)}`,
-    message.messageId,
-  );
-};
-
-export const ownedCallback = async ({ karbo, message }: KarboContext) => {
-  const ownedProductIds = (
-    await prisma.productsOnUsers.findMany({
-      where: { userId: message.author.userId },
-      select: { productId: true },
+  const media = await karbo.upload(
+    await profile({
+      nickname: message.author.nickname,
+      work: !user.work && user.work != 0 ? DEFAULT_WORK : WORKS_RECORD[user.work]!.name,
+      frame: user.frame as FrameKey,
+      background: user.background as BackgroundKey,
+      level,
+      experience: {
+        from: user.stats!.experience,
+        to: maxExperience,
+      },
+      reputation: user.stats!.reputation,
+      avatar: message.author.avatarUrl,
+      stats: user.stats!,
     })
-  ).map(({ productId }) => productId);
-
-  const products = FLATTED_PRODUCTS.filter((product) =>
-    ownedProductIds.includes(product.id),
   );
 
-  await karbo.text(
-    message.chatId,
-    `Ваши купленные товары: ${products.map((product) => bold(product.title)).join(', ') || bold('отсутствуют')}`,
-    message.messageId,
-  );
-};
-
-export const loveCallback = async ({ karbo, message }: KarboContext) => {
-  const user = await getCreateUser(
-    message.author.userId,
-    message.author.nickname,
-    { couple: true },
-  );
-
-  if (!user.coupleId) {
-    await outputException({ karbo, message }, 'youHaveNotMarried');
-    return;
-  }
-
-  const users = await Promise.all(
-    (
-      await prisma.user.findMany({
-        where: { coupleId: user.coupleId },
-      })
-    ).map(async (user) => {
-      const { nickname, avatar } = await karbo.user(user.id);
-
-      return { nickname, avatar: getAvatarUrl(avatar) };
-    }),
-  );
-
-  if (
-    isCoupleStreakEnded(Number(user.couple!.lastActionAt)) &&
-    user.couple!.actionStreak
-  ) {
-    const lastStreakAt = await manageStreakEnd(
-      { karbo, message },
-      user.couple!.actionStreak,
-      user.couple!.id,
-    );
-    user.couple!.lastStreakAt = BigInt(lastStreakAt);
-  }
-  const levelInfo = level(user.couple!.experience);
-
-  const image = await drawCouple({
-    users,
-    createdAt: getRelative(Date.now() - Number(user.couple!.createdAt)).slice(
-      6,
-    ),
-    answer: user.couple!.answer,
-    background: user.couple!.currentBackground || undefined,
-    level: levelInfo.level,
-    experience: {
-      from: user.couple!.experience,
-      to: levelInfo.maxExperience,
-    },
-    kissesMade: user.couple!.actionsDone,
-    kissesStreak: user.couple!.actionStreak,
-    frame: user.couple!.currentFrame,
-  });
-
-  await karbo.image(
-    message.chatId,
-    [await karbo.upload(image)],
-    message.messageId,
-  );
-};
-
-export const loveFrameCallback = async ({ karbo, message }: KarboContext) => {
-  const user = await getCreateUser(
-    message.author.userId,
-    message.author.nickname,
-    { couple: true },
-  );
-
-  if (!user.coupleId) {
-    await outputException({ karbo, message }, 'youHaveNotMarried');
-    return;
-  }
-
-  const frame = await validateProduct({ karbo, message }, 'frames');
-
-  if (!frame) return;
-
-  if (!isFrameForCouple(frame.id)) {
-    await outputException({ karbo, message }, 'accessDenied');
-    return;
-  }
-
-  await prisma.couple.update({
-    data: { currentFrame: frame.thumbnail.split('-')[1] },
-    where: { id: user.coupleId! },
-  });
-  await karbo.text(
-    message.chatId,
-    `Вы успешно поставили рамку - ${bold(frame.title)}`,
-    message.messageId,
-  );
-};
-
-export const loveBackgroundCallback = async ({
-  karbo,
-  message,
-}: KarboContext) => {
-  const user = await getCreateUser(
-    message.author.userId,
-    message.author.nickname,
-    { couple: true },
-  );
-
-  if (!user.coupleId) {
-    await outputException({ karbo, message }, 'youHaveNotMarried');
-    return;
-  }
-
-  const background = await validateProduct({ karbo, message }, 'backgrounds');
-
-  if (!background) return;
-
-  if (!isBackgroundForCouple(background.id)) {
-    await outputException({ karbo, message }, 'accessDenied');
-    return;
-  }
-
-  await prisma.couple.update({
-    data: {
-      currentBackground: `background-${background.thumbnail.split('-')[1]}`,
-    },
-    where: { id: user.coupleId! },
-  });
-  await karbo.text(
-    message.chatId,
-    `Вы успешно поставили фон - ${bold(background.title)}`,
-    message.messageId,
-  );
+  await karbo.image({ chatId: message.chatId, images: [media], replyMessageId: message.messageId });
 };

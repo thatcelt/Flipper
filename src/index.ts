@@ -1,26 +1,18 @@
 import { KarboAI } from 'karboai';
-import { config } from 'dotenv';
 
-import routes from './modules/index';
-import { loadImages } from './lib/canvas';
-import { readFile } from 'fs/promises';
+import { loadImages } from './util/canvas';
+import { common, profile, economy } from './modules';
 
-config({ path: '.env', quiet: true });
+const karbo = new KarboAI({
+  token: process.env.BOT_TOKEN,
+  id: process.env.BOT_ID,
+  enableLogging: true,
+});
 
 (async () => {
-  if (!process.env.BOT_TOKEN || !process.env.BOT_ID) {
-    throw new Error('BOT_TOKEN and BOT_ID must be set in the environment');
-  }
   await loadImages();
-  const karbo = new KarboAI({
-    token: process.env.BOT_TOKEN,
-    id: process.env.BOT_ID,
-    enableLogging: true,
-  });
-  process.env.BIG_BRO_URL = await karbo.upload(
-    await readFile('./public/assets/generator.png'),
-  );
 
-  karbo.bind(...routes);
+  karbo.bind(common, profile, economy);
+
   karbo.attach();
 })();
