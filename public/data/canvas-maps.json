@@ -1,0 +1,108 @@
+{
+  "colors": {
+    "white": "#FFFFFF",
+    "orange": "#99580A",
+    "red": "#990a0a",
+    "blue": "#005EFF",
+    "green": "#43990a",
+    "yellow": "#99780a",
+    "pink": "#990a92",
+    "purple": "#600a99",
+    "black": "#000000"
+  },
+  "profile": {
+    "avatar": { "x": 31, "y": 37, "width": 149, "height": 149, "radius": 8 },
+    "nickname": { "size": 22, "x": 196, "y": 58 },
+    "work": { "size": 17, "x": 280, "y": 89 },
+    "level": { "size": 17, "x": 269, "y": 119 },
+    "reputation": { "size": 17, "x": 314, "y": 148 },
+    "stats": { "size": 17, "x": 235, "y": 178 },
+    "statsStep": 78,
+    "experience": { "size": 17, "x": 260.5, "y": 249 },
+    "bar": { "x": 31, "y": 216 },
+    "messages": { "size": 14, "x": 267, "y": 328 },
+    "robs": { "size": 14, "x": 221, "y": 357 },
+    "duels": { "size": 14, "x": 239, "y": 389 },
+    "prestiges": { "size": 14, "x": 221, "y": 420 },
+    "coupleAvatar": { "x": 399, "y": 478, "width": 62, "height": 61, "radius": 100 },
+    "coupleCaption": { "size": 17, "x": 260.5, "y": 515 },
+    "clanAvatar": { "x": 399, "y": 590, "width": 62, "height": 61, "radius": 100 },
+    "clanCaption": { "size": 17, "x": 260.5, "y": 627 }
+  },
+  "card": {
+    "number": { "y": 407, "size": 25 },
+    "initials": { "size": 20, "x": 138, "y": 460 },
+    "date": { "size": 20, "x": 500, "y": 460 },
+    "balance": { "size": 20, "x": 230, "y": 538 },
+    "cash": { "size": 20, "x": 257, "y": 570 }
+  },
+  "clan": {
+    "avatar": { "x": 29, "y": 22, "width": 149, "height": 149, "radius": 12 },
+    "name": { "size": 22, "x": 193, "y": 45 },
+    "experience": { "size": 17, "x": 260.5, "y": 230 },
+    "bar": { "x": 29, "y": 197 },
+    "participants": { "size": 17, "x": 447, "y": 81 },
+    "level": { "size": 17, "x": 334, "y": 111 },
+    "chatLink": { "size": 17, "x": 323, "y": 139 },
+    "dots": {
+      "messages": [
+        { "x": 146, "y": 334 },
+        { "x": 306, "y": 324 },
+        { "x": 466, "y": 334 }
+      ],
+      "experience": [
+        { "x": 146, "y": 547 },
+        { "x": 306, "y": 537 },
+        { "x": 466, "y": 547 }
+      ]
+    }
+  },
+  "top": {
+    "dots": {
+      "winners": [
+        { "x": 152, "y": 142 },
+        { "x": 306, "y": 132 },
+        { "x": 460, "y": 142 }
+      ],
+      "meta": [
+        { "x": 152, "y": 251 },
+        { "x": 306, "y": 242 },
+        { "x": 460, "y": 251 }
+      ],
+      "secondaries": [
+        { "x": 74, "y": 334 },
+        { "x": 74, "y": 460 },
+        { "x": 74, "y": 586 }
+      ]
+    },
+    "secondaries": {
+      "nickname": { "size": 14, "x": 147, "y": 350 },
+      "value": { "size": 14, "y": 370 }
+    },
+    "x": {
+      "top-top-level": 228,
+      "top-top-balance": 322,
+      "top-top-duels": 322,
+      "top-top-messages": 350,
+      "top-top-reputation": 350,
+      "top-top-robs": 303
+    }
+  },
+  "shop": {
+    "previous": { "size": 13, "x": 43, "y": 683 },
+    "next": { "size": 13, "x": 640, "y": 683 },
+    "thumbnail": { "x": 57, "y": 173, "width": 278, "height": 186, "radius": [10, 10, 13, 10] },
+    "id": { "size": 12, "y": 204 }
+  },
+  "casino": { "size": 22, "x": 349, "y": 510 },
+  "couple": {
+    "image": { "y": 128, "width": 149, "height": 149, "radius": 100 },
+    "nickname": { "size": 17, "y": 315 },
+    "createdAt": { "size": 14, "x": 315, "y": 454 },
+    "kisses": { "size": 14, "x": 324, "y": 499 },
+    "streak": { "size": 14, "x": 380, "y": 543 },
+    "level": { "size": 17, "x": 374, "y": 317 },
+    "experience": { "size": 17, "x": 351, "y": 378 },
+    "bar": { "x": 118, "y": 345 }
+  }
+}

@@ -1,0 +1,706 @@
+{
+  "backgrounds": [
+    [
+      {
+        "thumbnail": "shop-aminodork",
+        "title": "Аминодорк",
+        "cost": 5000,
+        "id": 2
+      },
+      {
+        "thumbnail": "shop-aminodork",
+        "title": "Аминодорк [Для пары]",
+        "cost": 7000,
+        "id": 3
+      },
+      {
+        "thumbnail": "shop-aminodork",
+        "title": "Аминодорк [Для клана]",
+        "cost": 7000,
+        "id": 4
+      },
+      {
+        "thumbnail": "shop-forest",
+        "title": "Тёмный лес",
+        "cost": 5000,
+        "id": 5
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-forest",
+        "title": "Тёмный лес [Для пары]",
+        "cost": 7000,
+        "id": 6
+      },
+      {
+        "thumbnail": "shop-forest",
+        "title": "Тёмный лес [Для клана]",
+        "cost": 7000,
+        "id": 7
+      },
+      {
+        "thumbnail": "shop-porche",
+        "title": "Порш Макан",
+        "cost": 5000,
+        "id": 8
+      },
+      {
+        "thumbnail": "shop-porche",
+        "title": "Порш Макан [Для пары]",
+        "cost": 7000,
+        "id": 9
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-porche",
+        "title": "Порш Макан [Для клана]",
+        "cost": 7000,
+        "id": 10
+      },
+      {
+        "thumbnail": "shop-shrine",
+        "title": "Гробница зла",
+        "cost": 5000,
+        "id": 11
+      },
+      {
+        "thumbnail": "shop-shrine",
+        "title": "Гробница зла [Для пары]",
+        "cost": 7000,
+        "id": 12
+      },
+      {
+        "thumbnail": "shop-shrine",
+        "title": "Гробница зла [Для клана]",
+        "cost": 7000,
+        "id": 13
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-cherries",
+        "title": "Вишнёвый лес",
+        "cost": 5000,
+        "id": 14
+      },
+      {
+        "thumbnail": "shop-cherries",
+        "title": "Вишнёвый лес [Для пары]",
+        "cost": 7000,
+        "id": 15
+      },
+      {
+        "thumbnail": "shop-cherries",
+        "title": "Вишнёвый лес [Для клана]",
+        "cost": 7000,
+        "id": 16
+      },
+      {
+        "thumbnail": "shop-gachiakuta",
+        "title": "Серия Хранитель",
+        "cost": 5000,
+        "id": 17
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-gachiakuta",
+        "title": "Серия Хранитель [Для пары]",
+        "cost": 7000,
+        "id": 18
+      },
+      {
+        "thumbnail": "shop-gachiakuta",
+        "title": "Серия Хранитель [Для клана]",
+        "cost": 7000,
+        "id": 19
+      },
+      {
+        "thumbnail": "shop-guts",
+        "title": "Тёмный мечник",
+        "cost": 5000,
+        "id": 20
+      },
+      {
+        "thumbnail": "shop-guts",
+        "title": "Тёмный мечник [Для пары]",
+        "cost": 7000,
+        "id": 21
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-guts",
+        "title": "Тёмный мечник [Для клана]",
+        "cost": 7000,
+        "id": 22
+      },
+      {
+        "thumbnail": "shop-sniper",
+        "title": "Снайпер",
+        "cost": 5000,
+        "id": 23
+      },
+      {
+        "thumbnail": "shop-sniper",
+        "title": "Снайпер [Для пары]",
+        "cost": 7000,
+        "id": 24
+      },
+      {
+        "thumbnail": "shop-sniper",
+        "title": "Снайпер [Для клана]",
+        "cost": 7000,
+        "id": 25
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-challenger",
+        "title": "Челленджер",
+        "cost": 5000,
+        "id": 26
+      },
+      {
+        "thumbnail": "shop-challenger",
+        "title": "Челленджер [Для пары]",
+        "cost": 7000,
+        "id": 27
+      },
+      {
+        "thumbnail": "shop-challenger",
+        "title": "Челленджер [Для клана]",
+        "cost": 7000,
+        "id": 28
+      },
+      {
+        "thumbnail": "shop-thorns",
+        "title": "Тернии",
+        "cost": 5000,
+        "id": 29
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-thorns",
+        "title": "Тернии [Для пары]",
+        "cost": 7000,
+        "id": 30
+      },
+      {
+        "thumbnail": "shop-thorns",
+        "title": "Тернии [Для клана]",
+        "cost": 7000,
+        "id": 31
+      },
+      {
+        "thumbnail": "shop-ocean",
+        "title": "Кровавый океан",
+        "cost": 5000,
+        "id": 32
+      },
+      {
+        "thumbnail": "shop-ocean",
+        "title": "Кровавый океан [Для пары]",
+        "cost": 7000,
+        "id": 33
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-ocean",
+        "title": "Кровавый океан [Для клана]",
+        "cost": 7000,
+        "id": 34
+      },
+      {
+        "thumbnail": "shop-sewerslvt",
+        "title": "Sewerslvt",
+        "cost": 5000,
+        "id": 35
+      },
+      {
+        "thumbnail": "shop-sewerslvt",
+        "title": "Sewerslvt [Для пары]",
+        "cost": 7000,
+        "id": 36
+      },
+      {
+        "thumbnail": "shop-sewerslvt",
+        "title": "Sewerslvt [Для клана]",
+        "cost": 7000,
+        "id": 37
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-city",
+        "title": "Городок",
+        "cost": 5000,
+        "id": 38
+      },
+      {
+        "thumbnail": "shop-city",
+        "title": "Городок [Для пары]",
+        "cost": 7000,
+        "id": 39
+      },
+      {
+        "thumbnail": "shop-city",
+        "title": "Городок [Для клана]",
+        "cost": 7000,
+        "id": 40
+      },
+      {
+        "thumbnail": "shop-clouds",
+        "title": "Облака",
+        "cost": 5000,
+        "id": 41
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-clouds",
+        "title": "Облака [Для пары]",
+        "cost": 7000,
+        "id": 42
+      },
+      {
+        "thumbnail": "shop-clouds",
+        "title": "Облака [Для клана]",
+        "cost": 7000,
+        "id": 43
+      },
+      {
+        "thumbnail": "shop-winter",
+        "title": "Зима",
+        "cost": 5000,
+        "id": 44
+      },
+      {
+        "thumbnail": "shop-winter",
+        "title": "Зима [Для пары]",
+        "cost": 7000,
+        "id": 45
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-winter",
+        "title": "Зима [Для клана]",
+        "cost": 7000,
+        "id": 46
+      },
+      {
+        "thumbnail": "shop-eva",
+        "title": "EVA-01",
+        "cost": 5000,
+        "id": 47
+      },
+      {
+        "thumbnail": "shop-eva",
+        "title": "EVA-01 [Для пары]",
+        "cost": 7000,
+        "id": 48
+      },
+      {
+        "thumbnail": "shop-eva",
+        "title": "EVA-01 [Для клана]",
+        "cost": 7000,
+        "id": 49
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-ayanami",
+        "title": "Аянами Рей",
+        "cost": 5000,
+        "id": 50
+      },
+      {
+        "thumbnail": "shop-ayanami",
+        "title": "Аянами Рей [Для пары]",
+        "cost": 7000,
+        "id": 51
+      },
+      {
+        "thumbnail": "shop-ayanami",
+        "title": "Аянами Рей [Для клана]",
+        "cost": 7000,
+        "id": 52
+      },
+      {
+        "thumbnail": "shop-abstract",
+        "title": "Абстракт",
+        "cost": 5000,
+        "id": 53
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-abstract",
+        "title": "Абстракт [Для пары]",
+        "cost": 7000,
+        "id": 54
+      },
+      {
+        "thumbnail": "shop-abstract",
+        "title": "Абстракт [Для клана]",
+        "cost": 7000,
+        "id": 55
+      },
+      {
+        "thumbnail": "shop-faces",
+        "title": "Лица",
+        "cost": 5000,
+        "id": 56
+      },
+      {
+        "thumbnail": "shop-faces",
+        "title": "Лица [Для пары]",
+        "cost": 7000,
+        "id": 57
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-faces",
+        "title": "Лица [Для клана]",
+        "cost": 7000,
+        "id": 58
+      },
+      {
+        "thumbnail": "shop-centipede",
+        "title": "Сколопендра",
+        "cost": 5000,
+        "id": 59
+      },
+      {
+        "thumbnail": "shop-centipede",
+        "title": "Сколопендра [Для пары]",
+        "cost": 7000,
+        "id": 60
+      },
+      {
+        "thumbnail": "shop-centipede",
+        "title": "Сколопендра [Для клана]",
+        "cost": 7000,
+        "id": 61
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-ultrakill",
+        "title": "Кровь - это топливо",
+        "cost": 5000,
+        "id": 62
+      },
+      {
+        "thumbnail": "shop-ultrakill",
+        "title": "Кровь - это топливо [Для пары]",
+        "cost": 7000,
+        "id": 63
+      },
+      {
+        "thumbnail": "shop-ultrakill",
+        "title": "Кровь - это топливо [Для клана]",
+        "cost": 7000,
+        "id": 64
+      },
+      {
+        "thumbnail": "shop-cat",
+        "title": "Котозавр",
+        "cost": 5000,
+        "id": 65
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-cat",
+        "title": "Котозавр [Для пары]",
+        "cost": 7000,
+        "id": 66
+      },
+      {
+        "thumbnail": "shop-cat",
+        "title": "Котозавр [Для клана]",
+        "cost": 7000,
+        "id": 67
+      },
+      {
+        "thumbnail": "shop-kirbies",
+        "title": "Кирби",
+        "cost": 5000,
+        "id": 68
+      },
+      {
+        "thumbnail": "shop-kirbies",
+        "title": "Кирби [Для пары]",
+        "cost": 7000,
+        "id": 69
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-kirbies",
+        "title": "Кирби [Для клана]",
+        "cost": 7000,
+        "id": 70
+      }
+    ]
+  ],
+  "frames": [
+    [
+      {
+        "thumbnail": "shop-yellow-card",
+        "title": "Жёлтая карта",
+        "cost": 8000,
+        "id": 71
+      },
+      {
+        "thumbnail": "shop-red-card",
+        "title": "Красная карта",
+        "cost": 8000,
+        "id": 72
+      },
+      {
+        "thumbnail": "shop-green-card",
+        "title": "Зелёная карта",
+        "cost": 8000,
+        "id": 73
+      },
+      {
+        "thumbnail": "shop-blue-card",
+        "title": "Синяя карта",
+        "cost": 8000,
+        "id": 74
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-pink-card",
+        "title": "Розовая карта",
+        "cost": 8000,
+        "id": 75
+      },
+      {
+        "thumbnail": "shop-purple-card",
+        "title": "Фиолетовая карта",
+        "cost": 8000,
+        "id": 76
+      },
+      {
+        "thumbnail": "shop-black-card",
+        "title": "Чёрная карта",
+        "cost": 8000,
+        "id": 77
+      },
+      {
+        "thumbnail": "shop-white-card",
+        "title": "Белая карта",
+        "cost": 8000,
+        "id": 78
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-orange-card",
+        "title": "Оранжевая карта",
+        "cost": 8000,
+        "id": 79
+      },
+      {
+        "thumbnail": "shop-white-frame",
+        "title": "Белая рамка",
+        "cost": 7000,
+        "id": 80
+      },
+      {
+        "thumbnail": "shop-white-frame",
+        "title": "Белая рамка [Для пары]",
+        "cost": 7000,
+        "id": 81
+      },
+      {
+        "thumbnail": "shop-white-frame",
+        "title": "Белая рамка [Для клана]",
+        "cost": 7000,
+        "id": 82
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-yellow-frame",
+        "title": "Жёлтая рамка",
+        "cost": 7000,
+        "id": 83
+      },
+      {
+        "thumbnail": "shop-yellow-frame",
+        "title": "Жёлтая рамка [Для пары]",
+        "cost": 7000,
+        "id": 84
+      },
+      {
+        "thumbnail": "shop-yellow-frame",
+        "title": "Жёлтая рамка [Для клана]",
+        "cost": 7000,
+        "id": 85
+      },
+      {
+        "thumbnail": "shop-red-frame",
+        "title": "Красная рамка",
+        "cost": 7000,
+        "id": 86
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-red-frame",
+        "title": "Красная рамка [Для пары]",
+        "cost": 7000,
+        "id": 87
+      },
+      {
+        "thumbnail": "shop-red-frame",
+        "title": "Красная рамка [Для клана]",
+        "cost": 7000,
+        "id": 88
+      },
+      {
+        "thumbnail": "shop-purple-frame",
+        "title": "Фиолетовая рамка",
+        "cost": 7000,
+        "id": 89
+      },
+      {
+        "thumbnail": "shop-purple-frame",
+        "title": "Фиолетовая рамка [Для пары]",
+        "cost": 7000,
+        "id": 90
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-purple-frame",
+        "title": "Фиолетовая рамка [Для клана]",
+        "cost": 7000,
+        "id": 91
+      },
+      {
+        "thumbnail": "shop-pink-frame",
+        "title": "Розовая рамка",
+        "cost": 7000,
+        "id": 92
+      },
+      {
+        "thumbnail": "shop-pink-frame",
+        "title": "Розовая рамка [Для пары]",
+        "cost": 7000,
+        "id": 93
+      },
+      {
+        "thumbnail": "shop-pink-frame",
+        "title": "Розовая рамка [Для клана]",
+        "cost": 7000,
+        "id": 94
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-orange-frame",
+        "title": "Оранжевая рамка",
+        "cost": 7000,
+        "id": 95
+      },
+      {
+        "thumbnail": "shop-orange-frame",
+        "title": "Оранжевая рамка [Для пары]",
+        "cost": 7000,
+        "id": 96
+      },
+      {
+        "thumbnail": "shop-orange-frame",
+        "title": "Оранжевая рамка [Для клана]",
+        "cost": 7000,
+        "id": 97
+      },
+      {
+        "thumbnail": "shop-green-frame",
+        "title": "Зелёная рамка",
+        "cost": 7000,
+        "id": 98
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-green-frame",
+        "title": "Зелёная рамка [Для пары]",
+        "cost": 7000,
+        "id": 99
+      },
+      {
+        "thumbnail": "shop-green-frame",
+        "title": "Зелёная рамка [Для клана]",
+        "cost": 7000,
+        "id": 100
+      },
+      {
+        "thumbnail": "shop-blue-frame",
+        "title": "Синяя рамка",
+        "cost": 7000,
+        "id": 101
+      },
+      {
+        "thumbnail": "shop-blue-frame",
+        "title": "Синяя рамка [Для пары]",
+        "cost": 7000,
+        "id": 102
+      }
+    ],
+    [
+      {
+        "thumbnail": "shop-blue-frame",
+        "title": "Синяя рамка [Для клана]",
+        "cost": 7000,
+        "id": 103
+      },
+      {
+        "thumbnail": "shop-black-frame",
+        "title": "Чёрная рамка",
+        "cost": 7000,
+        "id": 104
+      },
+      {
+        "thumbnail": "shop-black-frame",
+        "title": "Чёрная рамка [Для пары]",
+        "cost": 7000,
+        "id": 105
+      },
+      {
+        "thumbnail": "shop-black-frame",
+        "title": "Чёрная рамка [Для клана]",
+        "cost": 7000,
+        "id": 106
+      }
+    ]
+  ],
+  "other": [
+    [
+      {
+        "thumbnail": "shop-clan",
+        "title": "Создание клана",
+        "cost": 10000,
+        "id": 0
+      },
+      {
+        "thumbnail": "shop-marry",
+        "title": "Свадьба",
+        "cost": 10000,
+        "id": 1
+      }
+    ]
+  ]
+}
