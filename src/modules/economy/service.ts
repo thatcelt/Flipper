@@ -11,7 +11,13 @@ import {
   validateUser,
 } from '../../util/snippets';
 import { casinoResult, casinoVariants, dailyReward } from '../../util/helpers';
-import { COOLDOWNS, SHOP_CATEGORIES, WORKS_RECORD, WORKS_STRING } from '../../constants';
+import {
+  COOLDOWNS,
+  FLATTED_PRODUCTS,
+  SHOP_CATEGORIES,
+  WORKS_RECORD,
+  WORKS_STRING,
+} from '../../constants';
 import type { BackgroundKey, CardColor, ShopEntity, ShopKey } from '../../types/canvas';
 
 export const bank: MessageCallback = async ({ karbo, message }) => {
@@ -238,5 +244,57 @@ export const shop: MessageCallback = async ({ karbo, message }) => {
     caption: `Количество страниц: ${code(categoryPages.length.toString())}`,
     replyMessageId: message.messageId,
     images: [media],
+  });
+};
+
+export const buy: MessageCallback = async ({ karbo, message }) => {
+  const [, productId] = message.content.split(' ');
+
+  const product = FLATTED_PRODUCTS[Number(productId)];
+
+  if (!product) {
+    await displayError({
+      karbo,
+      messageId: message.messageId,
+      key: 'wrongType',
+      chatId: message.chatId,
+    });
+    return;
+  }
+
+  const user = await getUser({ user: message.author, include: { products: true, card: true } });
+
+  if (user.products.find((p) => p.productId == product.id)) {
+    await displayError({
+      karbo,
+      messageId: message.messageId,
+      key: 'alreadyBought',
+      chatId: message.chatId,
+    });
+    return;
+  }
+
+  if (product.cost > user.card!.balance) {
+    await displayError({
+      karbo,
+      messageId: message.messageId,
+      key: 'notEnoughMoney',
+      chatId: message.chatId,
+    });
+    return;
+  }
+
+  await prisma.user.update({
+    where: { id: message.author.userId },
+    data: {
+      card: { update: { balance: { decrement: product.cost } } },
+      products: { create: { productId: product.id } },
+    },
+  });
+
+  await karbo.text({
+    chatId: message.chatId,
+    content: `Вы купили ${bold(product.title)} за ${code(product.cost.toString())} фликов`,
+    replyMessageId: message.messageId,
   });
 };

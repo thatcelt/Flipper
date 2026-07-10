@@ -1,5 +1,6 @@
 import { bold, code, italic } from 'karboai';
 import { works } from '../public/data/works.json';
+import { frames, backgrounds, other } from '../public/data/shop.json';
 import type { CasinoVariant } from './types/canvas';
 
 export const DEFAULT_WORK = 'Безработный';
@@ -38,5 +39,19 @@ export const WORKS_STRING = `${bold('Доступные работы:')}\n\n${wo
       `${italic(bold(work.metadata.name))} [ID: ${code(work.workId.toString())}]\nМинимум репутации: ${italic(work.metadata.minReputation.toString())}\nЗарплата: ${italic(work.metadata.salary.toString())}\n`
   )
   .join('\n')}`;
+
+export const FLATTED_PRODUCTS = [...frames.flat(), ...backgrounds.flat(), ...other.flat()].reduce(
+  (accumulator, currentItem) => {
+    accumulator[currentItem.id] = currentItem;
+    return accumulator;
+  },
+  {} as Record<number, (typeof frames)[0][0]>
+);
+
+export const FLATTED_CATEGORIES = {
+  backgrounds: backgrounds.flat(),
+  frames: frames.flat(),
+  other: other.flat(),
+};
 
 export const SHOP_CATEGORIES = ['backgrounds', 'frames', 'other'];

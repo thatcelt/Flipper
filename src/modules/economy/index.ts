@@ -1,6 +1,6 @@
 import { Router } from 'karboai';
 
-import { bank, bet, daily, jobs, shop, trade, transfer, work } from './service';
+import { bank, bet, buy, daily, jobs, shop, trade, transfer, work } from './service';
 
 const router = new Router('economy');
 
@@ -12,5 +12,6 @@ router.command('/bet', bet);
 router.command('/jobs', jobs);
 router.command('/work', work);
 router.command('/shop', shop);
+router.command('/buy', buy);
 
 export default router;
