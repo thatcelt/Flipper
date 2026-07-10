@@ -3,6 +3,7 @@ import type { InteractionCallbackQuery } from 'karboai/dist/dto/dispatcher.dto';
 import type { Prisma } from '../../generated/prisma/client';
 
 type MoneyType = 'cash' | 'balance';
+type CosmeticsType = 'profile' | 'couple' | 'clan';
 
 type ErrorKey =
   | 'wrongType'
@@ -15,7 +16,18 @@ type ErrorKey =
   | 'alreadyWorking'
   | 'unemployed'
   | 'getFired'
-  | 'wrongPage';
+  | 'wrongPage'
+  | 'alreadyBought'
+  | 'productNotFound'
+  | 'invalidProductType'
+  | 'productNotOwned';
+
+export type Product = {
+  id: number;
+  thumbnail: string;
+  title: string;
+  cost: number;
+};
 
 export type DisplayErrorBuilder = {
   karbo: KarboAI;
@@ -46,4 +58,17 @@ export type UpdateWorkBuilder = {
   message: Message;
   user: Prisma.UserGetPayload<{ include: { stats: true } }>;
   rawWorkId: string;
+};
+
+export type FindCosmeticsBuilder = {
+  karbo: KarboAI;
+  message: Message;
+  type: CosmeticsType;
+};
+
+export type FindProductBuilder = {
+  karbo: KarboAI;
+  message: Message;
+  type: CosmeticsType;
+  products: Product[];
 };

@@ -1,16 +1,68 @@
 import { bold, code, type User } from 'karboai';
 
-import { WORKS_RECORD } from '../constants';
+import { FLATTED_CATEGORIES, WORKS_RECORD } from '../constants';
 import errors from '../../public/data/errors.json';
 import { findUuid, getRelativeTime } from './helpers';
 import prisma, { getUser } from './prisma';
+import shop from '../../public/data/shop.json';
 import type {
   DisplayErrorBuilder,
+  FindCosmeticsBuilder,
+  FindProductBuilder,
   HasEnoughMoneyBuilder,
   IsScheduledBuilder,
+  Product,
   UpdateWorkBuilder,
   ValidateUserBuilder,
 } from '../types/snippets';
+
+const findProduct = async ({
+  karbo,
+  message,
+  type,
+  products,
+}: FindProductBuilder): Promise<Product | undefined> => {
+  const [, rawProductId] = message.content.split(' ');
+
+  const productId = Number(rawProductId);
+  const product = products.find((product) => product.id === productId);
+
+  if (!product) {
+    await displayError({
+      karbo,
+      key: 'productNotFound',
+      chatId: message.chatId,
+      messageId: message.messageId,
+    });
+    return;
+  }
+
+  if (!shop[type].includes(productId)) {
+    await displayError({
+      karbo,
+      key: 'invalidProductType',
+      chatId: message.chatId,
+      messageId: message.messageId,
+    });
+    return;
+  }
+
+  if (
+    !(await prisma.productsOnUser.findFirst({
+      where: { userId: message.author.userId, productId },
+    }))
+  ) {
+    await displayError({
+      karbo,
+      key: 'productNotOwned',
+      chatId: message.chatId,
+      messageId: message.messageId,
+    });
+    return;
+  }
+
+  return product;
+};
 
 export const displayError = async ({ karbo, key, chatId, messageId }: DisplayErrorBuilder) => {
   await karbo.text({
@@ -134,4 +186,12 @@ export const updateWork = async ({ karbo, message, user, rawWorkId }: UpdateWork
     content: `Вы успешно устроились на работу - ${bold(work.name)}`,
     replyMessageId: message.messageId,
   });
+};
+
+export const findFrame = async ({ karbo, message, type }: FindCosmeticsBuilder) => {
+  return await findProduct({ karbo, message, type, products: FLATTED_CATEGORIES.frames });
+};
+
+export const findBackground = async ({ karbo, message, type }: FindCosmeticsBuilder) => {
+  return await findProduct({ karbo, message, type, products: FLATTED_CATEGORIES.backgrounds });
 };
