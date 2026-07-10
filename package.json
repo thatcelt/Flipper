@@ -1,29 +1,22 @@
 {
   "name": "flipper",
-  "version": "1.0.0",
-  "description": "",
-  "license": "MIT",
-  "author": "celt_is_god",
-  "type": "module",
-  "main": "index.js",
-  "scripts": {
-    "test": "npx tsx src/test.ts",
-    "start": "npx tsx src/index.ts"
-  },
+  "version": "2.0.0",
+  "private": true,
   "devDependencies": {
-    "@types/node": "^25.5.2",
-    "dotenv": "^17.4.0",
-    "prisma": "^7.6.0",
-    "tsx": "^4.21.0",
-    "typescript": "^6.0.2"
+    "@types/bun": "latest",
+    "prisma": "^7.8.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "scripts": {
+    "test": "bun src/test.ts",
+    "dev": "bun src/index.ts"
   },
   "dependencies": {
-    "@prisma/adapter-mariadb": "^7.6.0",
-    "@prisma/client": "^7.6.0",
-    "@types/lodash": "^4.17.24",
-    "canvas": "^3.2.3",
-    "karboai": "^1.7.5",
-    "lodash": "^4.18.1",
-    "zod": "^4.3.6"
+    "@napi-rs/canvas": "^1.0.2",
+    "@prisma/adapter-mariadb": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "karboai": "^2.10.9"
   }
 }
