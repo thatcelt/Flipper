@@ -105,7 +105,7 @@ model Stats {
 
 model User {
   id         String           @id @unique
-  background String           @default("backgrounds-default")
+  background String           @default("default")
   frame      String           @default("orange")
   work       Int?
   card       Card?

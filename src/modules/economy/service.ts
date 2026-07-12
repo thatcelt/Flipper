@@ -164,7 +164,7 @@ export const work: MessageCallback = async ({ karbo, message }) => {
     return;
   }
 
-  if (!user.work && user.work != 0) {
+  if (!user.work) {
     await displayError({
       karbo,
       messageId: message.messageId,

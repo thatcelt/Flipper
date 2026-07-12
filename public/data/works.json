@@ -1,7 +1,7 @@
 {
   "works": [
     {
-      "workId": -1,
+      "workId": 1,
       "metadata": {
         "name": "Курьер Яндекс",
         "salary": 50,
@@ -9,7 +9,7 @@
       }
     },
     {
-      "workId": 0,
+      "workId": 2,
       "metadata": {
         "name": "Сетевой",
         "salary": 75,
@@ -17,7 +17,7 @@
       }
     },
     {
-      "workId": 1,
+      "workId": 3,
       "metadata": {
         "name": "Младший оператор",
         "salary": 100,
@@ -25,7 +25,7 @@
       }
     },
     {
-      "workId": 2,
+      "workId": 4,
       "metadata": {
         "name": "Менеджер протоколов",
         "salary": 125,
@@ -33,7 +33,7 @@
       }
     },
     {
-      "workId": 3,
+      "workId": 5,
       "metadata": {
         "name": "Администратор",
         "salary": 150,
@@ -41,7 +41,7 @@
       }
     },
     {
-      "workId": 4,
+      "workId": 6,
       "metadata": {
         "name": "Прошивальщик",
         "salary": 175,
@@ -49,7 +49,7 @@
       }
     },
     {
-      "workId": 5,
+      "workId": 7,
       "metadata": {
         "name": "Кибербезопасник",
         "salary": 200,
@@ -57,7 +57,7 @@
       }
     },
     {
-      "workId": 6,
+      "workId": 8,
       "metadata": {
         "name": "Главный технолог",
         "salary": 225,
@@ -65,7 +65,7 @@
       }
     },
     {
-      "workId": 7,
+      "workId": 9,
       "metadata": {
         "name": "Флиппер",
         "salary": 300,

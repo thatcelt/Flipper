@@ -14,11 +14,9 @@ export const me: MessageCallback = async ({ karbo, message }) => {
   const media = await karbo.upload(
     await profile({
       nickname: message.author.nickname,
-      work: !user.work && user.work != 0 ? DEFAULT_WORK : WORKS_RECORD[user.work]!.name,
+      work: !user.work ? DEFAULT_WORK : WORKS_RECORD[user.work]!.name,
       frame: user.frame as FrameKey,
-      background: (user.background == 'default'
-        ? user.background
-        : `backgrounds-${user.background}`) as BackgroundKey,
+      background: `backgrounds-${user.background}` as BackgroundKey,
       level,
       experience: {
         from: user.stats!.experience,
