@@ -104,5 +104,14 @@
     "level": { "size": 17, "x": 374, "y": 317 },
     "experience": { "size": 17, "x": 351, "y": 378 },
     "bar": { "x": 118, "y": 345 }
+  },
+  "duel": {
+    "user": {
+      "avatar": { "y": 136, "width": 149.2, "height": 149.2, "radius": 100 },
+      "nickname": { "size": 17, "y": 324, "maxWidth": 150 },
+      "health": { "y": 340, "width": 50, "height": 25 },
+      "deck": { "size": 14, "y": 427 },
+      "perk": { "y": 417, "width": 41, "height": 41, "radius": 100 }
+    }
   }
 }

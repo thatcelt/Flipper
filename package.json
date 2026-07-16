@@ -17,6 +17,6 @@
     "@napi-rs/canvas": "^1.0.2",
     "@prisma/adapter-mariadb": "^7.8.0",
     "@prisma/client": "^7.8.0",
-    "karboai": "^2.10.9"
+    "karboai": "^2.10.12"
   }
 }

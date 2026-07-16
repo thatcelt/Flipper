@@ -2,5 +2,13 @@
   "incrementStats": { "messages": { "increment": 1 }, "experience": { "increment": 1 } },
   "initStats": { "messages": 1, "experience": 1 },
   "defaultProducts": { "data": [{ "productId": 95 }, { "productId": 96 }, { "productId": 97 }] },
-  "incrementExperience": { "update": { "experience": { "increment": 10 } } }
+  "incrementExperience": { "update": { "experience": { "increment": 10 } } },
+  "topOrder": {
+    "balance": { "card": { "balance": "desc" } },
+    "duels": { "stats": { "duels": "desc" } },
+    "level": { "stats": { "experience": "desc" } },
+    "messages": { "stats": { "messages": "desc" } },
+    "reputation": { "stats": { "reputation": "desc" } },
+    "robs": { "stats": { "robs": "desc" } }
+  }
 }

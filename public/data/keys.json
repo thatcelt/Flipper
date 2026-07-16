@@ -503,6 +503,46 @@
     {
       "path": "./public/assets/backgrounds/default.png",
       "key": "backgrounds-default"
+    },
+    {
+      "path": "./public/assets/duel/duel.png",
+      "key": "duel-shape"
+    },
+    {
+      "path": "./public/assets/duel/dodge.png",
+      "key": "duel-dodge"
+    },
+    {
+      "path": "./public/assets/duel/punch.png",
+      "key": "duel-punch"
+    },
+    {
+      "path": "./public/assets/duel/health.png",
+      "key": "duel-health"
+    },
+    {
+      "path": "./public/assets/duel/ice.png",
+      "key": "duel-ice"
+    },
+    {
+      "path": "./public/assets/duel/wave.png",
+      "key": "duel-wave"
+    },
+    {
+      "path": "./public/assets/duel/killed.png",
+      "key": "duel-killed"
+    },
+    {
+      "path": "./public/assets/duel/killed-frame.png",
+      "key": "duel-killed-frame"
+    },
+    {
+      "path": "./public/assets/ice-perk.png",
+      "key": "ice-perk"
+    },
+    {
+      "path": "./public/assets/deck-perk.png",
+      "key": "deck-perk"
     }
   ],
   "fonts": [
@@ -513,6 +553,10 @@
     {
       "path": "./public/fonts/Monocraft.ttf",
       "key": "Monocraft"
+    },
+    {
+      "path": "./public/fonts/NotoSans-Regular.ttf",
+      "key": "NotoSans-Regular"
     }
   ]
 }

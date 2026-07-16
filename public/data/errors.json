@@ -12,5 +12,8 @@
   "alreadyBought": "Вы уже купили этот товар",
   "productNotFound": "Товар с таким ID не найден",
   "invalidProductType": "Неверный тип товара",
-  "productNotOwned": "Вы не владеете этим товаром"
+  "productNotOwned": "Вы не владеете этим товаром",
+  "alreadyInDuel": "Вы уже участвуете в дуэли",
+  "userAlreadyInDuel": "Пользователь уже на дуэли",
+  "alreadyRequested": "Пользователю уже отправили запрос на дуэль"
 }
