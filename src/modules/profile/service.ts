@@ -4,8 +4,8 @@ import prisma, { getUser } from '../../util/prisma';
 import { profile } from '../../util/canvas';
 import { DEFAULT_WORK, FLATTED_PRODUCTS, WORKS_RECORD } from '../../constants';
 import { calculateLevel } from '../../util/helpers';
-import type { BackgroundKey, FrameKey } from '../../types/canvas';
 import { findBackground, findFrame } from '../../util/snippets';
+import type { BackgroundKey, FrameKey } from '../../types/canvas';
 
 export const me: MessageCallback = async ({ karbo, message }) => {
   const user = await getUser({ user: message.author, include: { stats: true } });

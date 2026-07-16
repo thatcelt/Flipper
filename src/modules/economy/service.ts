@@ -10,7 +10,7 @@ import {
   updateWork,
   validateUser,
 } from '../../util/snippets';
-import { casinoResult, casinoVariants, dailyReward } from '../../util/helpers';
+import { isCasinoWon, casinoVariants, dailyReward } from '../../util/helpers';
 import {
   COOLDOWNS,
   FLATTED_PRODUCTS,
@@ -31,7 +31,7 @@ export const bank: MessageCallback = async ({ karbo, message }) => {
       date: user.card!.date,
       initials: user.card!.initials,
       number: user.card!.number,
-      background: user.background as BackgroundKey,
+      background: `backgrounds-${user.background}` as BackgroundKey,
     })
   );
 
@@ -123,7 +123,7 @@ export const bet: MessageCallback = async ({ karbo, message }) => {
     return;
   }
 
-  const key = casinoResult();
+  const key = isCasinoWon();
 
   const media = await karbo.upload(
     await casino({ key, variants: casinoVariants(key), value: amount })
