@@ -14,7 +14,9 @@ export const onJoin: MessageCallback = async ({ karbo, message }) => {
 export const message: MessageCallback = async ({ message }) => {
   if (message.content.startsWith(BOT_PREFIX) || message.author.isApiBot) return;
 
-  await getUser({ user: message.author, update: true });
+  try {
+    await getUser({ user: message.author, update: true });
+  } catch {}
 };
 
 export const help: MessageCallback = async ({ karbo, message }) => {

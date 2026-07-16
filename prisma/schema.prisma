@@ -97,7 +97,6 @@ model Stats {
   deck       Int    @default(1)
   ice        Int    @default(1)
   prestige   Int    @default(0)
-  strength   Int    @default(1)
   userId     String @unique
   perk       Perk?
   user       User   @relation(fields: [userId], references: [id])
@@ -128,7 +127,6 @@ enum UpgradeType {
 }
 
 enum Perk {
-  STRENGTH
   DECK
   ICE
 }

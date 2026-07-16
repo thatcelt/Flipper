@@ -1,7 +1,7 @@
 import { KarboAI } from 'karboai';
 
 import { loadImages } from './util/canvas';
-import { common, profile, economy } from './modules';
+import { common, profile, economy, actions } from './modules';
 
 const karbo = new KarboAI({
   token: process.env.BOT_TOKEN,
@@ -12,7 +12,7 @@ const karbo = new KarboAI({
 (async () => {
   await loadImages();
 
-  karbo.bind(common, profile, economy);
+  karbo.bind(common, profile, economy, actions);
 
   karbo.attach();
 })();
