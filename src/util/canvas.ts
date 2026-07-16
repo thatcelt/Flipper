@@ -4,11 +4,13 @@ import { createCanvas, loadImage, GlobalFonts, Image } from '@napi-rs/canvas';
 import keys from '../../public/data/keys.json';
 import maps from '../../public/data/canvas-maps.json';
 import { colors } from '../../public/data/canvas-maps.json';
+import { PERK_MAP } from '../constants';
 import type {
   CardBuilder,
   CasinoBuilder,
   ClanBuilder,
   CoupleBuilder,
+  DuelBuilder,
   ExperienceBuilder,
   ImageKey,
   LoadedCanvas,
@@ -102,7 +104,7 @@ export const profile = async (builder: ProfileBuilder): Promise<Buffer> => {
   text({ context, text: builder.level.toString(), ...maps.profile.level });
   text({ context, text: builder.reputation.toString(), ...maps.profile.reputation });
 
-  [builder.stats.deck, builder.stats.ice, builder.stats.strength].forEach((stat, index) => {
+  [builder.stats.deck, builder.stats.ice].forEach((stat, index) => {
     text({
       context,
       text: stat.toString(),
@@ -159,7 +161,7 @@ export const card = (builder: CardBuilder): Buffer => {
     });
   });
 
-  text({ context, text: builder.initials, font: 'sans-serif', ...maps.card.initials });
+  text({ context, text: builder.initials, font: 'NotoSans-Regular', ...maps.card.initials });
   text({ context, text: builder.date, font: 'Poppins Medium', ...maps.card.date });
   text({ context, text: `${builder.balance} фликов`, ...maps.card.balance });
   text({ context, text: `${builder.cash} фликов`, ...maps.card.cash });
@@ -220,7 +222,7 @@ export const top = async (builder: TopBuilder): Promise<Buffer> => {
     context,
     images: builder.secondaries.map((secondary) => secondary.avatar),
     dots: maps.top.dots.secondaries,
-    size: 67,
+    size: 68,
     radius: 100,
   });
 
@@ -230,6 +232,7 @@ export const top = async (builder: TopBuilder): Promise<Buffer> => {
 
     text({
       context,
+      font: 'NotoSans-Regular',
       text: nickname,
       size: 17,
       x: x + 89 / 2,
@@ -253,6 +256,7 @@ export const top = async (builder: TopBuilder): Promise<Buffer> => {
     text({
       context,
       text: nickname,
+      font: 'NotoSans-Regular',
       ...maps.top.secondaries.nickname,
       y: maps.top.secondaries.nickname.y + 126 * i,
     });
@@ -357,6 +361,56 @@ export const couple = async (builder: CoupleBuilder): Promise<Buffer> => {
     maps: maps.couple.experience,
     bar: maps.couple.bar,
   });
+
+  return canvas.toBuffer('image/jpeg', 85);
+};
+
+export const fight = async ({ users, history, killed }: DuelBuilder): Promise<Buffer> => {
+  const { canvas, context } = loadCanvas('duel-shape');
+  const health = images.get('duel-health')!;
+
+  for (let i = 0; i < users.length; i++) {
+    const user = users[i]!;
+    const x = 124 + 301 * i;
+    const healthX = 92 + 301 * i;
+
+    for (let j = 0; j < user.health; j++) {
+      context.drawImage(health, healthX - 9 + j * 55, maps.duel.user.health.y);
+    }
+
+    await round({ context, image: user.avatar, ...maps.duel.user.avatar, x: x + 1 });
+    text({
+      context,
+      text: user.nickname,
+      x: x + 76,
+      ...maps.duel.user.nickname,
+      align: 'center',
+    });
+    text({ context, text: `Дека: ${user.stats.deck}`, x, ...maps.duel.user.deck });
+    text({ context, text: `Лёд: ${user.stats.ice}`, x, ...maps.duel.user.deck, y: 457 });
+
+    if (user.perk) {
+      await round({
+        context,
+        image: images.get(PERK_MAP[user.perk])!,
+        ...maps.duel.user.perk,
+        x: 247 + 301 * i,
+      });
+    }
+  }
+
+  const truncated = history.slice(-9);
+
+  for (let i = 0; i < truncated.length; i++) {
+    const element = truncated[i]!;
+
+    context.drawImage(images.get(element)!, 107 + i * 55, 510, 45, 45);
+  }
+
+  if (killed) {
+    context.drawImage(images.get('duel-killed')!, 90 + 301 * (killed - 1), 44);
+    context.drawImage(images.get('duel-killed-frame')!, 0, 0);
+  }
 
   return canvas.toBuffer('image/jpeg', 85);
 };

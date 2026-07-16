@@ -1,6 +1,7 @@
 import type { Canvas, SKRSContext2D, CanvasTextAlign, Image } from '@napi-rs/canvas';
 
 import { colors } from '../../public/data/canvas-maps.json';
+import type { Perk } from '../../generated/prisma/enums';
 
 type Experience = {
   from: number;
@@ -8,6 +9,10 @@ type Experience = {
 };
 
 export type ShopKey = 'shop-shop-other' | 'shop-shop-backgrounds' | 'shop-shop-frames';
+
+export type DuelHistoryElement = 'duel-ice' | 'duel-wave' | 'duel-punch' | 'duel-dodge';
+
+export type PerkKey = 'ice-perk' | 'deck-perk';
 
 export type TopKey =
   | 'top-top-messages'
@@ -111,6 +116,10 @@ export type CasinoVariant =
   'casino-green-dork' | 'casino-green-love' | 'casino-purple-dork' | 'casino-purple-love';
 
 export type ImageKey =
+  | 'duel-health'
+  | 'duel-shape'
+  | 'duel-killed'
+  | 'duel-killed-frame'
   | 'frames-profile-black'
   | 'frames-profile-white'
   | 'frames-profile-red'
@@ -144,9 +153,11 @@ export type ImageKey =
   | ShopKey
   | ShopThumbnail
   | CasinoKey
-  | CasinoVariant;
+  | CasinoVariant
+  | DuelHistoryElement
+  | PerkKey;
 
-export type FontKey = 'Monocraft' | 'sans-serif' | 'Poppins Medium';
+export type FontKey = 'Monocraft' | 'NotoSans-Regular' | 'Poppins Medium';
 export type ColorKey = keyof typeof colors;
 export type FrameKey =
   'orange' | 'red' | 'blue' | 'green' | 'yellow' | 'pink' | 'purple' | 'black' | 'white';
@@ -223,7 +234,6 @@ export type ProfileBuilder = {
     prestige: number;
     ice: number;
     deck: number;
-    strength: number;
   };
   couple?: {
     nickname: string;
@@ -293,4 +303,19 @@ export type CoupleBuilder = {
   streak: number;
   frame: FrameKey;
   background?: BackgroundKey;
+};
+
+export type DuelBuilder = {
+  users: {
+    nickname: string;
+    avatar: string;
+    health: number;
+    perk?: Perk | null;
+    stats: {
+      deck: number;
+      ice: number;
+    };
+  }[];
+  history: DuelHistoryElement[];
+  killed?: number;
 };

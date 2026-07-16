@@ -1,7 +1,9 @@
 import { bold, code, italic } from 'karboai';
+import type { Perk } from '../generated/prisma/enums';
+
 import { works } from '../public/data/works.json';
 import { frames, backgrounds, other } from '../public/data/shop.json';
-import type { CasinoVariant } from './types/canvas';
+import type { CasinoVariant, PerkKey } from './types/canvas';
 
 export const DEFAULT_WORK = 'Безработный';
 export const BOT_PREFIX = '/';
@@ -16,7 +18,17 @@ export const RELATIVE_UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
 export const COOLDOWNS = {
   daily: 86400000,
   work: 43200000,
+  rob: 1500000,
+  duel: 3600000,
+  rep: 1500000,
 };
+
+export const CHANGE_REP_MAP = {
+  increment: 'повысили',
+  decrement: 'понизили',
+};
+
+export const TOP_CATEGORIES = ['balance', 'duels', 'level', 'messages', 'reputation', 'robs'];
 
 export const CASINO_VARIANTS: CasinoVariant[] = [
   'casino-green-dork',
@@ -55,3 +67,8 @@ export const FLATTED_CATEGORIES = {
 };
 
 export const SHOP_CATEGORIES = ['backgrounds', 'frames', 'other'];
+
+export const PERK_MAP: Record<Perk, PerkKey> = {
+  DECK: 'deck-perk',
+  ICE: 'ice-perk',
+};
