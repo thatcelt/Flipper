@@ -1,4 +1,5 @@
 import type { KarboAI, Message } from 'karboai';
+
 import type { InteractionCallbackQuery } from 'karboai/dist/dto/dispatcher.dto';
 import type { Prisma } from '../../generated/prisma/client';
 
@@ -20,7 +21,10 @@ type ErrorKey =
   | 'alreadyBought'
   | 'productNotFound'
   | 'invalidProductType'
-  | 'productNotOwned';
+  | 'productNotOwned'
+  | 'alreadyInDuel'
+  | 'alreadyRequested'
+  | 'userAlreadyInDuel';
 
 export type Product = {
   id: number;
@@ -32,7 +36,7 @@ export type Product = {
 export type DisplayErrorBuilder = {
   karbo: KarboAI;
   chatId: string;
-  messageId: string;
+  messageId?: string;
   key: ErrorKey;
 };
 
@@ -40,6 +44,7 @@ export type IsScheduledBuilder = {
   karbo: KarboAI;
   dataSource: Message | InteractionCallbackQuery;
   scheduledTime: bigint;
+  other?: boolean;
 };
 
 export type HasEnoughMoneyBuilder = {
@@ -51,6 +56,7 @@ export type HasEnoughMoneyBuilder = {
 export type ValidateUserBuilder = {
   karbo: KarboAI;
   message: Message;
+  userId?: string;
 };
 
 export type UpdateWorkBuilder = {
@@ -71,4 +77,10 @@ export type FindProductBuilder = {
   message: Message;
   type: CosmeticsType;
   products: Product[];
+};
+
+export type DuelTurnBuilder = {
+  karbo: KarboAI;
+  chatId: string;
+  duelId: string;
 };

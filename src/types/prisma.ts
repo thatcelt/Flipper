@@ -6,6 +6,7 @@ import type {
   UserInclude,
 } from '../../generated/prisma/models';
 import type { DefaultArgs } from '@prisma/client/runtime/client';
+import type { Card, Stats } from '../../generated/prisma/client';
 
 export type UserBuilder = {
   user: User | Author | Member;
@@ -18,4 +19,17 @@ export type UpdateCashBuilder = {
   increment: number;
   schedule?:
     ScheduleUncheckedUpdateOneWithoutUserNestedInput | ScheduleUpdateOneWithoutUserNestedInput;
+};
+
+export type RobQueriesBuilder = {
+  userId: string;
+  targetId: string;
+  result: boolean;
+  maxCash: number;
+};
+
+export type TopUser = {
+  id: string;
+  stats: Stats;
+  card: Card;
 };

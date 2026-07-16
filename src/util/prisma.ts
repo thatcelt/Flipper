@@ -7,8 +7,9 @@ import {
   defaultProducts,
   incrementExperience,
 } from '../../public/data/prisma.json';
-import { cardDate, cardNumber } from './helpers';
-import type { UpdateCashBuilder, UserBuilder } from '../types/prisma';
+import { cardDate, cardNumber, decrementReputation, robReward } from './helpers';
+import { COOLDOWNS } from '../constants';
+import type { RobQueriesBuilder, UpdateCashBuilder, UserBuilder } from '../types/prisma';
 
 const adapter = new PrismaMariaDb({
   host: process.env.DATABASE_HOST,
@@ -50,6 +51,40 @@ export const incrementCash = async ({ id, increment, schedule }: UpdateCashBuild
       schedule,
     },
   });
+};
+
+export const buildRobQueries = ({ userId, targetId, result, maxCash }: RobQueriesBuilder) => {
+  const reward = robReward(maxCash);
+  const decrement = decrementReputation();
+
+  const args = [
+    prisma.user.update({
+      where: { id: userId },
+      data: {
+        ...(result
+          ? { card: { update: { cash: { increment: reward } } } }
+          : { stats: { update: { reputation: { decrement } } } }),
+        schedule: { update: { canRobAt: Date.now() + COOLDOWNS.rob } },
+      },
+    }),
+  ];
+
+  if (result) {
+    args.push(
+      prisma.user.update({
+        where: { id: targetId },
+        data: {
+          card: { update: { cash: { decrement: reward } } },
+        },
+      })
+    );
+  }
+
+  return {
+    reputationDecrease: decrement,
+    reward,
+    args,
+  };
 };
 
 export default prisma;

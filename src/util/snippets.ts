@@ -2,11 +2,15 @@ import { bold, code, type User } from 'karboai';
 
 import { FLATTED_CATEGORIES, WORKS_RECORD } from '../constants';
 import errors from '../../public/data/errors.json';
-import { findUuid, getRelativeTime } from './helpers';
+import { findUuid, duelReward, getRelativeTime } from './helpers';
 import prisma, { getUser } from './prisma';
 import shop from '../../public/data/shop.json';
+import { finishDuel, getDuel, setTurn } from './duels';
+import { fight } from './canvas';
+import { buildDuelTurn } from './buttons';
 import type {
   DisplayErrorBuilder,
+  DuelTurnBuilder,
   FindCosmeticsBuilder,
   FindProductBuilder,
   HasEnoughMoneyBuilder,
@@ -76,6 +80,7 @@ export const isScheduled = async ({
   karbo,
   dataSource: { chatId, messageId },
   scheduledTime,
+  other,
 }: IsScheduledBuilder): Promise<boolean | undefined> => {
   const timestamp = Date.now();
 
@@ -84,7 +89,7 @@ export const isScheduled = async ({
   await karbo.text({
     chatId,
     replyMessageId: messageId,
-    content: `Вы сможете использовать эту команду только ${code(getRelativeTime(Number(scheduledTime)))}`,
+    content: `${other ? 'Другой пользователь сможет' : 'Вы сможете'} использовать эту команду только ${code(getRelativeTime(Number(scheduledTime)))}`,
   });
 
   return true;
@@ -122,8 +127,9 @@ export const getUserIfEnoughMoney = async ({
 export const validateUser = async ({
   karbo,
   message,
+  userId,
 }: ValidateUserBuilder): Promise<User | undefined> => {
-  const uuid = findUuid(message.content.split(' ')[2] || '')?.[0]; // shitcode
+  const uuid = userId ?? findUuid(message.content)?.[0]; // shitcode
 
   if (!uuid || uuid == process.env.BOT_ID || uuid == message.author.userId) {
     await displayError({
@@ -194,4 +200,61 @@ export const findFrame = async ({ karbo, message, type }: FindCosmeticsBuilder) 
 
 export const findBackground = async ({ karbo, message, type }: FindCosmeticsBuilder) => {
   return await findProduct({ karbo, message, type, products: FLATTED_CATEGORIES.backgrounds });
+};
+
+export const sendDuelTurn = async ({ karbo, chatId, duelId }: DuelTurnBuilder) => {
+  const duel = getDuel(duelId);
+
+  if (!duel) return;
+
+  const newTurn = await karbo.user(duel.users.find((user) => user.id != duel.turn)?.id!);
+
+  const killed = duel.users
+    .map((user, index) => ({ user, index }))
+    .filter(({ user }) => user.health == 0)?.[0]?.index;
+
+  let extended: string | undefined = undefined;
+
+  if (killed != undefined) {
+    finishDuel(duel.id);
+
+    const { reputation, balance } = duelReward();
+
+    const loser = duel.users[killed]!;
+    const winner = duel.users.find((_, index) => index !== killed)!;
+
+    await prisma.$transaction(
+      [
+        { user: winner, action: 'increment' },
+        { user: loser, action: 'decrement' },
+      ].map(({ user, action }) =>
+        prisma.user.update({
+          where: { id: user.id },
+          data: {
+            stats: { update: { reputation: { [action]: reputation }, duels: { increment: 1 } } },
+            card: { update: { balance: { [action]: balance } } },
+          },
+        })
+      )
+    );
+
+    extended = `${bold('Итоги дуэли')}:\n\n${winner.nickname} получил ${code(reputation.toString())} репутации и ${code(balance.toString())} фликов за бой\n\nа ${loser.nickname} потерял столько же`;
+  } else {
+    setTurn(duel.id, newTurn.userId);
+  }
+
+  const media = await karbo.upload(
+    await fight({
+      users: duel.users,
+      history: duel.history,
+      killed: killed != undefined ? killed + 1 : undefined,
+    })
+  );
+
+  await karbo.image({
+    chatId,
+    images: [media],
+    caption: extended ? extended : `Ходит: ${newTurn.nickname}`,
+    inlineButtons: killed != undefined ? undefined : buildDuelTurn(duel.id),
+  });
 };
