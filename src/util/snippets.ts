@@ -1,6 +1,6 @@
 import { bold, code, type User } from 'karboai';
 
-import { FLATTED_CATEGORIES, WORKS_RECORD } from '../constants';
+import { FLATTED_CATEGORIES, TIME, WORKS_RECORD } from '../constants';
 import errors from '../../public/data/errors.json';
 import { findUuid, duelReward, getRelativeTime } from './helpers';
 import prisma, { getUser } from './prisma';
@@ -9,6 +9,7 @@ import { finishDuel, getDuel, setTurn } from './duels';
 import { fight } from './canvas';
 import { buildDuelTurn } from './buttons';
 import type {
+  CheckStreakBuilder,
   DisplayErrorBuilder,
   DuelTurnBuilder,
   FindCosmeticsBuilder,
@@ -19,6 +20,8 @@ import type {
   UpdateWorkBuilder,
   ValidateUserBuilder,
 } from '../types/snippets';
+import { message } from '../modules/common/service';
+import type { Couple } from '../../generated/prisma/client';
 
 const findProduct = async ({
   karbo,
@@ -257,4 +260,29 @@ export const sendDuelTurn = async ({ karbo, chatId, duelId }: DuelTurnBuilder) =
     caption: extended ? extended : `Ходит: ${newTurn.nickname}`,
     inlineButtons: killed != undefined ? undefined : buildDuelTurn(duel.id),
   });
+};
+
+export const checkStreak = async (builder: CheckStreakBuilder): Promise<Couple | undefined> => {
+  if (Date.now() - Number(builder.couple.lastKissAt) > TIME.day && builder.couple.kissStreak) {
+    await builder.karbo.text({
+      content: `С последнего вашего с парой поцелуя прошло больше дня и ваш стрик сбросился..`,
+      chatId: builder.message.chatId,
+      replyMessageId: builder.message.messageId,
+    });
+
+    return await prisma.couple.update({
+      where: { id: builder.couple.id },
+      data: { kissStreak: 0, lastStreakAt: Date.now() },
+    });
+  }
+
+  if (
+    Math.floor((Date.now() - Number(builder.couple.lastStreakAt)) / TIME.day) >
+    builder.couple.kissStreak
+  ) {
+    return await prisma.couple.update({
+      where: { id: builder.couple.id },
+      data: { kissStreak: { increment: 1 } },
+    });
+  }
 };

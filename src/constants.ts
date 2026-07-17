@@ -21,6 +21,7 @@ export const COOLDOWNS = {
   rob: 1500000,
   duel: 3600000,
   rep: 1500000,
+  kiss: 1500000,
 };
 
 export const CHANGE_REP_MAP = {
@@ -72,3 +73,9 @@ export const PERK_MAP: Record<Perk, PerkKey> = {
   DECK: 'deck-perk',
   ICE: 'ice-perk',
 };
+
+export const TIME = {
+  day: 43200000,
+};
+
+export const MARRIAGE_CACHE = new Map<string, string>();

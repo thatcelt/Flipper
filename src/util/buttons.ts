@@ -43,3 +43,18 @@ export const buildDuelTurn = (duelId: string): InlineButton[][] => [
     },
   ],
 ];
+
+export const buildMarry = (userId: string): InlineButton[][] => [
+  [
+    {
+      id: `marry-yes_${userId}`,
+      label: `Да, конечно!`,
+      color: { textHex: colors.white, hex: colors.red },
+    },
+    {
+      id: `marry-no_${userId}`,
+      label: `Отказано`,
+      color: { textHex: colors.white, hex: colors.black },
+    },
+  ],
+];

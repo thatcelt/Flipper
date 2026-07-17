@@ -10,5 +10,6 @@
     "messages": { "stats": { "messages": "desc" } },
     "reputation": { "stats": { "reputation": "desc" } },
     "robs": { "stats": { "robs": "desc" } }
-  }
+  },
+  "coupleKiss": { "kissesAmount": { "increment": 1 }, "experience": { "increment": 50 } }
 }

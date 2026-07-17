@@ -21,6 +21,7 @@ import type {
   TextBuilder,
   TopBuilder,
 } from '../types/canvas';
+import { getAvatarUrl } from './helpers';
 
 const images: Map<ImageKey, Image> = new Map();
 
@@ -338,7 +339,7 @@ export const couple = async (builder: CoupleBuilder): Promise<Buffer> => {
   for (let i = 0; i < builder.users.length; i++) {
     const { nickname, avatar } = builder.users[i]!;
 
-    await round({ context, image: avatar, ...maps.couple.image, x: 125 + 301 * i });
+    await round({ context, image: getAvatarUrl(avatar), ...maps.couple.image, x: 125 + 301 * i });
     text({
       context,
       text: nickname,

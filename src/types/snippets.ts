@@ -1,7 +1,7 @@
 import type { KarboAI, Message } from 'karboai';
 
 import type { InteractionCallbackQuery } from 'karboai/dist/dto/dispatcher.dto';
-import type { Prisma } from '../../generated/prisma/client';
+import type { Couple, Prisma } from '../../generated/prisma/client';
 
 type MoneyType = 'cash' | 'balance';
 type CosmeticsType = 'profile' | 'couple' | 'clan';
@@ -24,7 +24,10 @@ type ErrorKey =
   | 'productNotOwned'
   | 'alreadyInDuel'
   | 'alreadyRequested'
-  | 'userAlreadyInDuel';
+  | 'userAlreadyInDuel'
+  | 'forbidden'
+  | 'alreadyMarried'
+  | 'marryAlreadyRequested';
 
 export type Product = {
   id: number;
@@ -83,4 +86,10 @@ export type DuelTurnBuilder = {
   karbo: KarboAI;
   chatId: string;
   duelId: string;
+};
+
+export type CheckStreakBuilder = {
+  karbo: KarboAI;
+  message: Message;
+  couple: Couple;
 };
