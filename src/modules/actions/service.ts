@@ -25,8 +25,26 @@ import {
 import { buildDuel } from '../../util/buttons';
 import type { UserOrderByWithRelationInput } from '../../../generated/prisma/models';
 import type { TopEntity, TopKey } from '../../types/canvas';
+import type { InteractionMiddleware } from 'karboai/dist/types/dispatcher';
 
 const REQUESTS_CACHE = new Map<string, string>();
+
+export const duelMiddleware: InteractionMiddleware = async ({ query }) => {
+  const [_, duelId] = query.buttonId.split('_');
+
+  const duel = getDuel(duelId);
+
+  if (duel && duel.turn == query.userId && !duel.isFinished) return true;
+};
+
+export const requestMiddleware: InteractionMiddleware = async ({ query }) => {
+  const [_, userId] = query.buttonId.split('_');
+
+  if (userId == query.userId && REQUESTS_CACHE.get(query.userId)) {
+    REQUESTS_CACHE.delete(query.userId);
+    return true;
+  }
+};
 
 const changeReputation = async (
   karbo: KarboAI,
@@ -219,14 +237,9 @@ export const duel: MessageCallback = async ({ karbo, message }) => {
 };
 
 export const accept: InteractionCallback = async ({ karbo, query }) => {
-  const [_, targetId] = query.buttonId.split('_');
+  const oppositeUserId = REQUESTS_CACHE.get(query.buttonId.split('_')[1]!)!;
 
-  const oppositeUserId = REQUESTS_CACHE.get(targetId!);
-  if (targetId != query.userId || !oppositeUserId) return;
-
-  REQUESTS_CACHE.delete(query.userId);
-
-  if (inDuel(oppositeUserId!)) {
+  if (inDuel(oppositeUserId)) {
     await displayError({
       karbo,
       key: 'alreadyInDuel',
@@ -235,7 +248,7 @@ export const accept: InteractionCallback = async ({ karbo, query }) => {
     return;
   }
 
-  if (inDuel(targetId!)) {
+  if (inDuel(query.userId)) {
     await displayError({
       karbo,
       key: 'alreadyInDuel',
@@ -245,8 +258,8 @@ export const accept: InteractionCallback = async ({ karbo, query }) => {
   }
 
   const [author, target] = await Promise.all([
-    karbo.user(oppositeUserId!, query.communityId),
-    karbo.user(targetId!, query.communityId),
+    karbo.user(oppositeUserId, query.communityId),
+    karbo.user(query.userId, query.communityId),
   ]);
 
   const [authorStats, targetStats] = await prisma.$transaction([
@@ -297,14 +310,6 @@ export const accept: InteractionCallback = async ({ karbo, query }) => {
 };
 
 export const escape: InteractionCallback = async ({ karbo, query }) => {
-  const [_, userId] = query.buttonId.split('_');
-
-  REQUESTS_CACHE.delete(query.userId);
-
-  if (userId != query.userId || REQUESTS_CACHE.get(query.userId)) return;
-
-  REQUESTS_CACHE.delete(query.userId);
-
   const { nickname } = await karbo.user(query.userId);
 
   await karbo.text({
@@ -314,11 +319,7 @@ export const escape: InteractionCallback = async ({ karbo, query }) => {
 };
 
 export const punch: InteractionCallback = async ({ karbo, query }) => {
-  const [_, duelId] = query.buttonId.split('_');
-
-  const duel = getDuel(duelId);
-
-  if (!duel || duel.turn != query.userId || duel.isFinished) return;
+  const duel = getDuel(query.buttonId.split('_')[1]!)!;
 
   const opponent = duel.users.find((user) => user.id != query.userId)!;
 
@@ -329,11 +330,7 @@ export const punch: InteractionCallback = async ({ karbo, query }) => {
 };
 
 export const dodge: InteractionCallback = async ({ karbo, query }) => {
-  const [_, duelId] = query.buttonId.split('_');
-
-  const duel = getDuel(duelId);
-
-  if (!duel || duel.turn != query.userId || duel.isFinished) return;
+  const duel = getDuel(query.buttonId.split('_')[1]!)!;
 
   writeToHistory(duel.id, 'duel-dodge');
 
@@ -341,11 +338,7 @@ export const dodge: InteractionCallback = async ({ karbo, query }) => {
 };
 
 export const buffIce: InteractionCallback = async ({ karbo, query }) => {
-  const [_, duelId] = query.buttonId.split('_');
-
-  const duel = getDuel(duelId);
-
-  if (!duel || duel.turn != query.userId || duel.isFinished) return;
+  const duel = getDuel(query.buttonId.split('_')[1]!)!;
 
   const user = duel.users.find((user) => user.id == query.userId)!;
 
@@ -358,11 +351,7 @@ export const buffIce: InteractionCallback = async ({ karbo, query }) => {
 };
 
 export const deck: InteractionCallback = async ({ karbo, query }) => {
-  const [_, duelId] = query.buttonId.split('_');
-
-  const duel = getDuel(duelId);
-
-  if (!duel || duel.turn != query.userId || duel.isFinished) return;
+  const duel = getDuel(query.buttonId.split('_')[1]!)!;
 
   const [user, opponent] = [
     duel.users.find((user) => user.id == query.userId)!,
