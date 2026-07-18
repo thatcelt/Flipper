@@ -4,12 +4,24 @@ import prisma, { getUser } from '../../util/prisma';
 import { profile } from '../../util/canvas';
 import { DEFAULT_WORK, FLATTED_PRODUCTS, WORKS_RECORD } from '../../constants';
 import { calculateLevel } from '../../util/helpers';
-import { findBackground, findFrame } from '../../util/snippets';
+import { findBackground, findCardColor, findFrame } from '../../util/snippets';
 import type { BackgroundKey, FrameKey } from '../../types/canvas';
 
-export const me: MessageCallback = async ({ karbo, message }) => {
-  const user = await getUser({ user: message.author, include: { stats: true } });
+export const me: MessageCallback = async ({ karbo, message }): Promise<void> => {
+  const user = await getUser({ user: message.author, include: { stats: true, couple: true } });
   const { level, maxExperience } = calculateLevel(user.stats!.experience);
+
+  let couple = undefined;
+
+  if (user.couple) {
+    const { id } = (await prisma.user.findFirst({
+      where: { coupleId: user.couple.id, id: { not: message.author.userId } },
+      select: { id: true },
+    }))!;
+    const { nickname, avatar } = await karbo.user(id);
+
+    couple = { nickname, avatar };
+  }
 
   const media = await karbo.upload(
     await profile({
@@ -25,6 +37,7 @@ export const me: MessageCallback = async ({ karbo, message }) => {
       reputation: user.stats!.reputation,
       avatar: message.author.avatarUrl,
       stats: user.stats!,
+      couple,
     })
   );
 
@@ -35,7 +48,7 @@ export const me: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const items: MessageCallback = async ({ karbo, message }) => {
+export const items: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const user = await getUser({ user: message.author, include: { products: true } });
 
   const items = user.products.map((product, index) => {
@@ -49,7 +62,7 @@ export const items: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const setFrame: MessageCallback = async ({ karbo, message }) => {
+export const setFrame: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const frame = await findFrame({ karbo, message, type: 'profile' });
 
   if (!frame) return;
@@ -67,7 +80,7 @@ export const setFrame: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const setBackground: MessageCallback = async ({ karbo, message }) => {
+export const setBackground: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const background = await findBackground({ karbo, message, type: 'profile' });
 
   if (!background) return;
@@ -82,5 +95,23 @@ export const setBackground: MessageCallback = async ({ karbo, message }) => {
   await karbo.text({
     chatId: message.chatId,
     content: `Вы поставили фон - ${code(background.title)}`,
+  });
+};
+
+export const setCardColor: MessageCallback = async ({ karbo, message }): Promise<void> => {
+  const cardFrame = await findCardColor({ karbo, message, type: 'profile' });
+
+  if (!cardFrame) return;
+
+  const [, color] = cardFrame.thumbnail.split('-');
+
+  await prisma.card.update({
+    where: { ownerId: message.author.userId },
+    data: { color },
+  });
+
+  await karbo.text({
+    chatId: message.chatId,
+    content: `Вы поставили цвет карты - ${code(cardFrame.title)}`,
   });
 };
