@@ -20,7 +20,7 @@ import {
 } from '../../constants';
 import type { BackgroundKey, CardColor, ShopEntity, ShopKey } from '../../types/canvas';
 
-export const bank: MessageCallback = async ({ karbo, message }) => {
+export const bank: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const user = await getUser({ user: message.author, include: { card: true } });
 
   const media = await karbo.upload(
@@ -38,7 +38,7 @@ export const bank: MessageCallback = async ({ karbo, message }) => {
   await karbo.image({ chatId: message.chatId, images: [media], replyMessageId: message.messageId });
 };
 
-export const daily: MessageCallback = async ({ karbo, message }) => {
+export const daily: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const user = await getUser({ user: message.author, include: { schedule: true } });
 
   if (await isScheduled({ karbo, dataSource: message, scheduledTime: user.schedule!.canDailyAt }))
@@ -59,7 +59,7 @@ export const daily: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const transfer: MessageCallback = async ({ karbo, message }) => {
+export const transfer: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const transferData = await getUserIfEnoughMoney({ karbo, dataSource: message, type: 'cash' });
 
   if (!transferData) return;
@@ -78,7 +78,7 @@ export const transfer: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const trade: MessageCallback = async ({ karbo, message }) => {
+export const trade: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const transferData = await getUserIfEnoughMoney({ karbo, dataSource: message, type: 'balance' });
 
   if (!transferData) return;
@@ -106,7 +106,7 @@ export const trade: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const bet: MessageCallback = async ({ karbo, message }) => {
+export const bet: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const betData = await getUserIfEnoughMoney({ karbo, dataSource: message, type: 'balance' });
 
   if (!betData) return;
@@ -147,7 +147,7 @@ export const bet: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const jobs: MessageCallback = async ({ karbo, message }) => {
+export const jobs: MessageCallback = async ({ karbo, message }): Promise<void> => {
   await karbo.text({
     chatId: message.chatId,
     replyMessageId: message.messageId,
@@ -155,7 +155,7 @@ export const jobs: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const work: MessageCallback = async ({ karbo, message }) => {
+export const work: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const [, workId] = message.content.split(' ');
   const user = await getUser({ user: message.author, include: { stats: true, schedule: true } });
 
@@ -203,7 +203,7 @@ export const work: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const shop: MessageCallback = async ({ karbo, message }) => {
+export const shop: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const [, category, rawPage] = message.content.split(' ');
   const page = Number(rawPage);
 
@@ -211,13 +211,13 @@ export const shop: MessageCallback = async ({ karbo, message }) => {
     await displayError({
       karbo,
       messageId: message.messageId,
-      key: 'wrongType',
+      key: 'wrongCategory',
       chatId: message.chatId,
     });
     return;
   }
 
-  const categoryPages = shopCategories[category as keyof typeof shopCategories];
+  const categoryPages = shopCategories[category as keyof typeof shopCategories] as number[];
   const elements = categoryPages[page - 1] as ShopEntity[] | undefined;
 
   if (!elements) {
@@ -247,7 +247,7 @@ export const shop: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const buy: MessageCallback = async ({ karbo, message }) => {
+export const buy: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const [, productId] = message.content.split(' ');
 
   const product = FLATTED_PRODUCTS[Number(productId)];

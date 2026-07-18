@@ -29,7 +29,9 @@ import type { InteractionMiddleware } from 'karboai/dist/types/dispatcher';
 
 const REQUESTS_CACHE = new Map<string, string>();
 
-export const duelMiddleware: InteractionMiddleware = async ({ query }) => {
+export const duelMiddleware: InteractionMiddleware = async ({
+  query,
+}): Promise<boolean | undefined> => {
   const [_, duelId] = query.buttonId.split('_');
 
   const duel = getDuel(duelId);
@@ -91,7 +93,7 @@ const changeReputation = async (
   });
 };
 
-export const rob: MessageCallback = async ({ karbo, message }) => {
+export const rob: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const user = await getUser({ user: message.author, include: { schedule: true } });
 
   if (await isScheduled({ karbo, dataSource: message, scheduledTime: user.schedule!.canRobAt }))
@@ -120,15 +122,15 @@ export const rob: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const increaseReputation: MessageCallback = async ({ karbo, message }) => {
+export const increaseReputation: MessageCallback = async ({ karbo, message }): Promise<void> => {
   await changeReputation(karbo, message, 'increment');
 };
 
-export const decreaseReputation: MessageCallback = async ({ karbo, message }) => {
+export const decreaseReputation: MessageCallback = async ({ karbo, message }): Promise<void> => {
   await changeReputation(karbo, message, 'decrement');
 };
 
-export const _top: MessageCallback = async ({ karbo, message }) => {
+export const _top: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const [, category] = message.content.split(' ');
 
   if (!TOP_CATEGORIES.includes(category!)) {
@@ -174,7 +176,7 @@ export const _top: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const duel: MessageCallback = async ({ karbo, message }) => {
+export const duel: MessageCallback = async ({ karbo, message }): Promise<void> => {
   if (inDuel(message.author.userId)) {
     await displayError({
       karbo,
@@ -236,7 +238,7 @@ export const duel: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const accept: InteractionCallback = async ({ karbo, query }) => {
+export const accept: InteractionCallback = async ({ karbo, query }): Promise<void> => {
   const oppositeUserId = REQUESTS_CACHE.get(query.buttonId.split('_')[1]!)!;
 
   if (inDuel(oppositeUserId)) {
@@ -309,7 +311,7 @@ export const accept: InteractionCallback = async ({ karbo, query }) => {
   await sendDuelTurn({ karbo, chatId: query.chatId, duelId: duel.id });
 };
 
-export const escape: InteractionCallback = async ({ karbo, query }) => {
+export const escape: InteractionCallback = async ({ karbo, query }): Promise<void> => {
   const { nickname } = await karbo.user(query.userId);
 
   await karbo.text({
@@ -318,7 +320,7 @@ export const escape: InteractionCallback = async ({ karbo, query }) => {
   });
 };
 
-export const punch: InteractionCallback = async ({ karbo, query }) => {
+export const punch: InteractionCallback = async ({ karbo, query }): Promise<void> => {
   const duel = getDuel(query.buttonId.split('_')[1]!)!;
 
   const opponent = duel.users.find((user) => user.id != query.userId)!;
@@ -329,7 +331,7 @@ export const punch: InteractionCallback = async ({ karbo, query }) => {
   await sendDuelTurn({ karbo, chatId: query.chatId, duelId: duel.id });
 };
 
-export const dodge: InteractionCallback = async ({ karbo, query }) => {
+export const dodge: InteractionCallback = async ({ karbo, query }): Promise<void> => {
   const duel = getDuel(query.buttonId.split('_')[1]!)!;
 
   writeToHistory(duel.id, 'duel-dodge');
@@ -337,7 +339,7 @@ export const dodge: InteractionCallback = async ({ karbo, query }) => {
   await sendDuelTurn({ karbo, chatId: query.chatId, duelId: duel.id });
 };
 
-export const buffIce: InteractionCallback = async ({ karbo, query }) => {
+export const buffIce: InteractionCallback = async ({ karbo, query }): Promise<void> => {
   const duel = getDuel(query.buttonId.split('_')[1]!)!;
 
   const user = duel.users.find((user) => user.id == query.userId)!;
@@ -350,7 +352,7 @@ export const buffIce: InteractionCallback = async ({ karbo, query }) => {
   await sendDuelTurn({ karbo, chatId: query.chatId, duelId: duel.id });
 };
 
-export const deck: InteractionCallback = async ({ karbo, query }) => {
+export const deck: InteractionCallback = async ({ karbo, query }): Promise<void> => {
   const duel = getDuel(query.buttonId.split('_')[1]!)!;
 
   const [user, opponent] = [
