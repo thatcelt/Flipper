@@ -65,6 +65,7 @@ export const FLATTED_CATEGORIES = {
   backgrounds: backgrounds.flat(),
   frames: frames.flat(),
   other: other.flat(),
+  cards: frames.flat().filter((frame) => frame.thumbnail.includes('card')),
 };
 
 export const SHOP_CATEGORIES = ['backgrounds', 'frames', 'other'];

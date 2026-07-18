@@ -27,7 +27,9 @@ type ErrorKey =
   | 'userAlreadyInDuel'
   | 'forbidden'
   | 'alreadyMarried'
-  | 'marryAlreadyRequested';
+  | 'marryAlreadyRequested'
+  | 'notMarried'
+  | 'wrongCategory';
 
 export type Product = {
   id: number;

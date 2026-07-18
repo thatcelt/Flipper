@@ -19,12 +19,20 @@ import { calculateLevel, getRelativeTime } from '../../util/helpers';
 import type { BackgroundKey, FrameKey } from '../../types/canvas';
 
 export const coupleMiddleware: MessageMiddleware = async ({
+  karbo,
   message,
 }): Promise<boolean | undefined> => {
   if (
     await prisma.user.findFirst({ where: { id: message.author.userId, coupleId: { not: null } } })
   )
     return true;
+
+  await displayError({
+    karbo,
+    chatId: message.chatId,
+    key: 'notMarried',
+    messageId: message.messageId,
+  });
 };
 
 export const offerMiddleware: InteractionMiddleware = async ({
@@ -33,7 +41,7 @@ export const offerMiddleware: InteractionMiddleware = async ({
   if (MARRIAGE_CACHE.get(query.userId)) return true;
 };
 
-export const marry: MessageCallback = async ({ karbo, message }) => {
+export const marry: MessageCallback = async ({ karbo, message }): Promise<void> => {
   if (
     !(await prisma.productsOnUser.findFirst({
       where: { userId: message.author.userId, productId: marryId },
@@ -86,7 +94,7 @@ export const marry: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const love: MessageCallback = async ({ karbo, message }) => {
+export const love: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const user = (await prisma.user.findUnique({
     where: { id: message.author.userId },
     include: { couple: true },
@@ -122,7 +130,7 @@ export const love: MessageCallback = async ({ karbo, message }) => {
   await karbo.image({ images: [media], chatId: message.chatId, replyMessageId: message.messageId });
 };
 
-export const kiss: MessageCallback = async ({ karbo, message }) => {
+export const kiss: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const { couple } = (await prisma.user.findUnique({
     where: { id: message.author.userId },
     include: { couple: true },
@@ -152,7 +160,7 @@ export const kiss: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const loveBackground: MessageCallback = async ({ karbo, message }) => {
+export const loveBackground: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const { coupleId } = (await prisma.user.findUnique({
     where: { id: message.author.userId },
   }))!;
@@ -174,7 +182,7 @@ export const loveBackground: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const loveFrame: MessageCallback = async ({ karbo, message }) => {
+export const loveFrame: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const { coupleId } = (await prisma.user.findUnique({
     where: { id: message.author.userId },
   }))!;
@@ -196,7 +204,20 @@ export const loveFrame: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const marryYes: InteractionCallback = async ({ karbo, query }) => {
+export const divorce: MessageCallback = async ({ karbo, message }): Promise<void> => {
+  const { coupleId } = (await prisma.user.findUnique({
+    where: { id: message.author.userId },
+  }))!;
+
+  await prisma.couple.delete({ where: { id: coupleId! } });
+
+  await karbo.text({
+    chatId: message.chatId,
+    content: `Печальные новости! ${message.author.nickname} официально расстался со своей парой..`,
+  });
+};
+
+export const marryYes: InteractionCallback = async ({ karbo, query }): Promise<void> => {
   const oppositeUserId = MARRIAGE_CACHE.get(query.userId)!;
 
   MARRIAGE_CACHE.delete(query.userId);
@@ -233,7 +254,7 @@ export const marryYes: InteractionCallback = async ({ karbo, query }) => {
   });
 };
 
-export const marryNo: InteractionCallback = async ({ karbo, query }) => {
+export const marryNo: InteractionCallback = async ({ karbo, query }): Promise<void> => {
   const user = await karbo.user(query.userId, query.communityId);
 
   MARRIAGE_CACHE.delete(query.userId);

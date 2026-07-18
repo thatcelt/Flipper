@@ -205,6 +205,10 @@ export const findBackground = async ({ karbo, message, type }: FindCosmeticsBuil
   return await findProduct({ karbo, message, type, products: FLATTED_CATEGORIES.backgrounds });
 };
 
+export const findCardColor = async ({ karbo, message, type }: FindCosmeticsBuilder) => {
+  return await findProduct({ karbo, message, type, products: FLATTED_CATEGORIES.cards });
+};
+
 export const sendDuelTurn = async ({ karbo, chatId, duelId }: DuelTurnBuilder) => {
   const duel = getDuel(duelId);
 

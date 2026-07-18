@@ -131,7 +131,11 @@ export const profile = async (builder: ProfileBuilder): Promise<Buffer> => {
   let courpleCaption = 'У вас нет пары';
 
   if (builder.couple) {
-    await round({ context, image: builder.couple.avatar, ...maps.profile.coupleAvatar });
+    await round({
+      context,
+      image: getAvatarUrl(builder.couple.avatar),
+      ...maps.profile.coupleAvatar,
+    });
     courpleCaption = `В паре с ${builder.couple.nickname}`;
   }
 
