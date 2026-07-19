@@ -13,16 +13,10 @@ datasource db {
   provider = "mysql"
 }
 
-model Funds {
-  id      Int  @unique @default(autoincrement())
-  balance Int  @default(0)
-  clanId  Int  @unique
-  clans   Clan @relation(fields: [clanId], references: [id])
-}
-
 model Clan {
   id         Int      @unique @default(autoincrement())
   title      String
+  icon       String
   ownerId    String   @unique
   experience Int      @default(0)
   chatLink   String?
@@ -30,8 +24,6 @@ model Clan {
   users      User[]
   background String   @default("default")
   frame      String   @default("orange")
-  funds      Funds?
-  bet        Int      @default(0)
 }
 
 model Couple {

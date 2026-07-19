@@ -41,7 +41,7 @@ export const bank: MessageCallback = async ({ karbo, message }): Promise<void> =
 export const daily: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const user = await getUser({ user: message.author, include: { schedule: true } });
 
-  if (await isScheduled({ karbo, dataSource: message, scheduledTime: user.schedule!.canDailyAt }))
+  if (await isScheduled({ karbo, source: message, scheduledTime: user.schedule!.canDailyAt }))
     return;
 
   const increment = dailyReward();
@@ -60,7 +60,7 @@ export const daily: MessageCallback = async ({ karbo, message }): Promise<void> 
 };
 
 export const transfer: MessageCallback = async ({ karbo, message }): Promise<void> => {
-  const transferData = await getUserIfEnoughMoney({ karbo, dataSource: message, type: 'cash' });
+  const transferData = await getUserIfEnoughMoney({ karbo, source: message, type: 'cash' });
 
   if (!transferData) return;
 
@@ -79,7 +79,7 @@ export const transfer: MessageCallback = async ({ karbo, message }): Promise<voi
 };
 
 export const trade: MessageCallback = async ({ karbo, message }): Promise<void> => {
-  const transferData = await getUserIfEnoughMoney({ karbo, dataSource: message, type: 'balance' });
+  const transferData = await getUserIfEnoughMoney({ karbo, source: message, type: 'balance' });
 
   if (!transferData) return;
 
@@ -107,7 +107,7 @@ export const trade: MessageCallback = async ({ karbo, message }): Promise<void> 
 };
 
 export const bet: MessageCallback = async ({ karbo, message }): Promise<void> => {
-  const betData = await getUserIfEnoughMoney({ karbo, dataSource: message, type: 'balance' });
+  const betData = await getUserIfEnoughMoney({ karbo, source: message, type: 'balance' });
 
   if (!betData) return;
 
@@ -116,9 +116,8 @@ export const bet: MessageCallback = async ({ karbo, message }): Promise<void> =>
   if (amount < 100 || amount > 3000) {
     await displayError({
       karbo,
-      messageId: message.messageId,
       key: 'betAmount',
-      chatId: message.chatId,
+      source: message,
     });
     return;
   }
@@ -167,9 +166,8 @@ export const work: MessageCallback = async ({ karbo, message }): Promise<void> =
   if (!user.work) {
     await displayError({
       karbo,
-      messageId: message.messageId,
       key: 'unemployed',
-      chatId: message.chatId,
+      source: message,
     });
     return;
   }
@@ -179,15 +177,14 @@ export const work: MessageCallback = async ({ karbo, message }): Promise<void> =
   if (work?.minReputation > user.stats!.reputation) {
     await displayError({
       karbo,
-      messageId: message.messageId,
       key: 'getFired',
-      chatId: message.chatId,
+      source: message,
     });
     await prisma.user.update({ where: { id: message.author.userId }, data: { work: null } });
     return;
   }
 
-  if (await isScheduled({ karbo, dataSource: message, scheduledTime: user.schedule!.canWorkAt }))
+  if (await isScheduled({ karbo, source: message, scheduledTime: user.schedule!.canWorkAt }))
     return;
 
   await incrementCash({
@@ -210,9 +207,8 @@ export const shop: MessageCallback = async ({ karbo, message }): Promise<void> =
   if (!category || isNaN(page) || !SHOP_CATEGORIES.includes(category)) {
     await displayError({
       karbo,
-      messageId: message.messageId,
       key: 'wrongCategory',
-      chatId: message.chatId,
+      source: message,
     });
     return;
   }
@@ -223,9 +219,8 @@ export const shop: MessageCallback = async ({ karbo, message }): Promise<void> =
   if (!elements) {
     await displayError({
       karbo,
-      messageId: message.messageId,
       key: 'wrongPage',
-      chatId: message.chatId,
+      source: message,
     });
     return;
   }
@@ -255,9 +250,8 @@ export const buy: MessageCallback = async ({ karbo, message }): Promise<void> =>
   if (!product) {
     await displayError({
       karbo,
-      messageId: message.messageId,
       key: 'wrongType',
-      chatId: message.chatId,
+      source: message,
     });
     return;
   }
@@ -267,9 +261,8 @@ export const buy: MessageCallback = async ({ karbo, message }): Promise<void> =>
   if (user.products.find((p) => p.productId == product.id)) {
     await displayError({
       karbo,
-      messageId: message.messageId,
       key: 'alreadyBought',
-      chatId: message.chatId,
+      source: message,
     });
     return;
   }
@@ -277,9 +270,8 @@ export const buy: MessageCallback = async ({ karbo, message }): Promise<void> =>
   if (product.cost > user.card!.balance) {
     await displayError({
       karbo,
-      messageId: message.messageId,
       key: 'notEnoughMoney',
-      chatId: message.chatId,
+      source: message,
     });
     return;
   }

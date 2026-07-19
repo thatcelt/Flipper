@@ -4,6 +4,7 @@ import type { Perk } from '../generated/prisma/enums';
 import { works } from '../public/data/works.json';
 import { frames, backgrounds, other } from '../public/data/shop.json';
 import type { CasinoVariant, PerkKey } from './types/canvas';
+import type { ClanFields } from './types/snippets';
 
 export const DEFAULT_WORK = 'Безработный';
 export const BOT_PREFIX = '/';
@@ -80,3 +81,5 @@ export const TIME = {
 };
 
 export const MARRIAGE_CACHE = new Map<string, string>();
+
+export const CLAN_FIELDS: ClanFields[] = ['title', 'chatLink', 'icon'];

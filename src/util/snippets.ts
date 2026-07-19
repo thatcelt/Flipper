@@ -9,6 +9,7 @@ import { finishDuel, getDuel, setTurn } from './duels';
 import { fight } from './canvas';
 import { buildDuelTurn } from './buttons';
 import type {
+  BasicBuilder,
   CheckStreakBuilder,
   DisplayErrorBuilder,
   DuelTurnBuilder,
@@ -21,7 +22,7 @@ import type {
   ValidateUserBuilder,
 } from '../types/snippets';
 import { message } from '../modules/common/service';
-import type { Couple } from '../../generated/prisma/client';
+import type { Clan, Couple } from '../../generated/prisma/client';
 
 const findProduct = async ({
   karbo,
@@ -38,8 +39,7 @@ const findProduct = async ({
     await displayError({
       karbo,
       key: 'productNotFound',
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
     });
     return;
   }
@@ -48,8 +48,7 @@ const findProduct = async ({
     await displayError({
       karbo,
       key: 'invalidProductType',
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
     });
     return;
   }
@@ -62,8 +61,7 @@ const findProduct = async ({
     await displayError({
       karbo,
       key: 'productNotOwned',
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
     });
     return;
   }
@@ -71,7 +69,11 @@ const findProduct = async ({
   return product;
 };
 
-export const displayError = async ({ karbo, key, chatId, messageId }: DisplayErrorBuilder) => {
+export const displayError = async ({
+  karbo,
+  key,
+  source: { chatId, messageId },
+}: DisplayErrorBuilder) => {
   await karbo.text({
     chatId,
     replyMessageId: messageId,
@@ -81,7 +83,7 @@ export const displayError = async ({ karbo, key, chatId, messageId }: DisplayErr
 
 export const isScheduled = async ({
   karbo,
-  dataSource: { chatId, messageId },
+  source: { chatId, messageId },
   scheduledTime,
   other,
 }: IsScheduledBuilder): Promise<boolean | undefined> => {
@@ -98,29 +100,25 @@ export const isScheduled = async ({
   return true;
 };
 
-export const getUserIfEnoughMoney = async ({
-  karbo,
-  dataSource: { content, chatId, messageId, author },
-  type,
-}: HasEnoughMoneyBuilder) => {
-  const [, rawAmount] = content.split(' ');
+export const getUserIfEnoughMoney = async ({ karbo, source, type }: HasEnoughMoneyBuilder) => {
+  const [, rawAmount] = source.content.split(' ');
 
   if (!rawAmount) {
-    await displayError({ karbo, key: 'wrongType', chatId, messageId });
+    await displayError({ karbo, key: 'wrongType', source });
     return;
   }
 
   const amount = parseFloat(rawAmount);
 
   if (isNaN(amount) || amount <= 0) {
-    await displayError({ karbo, key: 'wrongType', chatId, messageId });
+    await displayError({ karbo, key: 'wrongType', source });
     return;
   }
 
-  const user = await getUser({ user: author, include: { card: true } });
+  const user = await getUser({ user: source.author, include: { card: true } });
 
   if (user.card![type] < amount) {
-    await displayError({ karbo, key: 'notEnoughMoney', chatId, messageId });
+    await displayError({ karbo, key: 'notEnoughMoney', source });
     return;
   }
 
@@ -138,8 +136,7 @@ export const validateUser = async ({
     await displayError({
       karbo,
       key: 'wrongUser',
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
     });
     return;
   }
@@ -160,8 +157,7 @@ export const updateWork = async ({ karbo, message, user, rawWorkId }: UpdateWork
     await displayError({
       karbo,
       key: 'workNotFound',
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
     });
     return;
   }
@@ -170,8 +166,7 @@ export const updateWork = async ({ karbo, message, user, rawWorkId }: UpdateWork
     await displayError({
       karbo,
       key: 'alreadyWorking',
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
     });
     return;
   }
@@ -180,8 +175,7 @@ export const updateWork = async ({ karbo, message, user, rawWorkId }: UpdateWork
     await displayError({
       karbo,
       key: 'notEnoughReputation',
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
     });
     return;
   }
@@ -289,4 +283,40 @@ export const checkStreak = async (builder: CheckStreakBuilder): Promise<Couple |
       data: { kissStreak: { increment: 1 } },
     });
   }
+};
+
+export const getClanIfOwner = async ({
+  karbo,
+  message,
+}: BasicBuilder): Promise<Clan | undefined> => {
+  const clan = await prisma.clan.findFirst({ where: { ownerId: message.author.userId } });
+
+  if (!clan) {
+    await displayError({
+      karbo,
+      source: message,
+      key: 'forbidden',
+    });
+    return;
+  }
+
+  return clan;
+};
+
+export const getClanIfHas = async ({ karbo, message }: BasicBuilder): Promise<Clan | undefined> => {
+  const user = await prisma.user.findUnique({
+    where: { id: message.author.userId },
+    select: { clan: true },
+  });
+
+  if (!user?.clan) {
+    await displayError({
+      karbo,
+      source: message,
+      key: 'notInClan',
+    });
+    return;
+  }
+
+  return user.clan;
 };

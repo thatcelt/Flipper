@@ -55,15 +55,13 @@ const changeReputation = async (
 ) => {
   const user = await getUser({ user: message.author, include: { schedule: true } });
 
-  if (await isScheduled({ karbo, dataSource: message, scheduledTime: user.schedule!.canRepAt }))
-    return;
+  if (await isScheduled({ karbo, source: message, scheduledTime: user.schedule!.canRepAt })) return;
 
   if (!message.replyMessageId) {
     await displayError({
       karbo,
       key: 'wrongUser',
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
     });
     return;
   }
@@ -96,8 +94,7 @@ const changeReputation = async (
 export const rob: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const user = await getUser({ user: message.author, include: { schedule: true } });
 
-  if (await isScheduled({ karbo, dataSource: message, scheduledTime: user.schedule!.canRobAt }))
-    return;
+  if (await isScheduled({ karbo, source: message, scheduledTime: user.schedule!.canRobAt })) return;
 
   const target = await validateUser({ karbo, message });
 
@@ -137,8 +134,7 @@ export const _top: MessageCallback = async ({ karbo, message }): Promise<void> =
     await displayError({
       karbo,
       key: 'wrongType',
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
     });
     return;
   }
@@ -181,15 +177,14 @@ export const duel: MessageCallback = async ({ karbo, message }): Promise<void> =
     await displayError({
       karbo,
       key: 'alreadyInDuel',
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
     });
     return;
   }
 
   const user = await getUser({ user: message.author, include: { schedule: true } });
 
-  if (await isScheduled({ karbo, dataSource: message, scheduledTime: user.schedule!.canDuelAt }))
+  if (await isScheduled({ karbo, source: message, scheduledTime: user.schedule!.canDuelAt }))
     return;
 
   const target = await validateUser({ karbo, message });
@@ -200,8 +195,7 @@ export const duel: MessageCallback = async ({ karbo, message }): Promise<void> =
     await displayError({
       karbo,
       key: 'alreadyRequested',
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
     });
     return;
   }
@@ -211,7 +205,7 @@ export const duel: MessageCallback = async ({ karbo, message }): Promise<void> =
   if (
     await isScheduled({
       karbo,
-      dataSource: message,
+      source: message,
       scheduledTime: targetSchedules!.canDuelAt,
       other: true,
     })
@@ -222,8 +216,7 @@ export const duel: MessageCallback = async ({ karbo, message }): Promise<void> =
     await displayError({
       karbo,
       key: 'userAlreadyInDuel',
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
     });
     return;
   }
@@ -245,7 +238,7 @@ export const accept: InteractionCallback = async ({ karbo, query }): Promise<voi
     await displayError({
       karbo,
       key: 'alreadyInDuel',
-      chatId: query.chatId,
+      source: query,
     });
     return;
   }
@@ -254,7 +247,7 @@ export const accept: InteractionCallback = async ({ karbo, query }): Promise<voi
     await displayError({
       karbo,
       key: 'alreadyInDuel',
-      chatId: query.chatId,
+      source: query,
     });
     return;
   }

@@ -29,7 +29,15 @@ type ErrorKey =
   | 'alreadyMarried'
   | 'marryAlreadyRequested'
   | 'notMarried'
-  | 'wrongCategory';
+  | 'wrongCategory'
+  | 'wrongImage'
+  | 'alreadyInClan'
+  | 'notInClan'
+  | 'wrongValue'
+  | 'wrongField'
+  | 'cantLeave';
+
+export type ClanFields = 'title' | 'chatLink' | 'icon';
 
 export type Product = {
   id: number;
@@ -40,21 +48,20 @@ export type Product = {
 
 export type DisplayErrorBuilder = {
   karbo: KarboAI;
-  chatId: string;
-  messageId?: string;
+  source: Message | InteractionCallbackQuery;
   key: ErrorKey;
 };
 
 export type IsScheduledBuilder = {
   karbo: KarboAI;
-  dataSource: Message | InteractionCallbackQuery;
+  source: Message | InteractionCallbackQuery;
   scheduledTime: bigint;
   other?: boolean;
 };
 
 export type HasEnoughMoneyBuilder = {
   karbo: KarboAI;
-  dataSource: Message;
+  source: Message;
   type: MoneyType;
 };
 
@@ -94,4 +101,9 @@ export type CheckStreakBuilder = {
   karbo: KarboAI;
   message: Message;
   couple: Couple;
+};
+
+export type BasicBuilder = {
+  karbo: KarboAI;
+  message: Message;
 };

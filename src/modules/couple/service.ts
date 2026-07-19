@@ -29,9 +29,8 @@ export const coupleMiddleware: MessageMiddleware = async ({
 
   await displayError({
     karbo,
-    chatId: message.chatId,
     key: 'notMarried',
-    messageId: message.messageId,
+    source: message,
   });
 };
 
@@ -49,8 +48,7 @@ export const marry: MessageCallback = async ({ karbo, message }): Promise<void> 
   ) {
     await displayError({
       karbo,
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
       key: 'forbidden',
     });
     return;
@@ -63,8 +61,7 @@ export const marry: MessageCallback = async ({ karbo, message }): Promise<void> 
   if (MARRIAGE_CACHE.get(target.userId)) {
     await displayError({
       karbo,
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
       key: 'marryAlreadyRequested',
     });
     return;
@@ -78,8 +75,7 @@ export const marry: MessageCallback = async ({ karbo, message }): Promise<void> 
   ) {
     await displayError({
       karbo,
-      chatId: message.chatId,
-      messageId: message.messageId,
+      source: message,
       key: 'alreadyMarried',
     });
     return;
@@ -136,7 +132,7 @@ export const kiss: MessageCallback = async ({ karbo, message }): Promise<void> =
     include: { couple: true },
   }))!;
 
-  if (await isScheduled({ karbo, dataSource: message, scheduledTime: couple!.canKissAt })) return;
+  if (await isScheduled({ karbo, source: message, scheduledTime: couple!.canKissAt })) return;
 
   await checkStreak({ message, karbo, couple: couple! });
 
@@ -230,7 +226,7 @@ export const marryYes: InteractionCallback = async ({ karbo, query }): Promise<v
   ) {
     await displayError({
       karbo,
-      chatId: query.chatId,
+      source: query,
       key: 'alreadyMarried',
     });
     return;
