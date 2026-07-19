@@ -8,7 +8,10 @@ import { changeBackground, changeFrame, findCardColor } from '../../util/snippet
 import type { BackgroundKey, FrameKey } from '../../types/canvas';
 
 export const me: MessageCallback = async ({ karbo, message }): Promise<void> => {
-  const user = await getUser({ user: message.author, include: { stats: true, couple: true } });
+  const user = await getUser({
+    user: message.author,
+    include: { stats: true, couple: true, clan: true },
+  });
   const { level, maxExperience } = calculateLevel(user.stats!.experience);
 
   let couple = undefined;
@@ -22,6 +25,10 @@ export const me: MessageCallback = async ({ karbo, message }): Promise<void> => 
 
     couple = { nickname, avatar };
   }
+
+  let clan = undefined;
+
+  if (user.clan) clan = { name: user.clan.title, avatar: user.clan.icon };
 
   const media = await karbo.upload(
     await profile({
@@ -38,6 +45,7 @@ export const me: MessageCallback = async ({ karbo, message }): Promise<void> => 
       avatar: message.author.avatarUrl,
       stats: user.stats!,
       couple,
+      clan,
     })
   );
 

@@ -204,7 +204,7 @@ export type TextBuilder = {
 
 export type ManyRoundsBuilder = {
   context: SKRSContext2D;
-  images: string[];
+  images: (string | undefined)[];
   dots: { x: number; y: number }[];
   size: number;
   radius: number;
@@ -266,8 +266,8 @@ export type ClanBuilder = {
   chatLink: string;
   experience: Experience;
   top: {
-    messages: string[];
-    experience: string[];
+    messages: (string | undefined)[];
+    experience: (string | undefined)[];
   };
   background?: BackgroundKey;
 };

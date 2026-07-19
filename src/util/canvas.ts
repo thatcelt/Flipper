@@ -62,6 +62,8 @@ const manyRounds = async (builder: ManyRoundsBuilder): Promise<void> => {
     const { x, y } = builder.dots[i]!;
     const image = builder.images[i]!;
 
+    if (!image) continue;
+
     await round({
       context: builder.context,
       image,
