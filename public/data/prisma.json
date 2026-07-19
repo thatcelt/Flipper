@@ -11,5 +11,6 @@
     "reputation": { "stats": { "reputation": "desc" } },
     "robs": { "stats": { "robs": "desc" } }
   },
-  "coupleKiss": { "kissesAmount": { "increment": 1 }, "experience": { "increment": 50 } }
+  "coupleKiss": { "kissesAmount": { "increment": 1 }, "experience": { "increment": 50 } },
+  "clanTop": { "select": { "id": true }, "take": 3 }
 }

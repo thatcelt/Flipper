@@ -58,11 +58,7 @@ const changeReputation = async (
   if (await isScheduled({ karbo, source: message, scheduledTime: user.schedule!.canRepAt })) return;
 
   if (!message.replyMessageId) {
-    await displayError({
-      karbo,
-      key: 'wrongUser',
-      source: message,
-    });
+    await displayError({ karbo, key: 'wrongUser', source: message });
     return;
   }
 
@@ -131,11 +127,7 @@ export const _top: MessageCallback = async ({ karbo, message }): Promise<void> =
   const [, category] = message.content.split(' ');
 
   if (!TOP_CATEGORIES.includes(category!)) {
-    await displayError({
-      karbo,
-      key: 'wrongType',
-      source: message,
-    });
+    await displayError({ karbo, key: 'wrongType', source: message });
     return;
   }
 
@@ -174,11 +166,7 @@ export const _top: MessageCallback = async ({ karbo, message }): Promise<void> =
 
 export const duel: MessageCallback = async ({ karbo, message }): Promise<void> => {
   if (inDuel(message.author.userId)) {
-    await displayError({
-      karbo,
-      key: 'alreadyInDuel',
-      source: message,
-    });
+    await displayError({ karbo, key: 'alreadyInDuel', source: message });
     return;
   }
 
@@ -192,11 +180,7 @@ export const duel: MessageCallback = async ({ karbo, message }): Promise<void> =
   if (!target) return;
 
   if (REQUESTS_CACHE.get(target.userId)) {
-    await displayError({
-      karbo,
-      key: 'alreadyRequested',
-      source: message,
-    });
+    await displayError({ karbo, key: 'alreadyRequested', source: message });
     return;
   }
 
@@ -213,11 +197,7 @@ export const duel: MessageCallback = async ({ karbo, message }): Promise<void> =
     return;
 
   if (inDuel(target.userId)) {
-    await displayError({
-      karbo,
-      key: 'userAlreadyInDuel',
-      source: message,
-    });
+    await displayError({ karbo, key: 'userAlreadyInDuel', source: message });
     return;
   }
 
@@ -235,20 +215,12 @@ export const accept: InteractionCallback = async ({ karbo, query }): Promise<voi
   const oppositeUserId = REQUESTS_CACHE.get(query.buttonId.split('_')[1]!)!;
 
   if (inDuel(oppositeUserId)) {
-    await displayError({
-      karbo,
-      key: 'alreadyInDuel',
-      source: query,
-    });
+    await displayError({ karbo, key: 'alreadyInDuel', source: query });
     return;
   }
 
   if (inDuel(query.userId)) {
-    await displayError({
-      karbo,
-      key: 'alreadyInDuel',
-      source: query,
-    });
+    await displayError({ karbo, key: 'alreadyInDuel', source: query });
     return;
   }
 

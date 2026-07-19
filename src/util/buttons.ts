@@ -58,3 +58,18 @@ export const buildMarry = (userId: string): InlineButton[][] => [
     },
   ],
 ];
+
+export const buildInvite = (userId: string): InlineButton[][] => [
+  [
+    {
+      id: `accept-invite_${userId}`,
+      label: `Принять`,
+      color: { textHex: colors.white, hex: colors.green },
+    },
+    {
+      id: `decline-invite_${userId}`,
+      label: `Отказаться`,
+      color: { textHex: colors.white, hex: colors.red },
+    },
+  ],
+];

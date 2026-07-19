@@ -114,11 +114,7 @@ export const bet: MessageCallback = async ({ karbo, message }): Promise<void> =>
   const { amount } = betData;
 
   if (amount < 100 || amount > 3000) {
-    await displayError({
-      karbo,
-      key: 'betAmount',
-      source: message,
-    });
+    await displayError({ karbo, key: 'betAmount', source: message });
     return;
   }
 
@@ -164,22 +160,14 @@ export const work: MessageCallback = async ({ karbo, message }): Promise<void> =
   }
 
   if (!user.work) {
-    await displayError({
-      karbo,
-      key: 'unemployed',
-      source: message,
-    });
+    await displayError({ karbo, key: 'unemployed', source: message });
     return;
   }
 
   const work = WORKS_RECORD[user.work]!;
 
   if (work?.minReputation > user.stats!.reputation) {
-    await displayError({
-      karbo,
-      key: 'getFired',
-      source: message,
-    });
+    await displayError({ karbo, key: 'getFired', source: message });
     await prisma.user.update({ where: { id: message.author.userId }, data: { work: null } });
     return;
   }
@@ -205,11 +193,7 @@ export const shop: MessageCallback = async ({ karbo, message }): Promise<void> =
   const page = Number(rawPage);
 
   if (!category || isNaN(page) || !SHOP_CATEGORIES.includes(category)) {
-    await displayError({
-      karbo,
-      key: 'wrongCategory',
-      source: message,
-    });
+    await displayError({ karbo, key: 'wrongCategory', source: message });
     return;
   }
 
@@ -217,11 +201,7 @@ export const shop: MessageCallback = async ({ karbo, message }): Promise<void> =
   const elements = categoryPages[page - 1] as ShopEntity[] | undefined;
 
   if (!elements) {
-    await displayError({
-      karbo,
-      key: 'wrongPage',
-      source: message,
-    });
+    await displayError({ karbo, key: 'wrongPage', source: message });
     return;
   }
 
@@ -248,31 +228,19 @@ export const buy: MessageCallback = async ({ karbo, message }): Promise<void> =>
   const product = FLATTED_PRODUCTS[Number(productId)];
 
   if (!product) {
-    await displayError({
-      karbo,
-      key: 'wrongType',
-      source: message,
-    });
+    await displayError({ karbo, key: 'wrongType', source: message });
     return;
   }
 
   const user = await getUser({ user: message.author, include: { products: true, card: true } });
 
   if (user.products.find((p) => p.productId == product.id)) {
-    await displayError({
-      karbo,
-      key: 'alreadyBought',
-      source: message,
-    });
+    await displayError({ karbo, key: 'alreadyBought', source: message });
     return;
   }
 
   if (product.cost > user.card!.balance) {
-    await displayError({
-      karbo,
-      key: 'notEnoughMoney',
-      source: message,
-    });
+    await displayError({ karbo, key: 'notEnoughMoney', source: message });
     return;
   }
 

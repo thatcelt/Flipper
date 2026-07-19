@@ -4,7 +4,7 @@ import prisma, { getUser } from '../../util/prisma';
 import { profile } from '../../util/canvas';
 import { DEFAULT_WORK, FLATTED_PRODUCTS, WORKS_RECORD } from '../../constants';
 import { calculateLevel } from '../../util/helpers';
-import { findBackground, findCardColor, findFrame } from '../../util/snippets';
+import { changeBackground, changeFrame, findCardColor } from '../../util/snippets';
 import type { BackgroundKey, FrameKey } from '../../types/canvas';
 
 export const me: MessageCallback = async ({ karbo, message }): Promise<void> => {
@@ -63,38 +63,24 @@ export const items: MessageCallback = async ({ karbo, message }): Promise<void> 
 };
 
 export const setFrame: MessageCallback = async ({ karbo, message }): Promise<void> => {
-  const frame = await findFrame({ karbo, message, type: 'profile' });
+  const frame = await changeFrame({ karbo, message, type: 'profile' });
 
   if (!frame) return;
 
-  const [, frameName, _] = frame.thumbnail.split('-');
-
   await prisma.user.update({
     where: { id: message.author.userId },
-    data: { frame: frameName },
-  });
-
-  await karbo.text({
-    chatId: message.chatId,
-    content: `Вы поставили рамку - ${code(frame.title)}`,
+    data: { frame },
   });
 };
 
 export const setBackground: MessageCallback = async ({ karbo, message }): Promise<void> => {
-  const background = await findBackground({ karbo, message, type: 'profile' });
+  const background = await changeBackground({ karbo, message, type: 'profile' });
 
   if (!background) return;
 
-  const [, backgroundName] = background.thumbnail.split('-');
-
   await prisma.user.update({
     where: { id: message.author.userId },
-    data: { background: backgroundName },
-  });
-
-  await karbo.text({
-    chatId: message.chatId,
-    content: `Вы поставили фон - ${code(background.title)}`,
+    data: { background },
   });
 };
 

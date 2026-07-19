@@ -35,7 +35,9 @@ type ErrorKey =
   | 'notInClan'
   | 'wrongValue'
   | 'wrongField'
-  | 'cantLeave';
+  | 'cantLeave'
+  | 'userAlreadyInClan'
+  | 'alreadyInvited';
 
 export type ClanFields = 'title' | 'chatLink' | 'icon';
 

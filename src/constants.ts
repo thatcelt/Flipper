@@ -80,6 +80,4 @@ export const TIME = {
   day: 43200000,
 };
 
-export const MARRIAGE_CACHE = new Map<string, string>();
-
 export const CLAN_FIELDS: ClanFields[] = ['title', 'chatLink', 'icon'];

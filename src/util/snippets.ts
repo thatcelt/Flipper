@@ -21,7 +21,6 @@ import type {
   UpdateWorkBuilder,
   ValidateUserBuilder,
 } from '../types/snippets';
-import { message } from '../modules/common/service';
 import type { Clan, Couple } from '../../generated/prisma/client';
 
 const findProduct = async ({
@@ -36,20 +35,12 @@ const findProduct = async ({
   const product = products.find((product) => product.id === productId);
 
   if (!product) {
-    await displayError({
-      karbo,
-      key: 'productNotFound',
-      source: message,
-    });
+    await displayError({ karbo, key: 'productNotFound', source: message });
     return;
   }
 
   if (!shop[type].includes(productId)) {
-    await displayError({
-      karbo,
-      key: 'invalidProductType',
-      source: message,
-    });
+    await displayError({ karbo, key: 'invalidProductType', source: message });
     return;
   }
 
@@ -58,11 +49,7 @@ const findProduct = async ({
       where: { userId: message.author.userId, productId },
     }))
   ) {
-    await displayError({
-      karbo,
-      key: 'productNotOwned',
-      source: message,
-    });
+    await displayError({ karbo, key: 'productNotOwned', source: message });
     return;
   }
 
@@ -133,11 +120,7 @@ export const validateUser = async ({
   const uuid = userId ?? findUuid(message.content)?.[0]; // shitcode
 
   if (!uuid || uuid == process.env.BOT_ID || uuid == message.author.userId) {
-    await displayError({
-      karbo,
-      key: 'wrongUser',
-      source: message,
-    });
+    await displayError({ karbo, key: 'wrongUser', source: message });
     return;
   }
 
@@ -154,29 +137,17 @@ export const updateWork = async ({ karbo, message, user, rawWorkId }: UpdateWork
   const work = WORKS_RECORD[workId];
 
   if (!work) {
-    await displayError({
-      karbo,
-      key: 'workNotFound',
-      source: message,
-    });
+    await displayError({ karbo, key: 'workNotFound', source: message });
     return;
   }
 
   if (workId == user.work) {
-    await displayError({
-      karbo,
-      key: 'alreadyWorking',
-      source: message,
-    });
+    await displayError({ karbo, key: 'alreadyWorking', source: message });
     return;
   }
 
   if (work.minReputation > user.stats!.reputation) {
-    await displayError({
-      karbo,
-      key: 'notEnoughReputation',
-      source: message,
-    });
+    await displayError({ karbo, key: 'notEnoughReputation', source: message });
     return;
   }
 
@@ -292,11 +263,7 @@ export const getClanIfOwner = async ({
   const clan = await prisma.clan.findFirst({ where: { ownerId: message.author.userId } });
 
   if (!clan) {
-    await displayError({
-      karbo,
-      source: message,
-      key: 'forbidden',
-    });
+    await displayError({ karbo, source: message, key: 'forbidden' });
     return;
   }
 
@@ -310,13 +277,41 @@ export const getClanIfHas = async ({ karbo, message }: BasicBuilder): Promise<Cl
   });
 
   if (!user?.clan) {
-    await displayError({
-      karbo,
-      source: message,
-      key: 'notInClan',
-    });
+    await displayError({ karbo, source: message, key: 'notInClan' });
     return;
   }
 
   return user.clan;
+};
+
+export const changeFrame = async (builder: FindCosmeticsBuilder): Promise<string | undefined> => {
+  const frame = await findFrame(builder);
+
+  if (!frame) return;
+
+  const [, name, _] = frame.thumbnail.split('-');
+
+  await builder.karbo.text({
+    chatId: builder.message.chatId,
+    content: `Вы поставили рамку - ${code(frame.title)}`,
+  });
+
+  return name!;
+};
+
+export const changeBackground = async (
+  builder: FindCosmeticsBuilder
+): Promise<string | undefined> => {
+  const background = await findBackground(builder);
+
+  if (!background) return;
+
+  const [, name] = background.thumbnail.split('-');
+
+  await builder.karbo.text({
+    chatId: builder.message.chatId,
+    content: `Вы поставили фон - ${code(background.title)}`,
+  });
+
+  return name!;
 };
