@@ -40,24 +40,19 @@ model Couple {
   users        User[]
 }
 
-model Upgrade {
-  id        Int         @id @default(autoincrement())
-  upgradeAt BigInt      @default(0)
-  type      UpgradeType @default(NOTHING)
-  userId    String      @unique
-  user      User        @relation(fields: [userId], references: [id])
-}
-
 model Schedule {
-  id         Int    @id @default(autoincrement())
-  canWorkAt  BigInt @default(0)
-  canDailyAt BigInt @default(0)
-  canRobAt   BigInt @default(0)
-  canDuelAt  BigInt @default(0)
-  canHackAt  BigInt @default(0)
-  canRepAt   BigInt @default(0)
-  userId     String @unique
-  user       User   @relation(fields: [userId], references: [id])
+  id             Int    @id @default(autoincrement())
+  canWorkAt      BigInt @default(0)
+  canDailyAt     BigInt @default(0)
+  canRobAt       BigInt @default(0)
+  canDuelAt      BigInt @default(0)
+  canRepAt       BigInt @default(0)
+  canHackAt      BigInt @default(0)
+  canCrimeAt     BigInt @default(0)
+  canSacrificeAt BigInt @default(0)
+  canRescueAt    BigInt @default(0)
+  userId         String @unique
+  user           User   @relation(fields: [userId], references: [id])
 }
 
 model ProductsOnUser {
@@ -103,19 +98,10 @@ model User {
   stats      Stats?
   schedule   Schedule?
   products   ProductsOnUser[]
-  upgrade    Upgrade?
   coupleId   Int?
   clanId     Int?
   couple     Couple?          @relation(fields: [coupleId], references: [id])
   clan       Clan?            @relation(fields: [clanId], references: [id])
-}
-
-enum UpgradeType {
-  STRENGTH
-  DECK
-  ICE
-  PRESTIGE
-  NOTHING
 }
 
 enum Perk {

@@ -4,3 +4,5 @@ export { default as economy } from './economy';
 export { default as actions } from './actions';
 export { default as couple } from './couple';
 export { default as clans } from './clans';
+export { default as hero } from './hero';
+export { default as villain } from './villain';

@@ -30,7 +30,6 @@ export const getUser = async ({ user, update, include }: UserBuilder) =>
       stats: { create: initStats },
       card: { create: { initials: user.nickname, number: cardNumber(), date: cardDate() } },
       schedule: { create: {} },
-      upgrade: { create: {} },
       products: { createMany: defaultProducts },
     },
     update: update

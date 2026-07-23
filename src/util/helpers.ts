@@ -88,3 +88,7 @@ export const duelReward = (): { reputation: number; balance: number } => ({
   reputation: randomNumber(5, 10),
   balance: randomNumber(100, 400),
 });
+
+export const geHackAndtSacrifice = (): number => randomNumber(200, 600);
+
+export const getCrimeAndRescue = (): number => randomNumber(5, 10);
