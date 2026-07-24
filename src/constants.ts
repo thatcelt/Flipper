@@ -1,10 +1,12 @@
 import { bold, code, italic } from 'karboai';
 import type { Perk } from '../generated/prisma/enums';
 
+import { main, sub } from '../public/data/commands.json';
 import { works } from '../public/data/works.json';
 import { frames, backgrounds, other } from '../public/data/shop.json';
 import type { CasinoVariant, PerkKey } from './types/canvas';
 import type { ClanFields } from './types/snippets';
+import type { SubCommands, SubCommandUnion } from './types/constants';
 
 export const DEFAULT_WORK = 'Безработный';
 export const BOT_PREFIX = '/';
@@ -82,3 +84,19 @@ export const TIME = {
 };
 
 export const CLAN_FIELDS: ClanFields[] = ['title', 'chatLink', 'icon'];
+
+export const ALL_COMMANDS = main
+  .map((command) => `${bold(command.name)} - ${italic(command.description)}\n`)
+  .join('\n');
+
+export const SUB_COMMANDS = sub.reduce((accumulator, currentItem) => {
+  accumulator[currentItem.subKey as SubCommandUnion] = currentItem.commands
+    .map((command) => `${bold(command.name)} - ${italic(command.description)}\n`)
+    .join('\n');
+  return accumulator;
+}, {} as SubCommands);
+
+export const PERK_TEXTS: Record<Perk, string> = {
+  DECK: 'Экстра-бандл скриптов',
+  ICE: 'Усиленный лёд',
+};

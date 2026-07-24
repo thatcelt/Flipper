@@ -1,7 +1,9 @@
-import type { MessageCallback } from 'karboai';
+import { bold, type MessageCallback } from 'karboai';
 
 import { getUser } from '../../util/prisma';
-import { BOT_PREFIX } from '../../constants';
+import { ALL_COMMANDS, BOT_PREFIX, SUB_COMMANDS } from '../../constants';
+import { displayError } from '../../util/snippets';
+import type { SubCommandUnion } from '../../types/constants';
 
 export const onJoin: MessageCallback = async ({ karbo, message }) => {
   await karbo.text({
@@ -20,9 +22,21 @@ export const message: MessageCallback = async ({ message }) => {
 };
 
 export const help: MessageCallback = async ({ karbo, message }) => {
+  const [, category] = message.content.split(' ');
+  let commandsCategory: string | undefined;
+
+  try {
+    if (category) {
+      commandsCategory = SUB_COMMANDS[category as SubCommandUnion];
+    }
+  } catch {
+    await displayError({ karbo, source: message, key: 'wrongCategory' });
+    return;
+  }
+
   await karbo.text({
     chatId: message.chatId,
-    content: `Сейчас бот находится на техобслуживании.\n\nДевлог и новости будут проводиться в чате поддержки - ${process.env.CHAT_URL}`,
     replyMessageId: message.messageId,
+    content: `${bold('Навигация')}\n\n${commandsCategory || ALL_COMMANDS}\n${bold('Чат поддержки бота -')} ${process.env.CHAT_URL}`,
   });
 };

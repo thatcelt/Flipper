@@ -543,6 +543,10 @@
     {
       "path": "./public/assets/deck-perk.png",
       "key": "deck-perk"
+    },
+    {
+      "path": "./public/assets/perks.png",
+      "key": "perks"
     }
   ],
   "fonts": [
