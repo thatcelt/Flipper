@@ -27,7 +27,8 @@
     "coupleAvatar": { "x": 399, "y": 477, "width": 62, "height": 61, "radius": 100 },
     "coupleCaption": { "size": 17, "x": 260.5, "y": 515 },
     "clanAvatar": { "x": 399, "y": 589, "width": 62, "height": 61, "radius": 100 },
-    "clanCaption": { "size": 17, "x": 260.5, "y": 627 }
+    "clanCaption": { "size": 17, "x": 260.5, "y": 627 },
+    "perk": { "x": 552, "y": 236, "width": 97, "height": 97, "radius": 100 }
   },
   "card": {
     "number": { "y": 407, "size": 25 },

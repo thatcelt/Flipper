@@ -190,7 +190,7 @@ export const work: MessageCallback = async ({ karbo, message }): Promise<void> =
 
 export const shop: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const [, category, rawPage] = message.content.split(' ');
-  const page = Number(rawPage);
+  const page = Number(rawPage || 1); // stupid as fuck
 
   if (!category || isNaN(page) || !SHOP_CATEGORIES.includes(category)) {
     await displayError({ karbo, key: 'wrongCategory', source: message });

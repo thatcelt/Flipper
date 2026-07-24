@@ -65,7 +65,8 @@ export type ShopThumbnail =
   | 'shop-orange-frame'
   | 'shop-green-frame'
   | 'shop-blue-frame'
-  | 'shop-black-frame';
+  | 'shop-black-frame'
+  | 'perks';
 
 export type BackgroundKey =
   | 'backgrounds-aminodork'
@@ -243,7 +244,7 @@ export type ProfileBuilder = {
     name: string;
     avatar: string;
   };
-  perk?: string;
+  perk?: Perk;
   background?: BackgroundKey;
 };
 

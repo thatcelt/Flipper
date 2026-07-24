@@ -150,6 +150,10 @@ export const profile = async (builder: ProfileBuilder): Promise<Buffer> => {
     clanCaption = `В клане ${builder.clan.name}`;
   }
 
+  if (builder.perk) {
+    await round({ image: images.get(PERK_MAP[builder.perk])!, context, ...maps.profile.perk });
+  }
+
   text({ context, text: clanCaption, align: 'center', ...maps.profile.clanCaption });
 
   return canvas.toBuffer('image/jpeg', 85);
@@ -428,4 +432,10 @@ export const loadImages = async () => {
       asset.key as ImageKey,
       await loadImage(Buffer.from(await file(asset.path).arrayBuffer()))
     );
+};
+
+export const perks = async (): Promise<Buffer> => {
+  const { canvas } = loadCanvas('perks');
+
+  return canvas.toBuffer('image/jpeg', 85);
 };

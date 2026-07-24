@@ -73,3 +73,18 @@ export const buildInvite = (userId: string): InlineButton[][] => [
     },
   ],
 ];
+
+export const buildPerks = (userId: string): InlineButton[][] => [
+  [
+    {
+      id: `set-perk_DECK_${userId}`,
+      label: `Экстра-бандл скриптов`,
+      color: { textHex: colors.white, hex: colors.purple },
+    },
+    {
+      id: `set-perk_ICE_${userId}`,
+      label: `Усиленный лёд`,
+      color: { textHex: colors.white, hex: colors.blue },
+    },
+  ],
+];

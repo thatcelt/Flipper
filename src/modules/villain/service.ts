@@ -16,7 +16,7 @@ export const villainMiddleware: MessageMiddleware = async ({
     return true;
 };
 
-export const hack: MessageCallback = async ({ karbo, message }) => {
+export const hack: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const target = await validateUser({ karbo, message });
 
   if (!target) return;
@@ -48,7 +48,7 @@ export const hack: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const crime: MessageCallback = async ({ karbo, message }) => {
+export const crime: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const schedule = await prisma.schedule.findFirst({ where: { userId: message.author.userId } });
 
   if (await isScheduled({ karbo, source: message, scheduledTime: schedule!.canCrimeAt })) return;
@@ -70,7 +70,7 @@ export const crime: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const kick: MessageCallback = async ({ karbo, message }) => {
+export const kick: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const target = await validateUser({ karbo, message });
 
   if (!target) return;

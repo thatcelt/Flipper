@@ -1,11 +1,21 @@
 import { code, type MessageCallback } from 'karboai';
 
 import prisma, { getUser } from '../../util/prisma';
-import { profile } from '../../util/canvas';
-import { DEFAULT_WORK, FLATTED_PRODUCTS, WORKS_RECORD } from '../../constants';
+import { perks, profile } from '../../util/canvas';
+import { DEFAULT_WORK, FLATTED_PRODUCTS, PERK_TEXTS, WORKS_RECORD } from '../../constants';
 import { calculateLevel } from '../../util/helpers';
 import { changeBackground, changeFrame, findCardColor } from '../../util/snippets';
+import { buildPerks } from '../../util/buttons';
 import type { BackgroundKey, FrameKey } from '../../types/canvas';
+import type { InteractionCallback, InteractionMiddleware } from 'karboai/dist/types/dispatcher';
+import type { Perk } from '../../../generated/prisma/enums';
+import { message } from '../common/service';
+
+export const perksMiddleware: InteractionMiddleware = async ({
+  query,
+}): Promise<boolean | undefined> => {
+  if (query.buttonId.includes(query.userId)) return true;
+};
 
 export const me: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const user = await getUser({
@@ -41,6 +51,7 @@ export const me: MessageCallback = async ({ karbo, message }): Promise<void> => 
         from: user.stats!.experience,
         to: maxExperience,
       },
+      perk: user.stats!.perk as Perk | undefined,
       reputation: user.stats!.reputation,
       avatar: message.author.avatarUrl,
       stats: user.stats!,
@@ -108,4 +119,41 @@ export const setCardColor: MessageCallback = async ({ karbo, message }): Promise
     chatId: message.chatId,
     content: `Вы поставили цвет карты - ${code(cardFrame.title)}`,
   });
+};
+
+export const perk: MessageCallback = async ({ karbo, message }): Promise<void> => {
+  const user = await getUser({ user: message.author, include: { stats: true } });
+
+  const { level } = calculateLevel(user.stats!.experience);
+
+  if (level < 40) {
+    await karbo.text({
+      chatId: message.chatId,
+      replyMessageId: message.messageId,
+      content: `У вас слишком маленький уровень`,
+    });
+    return;
+  }
+
+  await karbo.image({
+    chatId: message.chatId,
+    replyMessageId: message.messageId,
+    images: [await karbo.upload(await perks())],
+    caption: user.stats!.perk ? `Ваш перк - ${PERK_TEXTS[user.stats!.perk]}` : 'Выберите ваш перк',
+    inlineButtons: user.stats!.perk ? undefined : buildPerks(message.author.userId),
+  });
+};
+
+export const setPerk: InteractionCallback = async ({ karbo, query }): Promise<void> => {
+  const [, perk, userId] = query.buttonId.split('_');
+
+  if (await prisma.user.findFirst({ where: { id: userId, stats: { perk: { not: null } } } }))
+    return;
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: { stats: { update: { perk: perk as Perk } } },
+  });
+
+  await karbo.text({ chatId: query.chatId, content: `Вы выбрали свой перк` });
 };

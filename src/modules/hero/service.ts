@@ -17,7 +17,7 @@ export const heroMiddleware: MessageMiddleware = async ({
     return true;
 };
 
-export const sacrifice: MessageCallback = async ({ karbo, message }) => {
+export const sacrifice: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const target = await validateUser({ karbo, message });
 
   if (!target) return;
@@ -48,7 +48,7 @@ export const sacrifice: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const rescue: MessageCallback = async ({ karbo, message }) => {
+export const rescue: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const schedule = await prisma.schedule.findFirst({ where: { userId: message.author.userId } });
 
   if (await isScheduled({ karbo, source: message, scheduledTime: schedule!.canRescueAt })) return;
@@ -70,7 +70,7 @@ export const rescue: MessageCallback = async ({ karbo, message }) => {
   });
 };
 
-export const pat: MessageCallback = async ({ karbo, message }) => {
+export const pat: MessageCallback = async ({ karbo, message }): Promise<void> => {
   const target = await validateUser({ karbo, message });
 
   if (!target) return;
