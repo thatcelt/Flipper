@@ -23,6 +23,7 @@ export const COOLDOWNS = {
   duel: 3600000,
   rep: 1500000,
   kiss: 1500000,
+  sides: 43200000,
 };
 
 export const CHANGE_REP_MAP = {

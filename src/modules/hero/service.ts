@@ -4,6 +4,7 @@ import type { MessageMiddleware } from 'karboai/dist/types/dispatcher';
 import prisma from '../../util/prisma';
 import { isScheduled, validateUser } from '../../util/snippets';
 import { geHackAndtSacrifice, getCrimeAndRescue } from '../../util/helpers';
+import { COOLDOWNS } from '../../constants';
 
 export const heroMiddleware: MessageMiddleware = async ({
   message,
@@ -32,7 +33,10 @@ export const sacrifice: MessageCallback = async ({ karbo, message }) => {
     [message.author.userId, target.userId].map((userId) =>
       prisma.user.update({
         where: { id: userId },
-        data: { card: { update: { balance: { increment } } } },
+        data: {
+          card: { update: { balance: { increment } } },
+          schedule: { update: { canSacrificeAt: Date.now() + COOLDOWNS.sides } },
+        },
       })
     )
   );
@@ -53,7 +57,10 @@ export const rescue: MessageCallback = async ({ karbo, message }) => {
 
   await prisma.user.update({
     where: { id: message.author.userId },
-    data: { stats: { update: { reputation: { increment } } } },
+    data: {
+      stats: { update: { reputation: { increment } } },
+      schedule: { update: { canRescueAt: Date.now() + COOLDOWNS.sides } },
+    },
   });
 
   await karbo.text({

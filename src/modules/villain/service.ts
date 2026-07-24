@@ -3,13 +3,14 @@ import type { MessageMiddleware } from 'karboai/dist/types/dispatcher';
 import prisma from '../../util/prisma';
 import { isScheduled, validateUser } from '../../util/snippets';
 import { geHackAndtSacrifice, getCrimeAndRescue } from '../../util/helpers';
+import { COOLDOWNS } from '../../constants';
 
 export const villainMiddleware: MessageMiddleware = async ({
   message,
 }): Promise<boolean | undefined> => {
   if (
     await prisma.user.findFirst({
-      where: { id: message.author.userId, stats: { reputation: { lte: 100 } } },
+      where: { id: message.author.userId, stats: { reputation: { lte: -100 } } },
     })
   )
     return true;
@@ -29,7 +30,10 @@ export const hack: MessageCallback = async ({ karbo, message }) => {
   await prisma.$transaction([
     prisma.user.update({
       where: { id: message.author.userId },
-      data: { card: { update: { balance: { increment: reward } } } },
+      data: {
+        card: { update: { balance: { increment: reward } } },
+        schedule: { update: { canHackAt: Date.now() + COOLDOWNS.sides } },
+      },
     }),
     prisma.user.update({
       where: { id: target.userId },
@@ -47,13 +51,16 @@ export const hack: MessageCallback = async ({ karbo, message }) => {
 export const crime: MessageCallback = async ({ karbo, message }) => {
   const schedule = await prisma.schedule.findFirst({ where: { userId: message.author.userId } });
 
-  if (await isScheduled({ karbo, source: message, scheduledTime: schedule!.canRescueAt })) return;
+  if (await isScheduled({ karbo, source: message, scheduledTime: schedule!.canCrimeAt })) return;
 
   const decrement = getCrimeAndRescue();
 
   await prisma.user.update({
     where: { id: message.author.userId },
-    data: { stats: { update: { reputation: { decrement } } } },
+    data: {
+      stats: { update: { reputation: { decrement } } },
+      schedule: { update: { canCrimeAt: Date.now() + COOLDOWNS.sides } },
+    },
   });
 
   await karbo.text({
