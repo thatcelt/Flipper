@@ -43,7 +43,6 @@ export const requestMiddleware: InteractionMiddleware = async ({ query }) => {
   const [_, userId] = query.buttonId.split('_');
 
   if (userId == query.userId && REQUESTS_CACHE.get(query.userId)) {
-    REQUESTS_CACHE.delete(query.userId);
     return true;
   }
 };
@@ -212,7 +211,9 @@ export const duel: MessageCallback = async ({ karbo, message }): Promise<void> =
 };
 
 export const accept: InteractionCallback = async ({ karbo, query }): Promise<void> => {
-  const oppositeUserId = REQUESTS_CACHE.get(query.buttonId.split('_')[1]!)!;
+  const oppositeUserId = REQUESTS_CACHE.get(query.userId)!;
+
+  REQUESTS_CACHE.delete(query.userId);
 
   if (inDuel(oppositeUserId)) {
     await displayError({ karbo, key: 'alreadyInDuel', source: query });
@@ -278,6 +279,7 @@ export const accept: InteractionCallback = async ({ karbo, query }): Promise<voi
 
 export const escape: InteractionCallback = async ({ karbo, query }): Promise<void> => {
   const { nickname } = await karbo.user(query.userId);
+  REQUESTS_CACHE.delete(query.userId);
 
   await karbo.text({
     content: `${nickname} вместо честного боя тихонько развернулся и дал по педалям в страхе от противника!`,
